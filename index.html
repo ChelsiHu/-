@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>难搞工作群 · 记账本</title>
+<title>服装进货成本 · 记账本</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   :root {
@@ -90,8 +90,8 @@
 <body>
 <div class="container">
   <header>
-    <h1><span class="emoji">💰</span>难搞工作群 · 记账本</h1>
-    <p class="sub">在这里对 WorkBuddy 说「请记账」就能自动记录 · 每月轻松 Check 成本</p>
+    <h1><span class="emoji">👗</span>服装进货 · 记账本</h1>
+    <p class="sub">进货成本、推广费用一目了然 · 每月轻松 Check 利润</p>
   </header>
 
   <!-- 月度统计卡片 -->
@@ -137,13 +137,16 @@
       <div class="form-group">
         <label>分类</label>
         <select id="inputCategory">
-          <option value="餐饮">🍜 餐饮</option>
-          <option value="交通">🚗 交通</option>
-          <option value="办公用品">📎 办公用品</option>
-          <option value="通讯">📱 通讯</option>
-          <option value="差旅">✈️ 差旅</option>
-          <option value="客户招待">🤝 客户招待</option>
-          <option value="其他">📦 其他</option>
+          <option value="服装进货">👗 服装进货</option>
+          <option value="推广费用">📣 推广费用</option>
+          <option value="物流运费">🚚 物流运费</option>
+          <option value="包装耗材">📦 包装耗材</option>
+          <option value="店铺租金">🏠 店铺租金</option>
+          <option value="水电燃气">⚡ 水电燃气</option>
+          <option value="人工工资">👤 人工工资</option>
+          <option value="拍摄美工">📸 拍摄美工</option>
+          <option value="餐费报销">🍜 餐费报销</option>
+          <option value="其他">💡 其他</option>
         </select>
       </div>
       <div class="form-group">
@@ -152,7 +155,7 @@
       </div>
       <div class="form-group">
         <label>备注</label>
-        <input type="text" id="inputNote" placeholder="买了什么...">
+        <input type="text" id="inputNote" placeholder="款式、颜色、数量...">
       </div>
       <button class="btn btn-primary" onclick="addExpense()">记 账</button>
     </div>
@@ -237,12 +240,15 @@ function quickAdd(amount, category, note='-') {
 
   // 匹配分类
   const catMap = {
-    '餐饮':'餐饮','吃饭':'餐饮','午餐':'餐饮','晚餐':'餐饮','早餐':'餐饮','外卖':'餐饮','奶茶':'餐饮','咖啡':'餐饮',
-    '交通':'交通','打车':'交通','地铁':'交通','公交':'交通','加油':'交通','停车':'交通',
-    '办公':'办公用品','办公用品':'办公用品','文具':'办公用品','打印':'办公用品',
-    '通讯':'通讯','话费':'通讯','电话':'通讯',
-    '差旅':'差旅','出差':'差旅','机票':'差旅','酒店':'差旅','住宿':'差旅',
-    '招待':'客户招待','客户':'客户招待','请客':'客户招待','宴请':'客户招待',
+    '进货':'服装进货','拿货':'服装进货','采购':'服装进货','衣服':'服装进货','服装':'服装进货','补货':'服装进货',
+    '推广':'推广费用','广告':'推广费用','投流':'推广费用','dou':'推广费用','抖音':'推广费用','朋友圈':'推广费用','信息流':'推广费用',
+    '物流':'物流运费','运费':'物流运费','快递':'物流运费','发货':'物流运费','货运':'物流运费',
+    '包装':'包装耗材','袋子':'包装耗材','吊牌':'包装耗材','标签':'包装耗材',
+    '租金':'店铺租金','房租':'店铺租金','档口':'店铺租金','铺租':'店铺租金',
+    '工资':'人工工资','人工':'人工工资','员工':'人工工资','发工资':'人工工资',
+    '拍摄':'拍摄美工','照片':'拍摄美工','模特':'拍摄美工','美工':'拍摄美工','修图':'拍摄美工','拍照':'拍摄美工',
+    '电费':'水电燃气','水电':'水电燃气','燃气':'水电燃气','水费':'水电燃气','电':'水电燃气','空调':'水电燃气',
+    '餐饮':'餐费报销','吃饭':'餐费报销','午餐':'餐费报销','晚餐':'餐费报销','外卖':'餐费报销','报销':'餐费报销','快餐':'餐费报销','盒饭':'餐费报销',
   };
   const matched = Object.keys(catMap).find(k => category.includes(k));
   const finalCat = catMap[matched || category] || '其他';
@@ -290,7 +296,7 @@ function renderList() {
   const container = document.getElementById('expenseList');
 
   if (monthExpenses.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>这个月还没有记录，快来记一笔吧</p></div>';
+    container.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>这个月还没有记录，开始记一笔进货成本吧</p></div>';
     return;
   }
 
