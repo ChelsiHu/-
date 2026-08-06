@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>服装进货成本 · 记账本</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
   :root {
     --bg: #f5f6fa;
@@ -174,10 +176,26 @@
         </select>
         <button class="btn btn-outline btn-sm" onclick="copyToClipboard()">📋 复制数据</button>
         <button class="btn btn-outline btn-sm" onclick="pasteFromClipboard()">📌 粘贴恢复</button>
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('importFile').click()">📥 导入1688订单</button>
+        <button class="btn btn-outline btn-sm" onclick="pasteAndParse()">📋 粘贴解析</button>
         <button class="btn btn-outline btn-sm" onclick="exportCSV()">📥 导出 CSV</button>
+        <input type="file" id="importFile" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleImport(event)">
       </div>
     </div>
     <div id="expenseList"></div>
+  </div>
+</div>
+
+<!-- 导入预览弹窗 -->
+<div id="importModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:24px;max-width:700px;width:90%;max-height:80vh;overflow:auto;">
+    <h3 style="margin-bottom:12px;">📥 导入1688订单预览</h3>
+    <p id="importSummary" style="font-size:13px;color:#636e72;margin-bottom:12px;"></p>
+    <div id="importPreview" style="max-height:50vh;overflow:auto;margin-bottom:16px;"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button class="btn btn-outline btn-sm" onclick="closeImportModal()">取消</button>
+      <button class="btn btn-primary btn-sm" id="confirmImportBtn" onclick="confirmImport()">确认导入</button>
+    </div>
   </div>
 </div>
 
@@ -456,6 +474,46 @@ function downloadBlob(blob, filename) {
   URL.revokeObjectURL(url);
 }
 
+// ============ URL Hash 自动导入 (来自1688书签抓取) ============
+(function checkHashImport() {
+  var hash = location.hash;
+  if (!hash || !hash.startsWith('#import=')) return;
+  try {
+    var json = decodeURIComponent(atob(hash.replace('#import=', '')));
+    var data = JSON.parse(json);
+    if (!data || !data.orders || !Array.isArray(data.orders) || data.orders.length === 0) return;
+
+    importPreviewData = data.orders.map(function(o, i) {
+      return {
+        id: o.orderId || ('1688_' + Date.now() + '_' + i),
+        amount: Math.round(parseFloat(o.amount) * 100) / 100,
+        category: '服装进货',
+        date: o.date && /^\d{4}-\d{2}-\d{2}$/.test(o.date) ? o.date : new Date().toISOString().split('T')[0],
+        note: o.product || '1688订单',
+        createdAt: new Date().toISOString()
+      };
+    });
+
+    var totalAmount = importPreviewData.reduce(function(s, e) { return s + e.amount; }, 0);
+
+    var previewHTML = '<table class="expense-table"><thead><tr><th>日期</th><th>商品</th><th>金额</th></tr></thead><tbody>';
+    importPreviewData.forEach(function(e) {
+      previewHTML += '<tr><td>' + e.date + '</td><td>' + e.note + '</td><td class="amount">¥' + e.amount.toFixed(2) + '</td></tr>';
+    });
+    previewHTML += '</tbody></table>';
+
+    document.getElementById('importSummary').textContent =
+      '1688自动抓取：共识别 ' + importPreviewData.length + ' 笔订单，合计 ¥' + totalAmount.toFixed(2);
+    document.getElementById('importPreview').innerHTML = previewHTML;
+    document.getElementById('importModal').style.display = 'flex';
+
+    // 清除 hash
+    history.replaceState(null, '', location.pathname);
+  } catch(e) {
+    console.warn('Hash import error:', e);
+  }
+})();
+
 // ============ 初始化 ============
 loadData();
 document.getElementById('inputDate').value = new Date().toISOString().split('T')[0];
@@ -468,6 +526,236 @@ document.addEventListener('keydown', e => {
     addExpense();
   }
 });
+
+// ============ 导入1688订单 ============
+let importPreviewData = [];
+
+function handleImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+
+  if (ext === 'csv') {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const text = e.target.result;
+      Papa.parse(text, {
+        header: true,
+        skipEmptyLines: true,
+        encoding: 'UTF-8',
+        complete: function(results) {
+          if (results.errors.length > 0) console.warn('CSV parse warnings:', results.errors);
+          processImportRows(results.data, results.meta.fields);
+        }
+      });
+    };
+    reader.readAsText(file, 'UTF-8');
+  } else if (ext === 'xlsx' || ext === 'xls') {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+      const fields = rows.length > 0 ? Object.keys(rows[0]) : [];
+      processImportRows(rows, fields);
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  event.target.value = '';
+}
+
+function findColumn(fields, patterns) {
+  for (const p of patterns) {
+    const col = fields.find(f => f.includes(p));
+    if (col) return col;
+  }
+  return null;
+}
+
+function parseAmount(val) {
+  if (typeof val === 'number') return val;
+  const s = String(val).replace(/[￥¥, ，\s]/g, '');
+  const num = parseFloat(s);
+  return isNaN(num) ? 0 : num;
+}
+
+function processImportRows(rows, fields) {
+  if (!rows.length) { alert('文件中没有数据'); return; }
+
+  // 自动检测列名
+  const amountCol = findColumn(fields, ['实付款','实付金额','金额','总价','合计','支付金额','付款金额','订单金额']);
+  const productCol = findColumn(fields, ['商品名称','商品标题','货品名称','产品名称','商品','货品']);
+  const dateCol = findColumn(fields, ['下单时间','付款时间','创建时间','交易时间','日期','时间']);
+  const orderCol = findColumn(fields, ['订单编号','订��号','编号']);
+  const qtyCol = findColumn(fields, ['数量','件数']);
+
+  if (!amountCol) { alert('未找到金额列，请确认文件格式。支持的列名：实付款、金额、合计等'); return; }
+
+  importPreviewData = [];
+  let totalAmount = 0;
+
+  rows.forEach((row, i) => {
+    const amount = parseAmount(row[amountCol]);
+    if (amount <= 0) return;
+
+    let date = '';
+    if (dateCol && row[dateCol]) {
+      const d = new Date(row[dateCol]);
+      if (!isNaN(d.getTime())) {
+        date = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      }
+    }
+    if (!date) date = new Date().toISOString().split('T')[0];
+
+    let note = '';
+    if (productCol && row[productCol]) note += row[productCol];
+    if (qtyCol && row[qtyCol]) note += (note ? ' ×' : '') + row[qtyCol];
+    if (!note) note = '-';
+
+    importPreviewData.push({
+      id: orderCol && row[orderCol] ? ('1688_' + String(row[orderCol]).trim()) : ('imp_' + Date.now() + '_' + i),
+      amount: Math.round(amount * 100) / 100,
+      category: '服装进货',
+      date: date,
+      note: note,
+      createdAt: new Date().toISOString()
+    });
+    totalAmount += amount;
+  });
+
+  if (importPreviewData.length === 0) { alert('未能解析出有效订单'); return; }
+
+  // 渲染预览
+  let previewHTML = '<table class="expense-table"><thead><tr><th>日期</th><th>商品</th><th>金额</th></tr></thead><tbody>';
+  importPreviewData.forEach(e => {
+    previewHTML += `<tr><td>${e.date}</td><td>${e.note}</td><td class="amount">¥${e.amount.toFixed(2)}</td></tr>`;
+  });
+  previewHTML += '</tbody></table>';
+
+  document.getElementById('importSummary').textContent =
+    `共识别 ${importPreviewData.length} 笔订单，合计 ¥${totalAmount.toFixed(2)}，全部分类为「服装进货」`;
+  document.getElementById('importPreview').innerHTML = previewHTML;
+  document.getElementById('importModal').style.display = 'flex';
+}
+
+function closeImportModal() {
+  document.getElementById('importModal').style.display = 'none';
+  importPreviewData = [];
+}
+
+// ============ 粘贴解析1688订单文本 ============
+async function pasteAndParse() {
+  try {
+    var text = await navigator.clipboard.readText();
+    if (!text || text.length < 10) { alert('剪贴板为空或内容太短，请先在1688页面全选复制订单文本'); return; }
+    var orders = parse1688Text(text);
+    if (!orders.length) { alert('未能从粘贴内容中识别出订单。\n\n请确认复制了1688「已买到的货品」页面的完整内容。'); return; }
+
+    importPreviewData = orders.map(function(o, i) {
+      return {
+        id: o.orderId || ('1688_' + Date.now() + '_' + i),
+        amount: Math.round(parseFloat(o.amount) * 100) / 100,
+        category: '服装进货',
+        date: o.date && /^\d{4}-\d{2}-\d{2}$/.test(o.date) ? o.date : new Date().toISOString().split('T')[0],
+        note: o.product || '1688订单',
+        createdAt: new Date().toISOString()
+      };
+    });
+
+    var totalAmount = importPreviewData.reduce(function(s, e) { return s + e.amount; }, 0);
+    var previewHTML = '<table class="expense-table"><thead><tr><th>日期</th><th>商品</th><th>金额</th></tr></thead><tbody>';
+    importPreviewData.forEach(function(e) {
+      previewHTML += '<tr><td>' + e.date + '</td><td>' + e.note + '</td><td class="amount">¥' + e.amount.toFixed(2) + '</td></tr>';
+    });
+    previewHTML += '</tbody></table>';
+
+    document.getElementById('importSummary').textContent =
+      '粘贴解析：共识别 ' + importPreviewData.length + ' 笔订单，合计 ¥' + totalAmount.toFixed(2);
+    document.getElementById('importPreview').innerHTML = previewHTML;
+    document.getElementById('importModal').style.display = 'flex';
+  } catch(e) {
+    alert('读取剪贴板失败：' + e.message + '\n\n请在1688页面 Ctrl+A 全选 → Ctrl+C 复制 → 回到本页点「粘贴解析」');
+  }
+}
+
+function parse1688Text(text) {
+  var orders = [];
+  var lines = text.split(/\n/);
+  var pricePattern = /[¥￥]\s*(\d+\.?\d{0,2})/g;
+
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) continue;
+    var prices = line.match(pricePattern);
+    if (!prices) continue;
+
+    // 取这一行最后一个价格作为实付款
+    var amount = parseFloat(prices[prices.length-1].replace(/[¥￥\s]/g, ''));
+    if (!amount || amount <= 0 || amount > 1000000) continue;
+
+    // 寻找商品名：向前查找（1688通常是 商品名在前，价格在后，或在同一行）
+    var product = '';
+    // 同一行中去掉价格和数字后的文本
+    var productPart = line.replace(pricePattern, '').replace(/[\d.x×\s]+$/g, '').trim();
+    if (productPart && productPart.length > 1 && productPart.length < 100) {
+      product = productPart;
+    } else {
+      // 向前找名称行（商品名通常在价格上方1-3行）
+      for (var j = i-1; j >= Math.max(0, i-3); j--) {
+        var prev = lines[j].trim();
+        if (prev && !prev.match(/[¥￥]/) && !prev.match(/^\d+$/) && prev.length > 2 && prev.length < 100) {
+          product = prev;
+          break;
+        }
+      }
+    }
+    if (!product) product = '1688订单';
+
+    // 寻找日期
+    var date = '';
+    var dateMatch = text.match(/\d{4}-\d{2}-\d{2}/);
+    if (dateMatch) date = dateMatch[0];
+
+    // 寻找订单号
+    var orderId = '';
+    var oidMatch = line.match(/\d{15,20}/);
+    if (oidMatch) orderId = oidMatch[0];
+
+    // 去重（同一行多个价格时取最后一个）
+    var dup = orders.find(function(o) { return o.amount === amount && o.product === product; });
+    if (!dup) {
+      orders.push({ amount: amount, product: product, date: date, orderId: orderId });
+    }
+  }
+
+  return orders;
+}
+
+function confirmImport() {
+  const existingIds = new Set(expenses.map(e => String(e.id)));
+  let addedCount = 0;
+
+  importPreviewData.forEach(row => {
+    if (!existingIds.has(String(row.id))) {
+      expenses.push(row);
+      existingIds.add(String(row.id));
+      addedCount++;
+    }
+  });
+
+  if (addedCount === 0) {
+    alert('这些订单已经存在，无需重复导入');
+  } else {
+    expenses.sort((a,b) => b.date.localeCompare(a.date) || b.id - a.id);
+    saveData();
+    renderAll();
+    alert(`✅ 成功导入 ${addedCount} 笔订单（${importPreviewData.length - addedCount} 笔已存在，已跳过）`);
+  }
+
+  closeImportModal();
+}
 </script>
 </body>
 </html>
