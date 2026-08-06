@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="漂亮宝贝工作台">
+<meta name="theme-color" content="#F0F7F4">
+<link rel="apple-touch-icon" href="data:image/jpeg;base64,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">
+<title>漂亮宝贝的工作台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --green:#2D9D5C;--green-light:#E8F5E9;--green-soft:#A8E6CF;--green-dark:#1B5E20;
+  --bg:#F0F7F4;--card:#FFFFFF;--text:#2D3436;--text2:#636E72;--text3:#999;
+  --shadow:0 2px 12px rgba(0,0,0,0.06);--shadow-lg:0 4px 24px rgba(0,0,0,0.1);
+  --radius:16px;--radius-sm:12px;--radius-xs:8px;
+  --red:#E74C3C;--orange:#F39C12;--blue:#3498DB;--pink:#E91E63;
+  --nav-h:64px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;}
+/* Header */
+.main-header{padding:12px 20px;background:#fff;border-bottom:1px solid #e0e0e0;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,0.03);flex-shrink:0;}
+.main-header .greeting{font-size:16px;font-weight:700;}
+.main-header .greeting em{font-style:normal;color:var(--green);}
+.main-header .header-right{display:flex;align-items:center;gap:12px;}
+.main-header .reset-btn{padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;color:var(--text2);transition:all 0.2s;white-space:nowrap;}
+.main-header .reset-btn:hover{background:#f5f5f5;}
+/* Main content */
+.main-content{flex:1;overflow-y:auto;padding:16px 16px 80px;}
+.main-content .page{display:none;}
+.main-content .page.active{display:block;}
+/* Bottom nav */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:#fff;
+  border-top:1px solid #e0e0e0;display:flex;justify-content:space-around;
+  align-items:center;z-index:999;box-shadow:0 -2px 12px rgba(0,0,0,0.04);
+  padding:0 4px;padding-bottom:env(safe-area-inset-bottom,0);
+  pointer-events:auto;touch-action:manipulation;
+}
+.bottom-nav .nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  cursor:pointer;color:var(--text3);transition:all 0.2s;padding:8px 6px;
+  min-width:0;flex:1;text-align:center;user-select:none;
+  -webkit-tap-highlight-color:transparent;pointer-events:auto;
+}
+.bottom-nav .nav-item:hover{color:var(--green);}
+.bottom-nav .nav-item:active{color:var(--green);transform:scale(0.9);}
+.bottom-nav .nav-item.active{color:var(--green);font-weight:600;}
+.bottom-nav .nav-item .nav-icon{font-size:20px;line-height:1;}
+.bottom-nav .nav-item .nav-label{font-size:10px;white-space:nowrap;}
+/* Cards */
+.card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px;}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.card-header h3{font-size:16px;font-weight:700;}
+.card-header .add-btn{width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;border:none;cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.card-header .add-btn:hover{background:var(--green-dark);transform:scale(1.1);}
+.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:600px){.dashboard-grid{grid-template-columns:1fr;}}
+.dashboard-grid .full-width{grid-column:1/-1;}
+.dash-inspire{text-align:center;padding:24px 16px;}
+.dash-inspire .quote-cn{font-size:16px;color:var(--text);line-height:1.6;margin-bottom:8px;}
+.dash-inspire .quote-en{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:12px;font-style:italic;}
+.dash-inspire .play-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;background:var(--green);color:#fff;border:none;border-radius:20px;cursor:pointer;font-size:13px;transition:all 0.2s;}
+.dash-inspire .play-btn:hover{background:var(--green-dark);}
+.dash-inspire .play-btn.playing{background:var(--orange);}
+.dash-pet{text-align:center;padding:16px;}
+.dash-pet img{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--green-soft);}
+.dash-pet .pet-name{font-size:13px;color:var(--text2);margin-top:8px;}
+/* Calendar */
+.calendar{margin-bottom:8px;}
+.calendar .cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.calendar .cal-header .month-label{font-size:15px;font-weight:700;}
+.calendar .cal-header .cal-nav-btn{width:28px;height:28px;border-radius:50%;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--text2);}
+.calendar .cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:12px;color:var(--text3);margin-bottom:4px;padding:4px 0;}
+.calendar .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.calendar .cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;font-size:13px;position:relative;transition:all 0.15s;min-height:32px;}
+.calendar .cal-day:hover{background:var(--green-light);}
+.calendar .cal-day.today{background:var(--green);color:#fff;font-weight:700;}
+.calendar .cal-day.other-month{color:#ccc;cursor:default;}
+.calendar .cal-day.has-tasks::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--green);}
+.calendar .cal-day.today.has-tasks::after{background:#fff;}
+.calendar .cal-day.selected{border:2px solid var(--green);}
+/* Task list */
+.task-list{list-style:none;max-height:280px;overflow-y:auto;}
+.task-list li{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;}
+.task-list li:last-child{border-bottom:none;}
+.task-list .task-check{width:20px;height:20px;border-radius:50%;border:2px solid #ddd;cursor:pointer;flex-shrink:0;transition:all 0.2s;}
+.task-list .task-check.done{background:var(--green);border-color:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;}
+.task-list .task-info{flex:1;min-width:0;}
+.task-list .task-title{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.task-list .task-title.done-text{text-decoration:line-through;color:var(--text3);}
+.task-list .task-date{font-size:11px;color:var(--text3);}
+.task-list .task-priority{font-size:11px;padding:2px 8px;border-radius:10px;flex-shrink:0;}
+.task-list .task-priority.high{background:#FDE8E8;color:var(--red);}
+.task-list .task-priority.med{background:#FFF3E0;color:var(--orange);}
+.task-list .task-priority.low{background:#E8F5E9;color:var(--green);}
+.task-list .task-del{color:#ccc;cursor:pointer;font-size:16px;flex-shrink:0;opacity:0;transition:opacity 0.2s;}
+.task-list li:hover .task-del{opacity:1;}
+.task-list .task-del:hover{color:var(--red);}
+/* Learn */
+.learn-category{margin-bottom:16px;}
+.learn-category .cat-name{font-size:13px;font-weight:600;color:var(--green);margin-bottom:8px;background:var(--green-light);display:inline-block;padding:4px 14px;border-radius:10px;}
+.learn-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+@media(max-width:600px){.learn-cards{grid-template-columns:1fr;}}
+.learn-card{background:var(--card);border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:all 0.2s;}
+.learn-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.learn-card .card-thumb{height:100px;background:linear-gradient(135deg,var(--green-light),var(--green-soft));display:flex;align-items:center;justify-content:center;font-size:32px;}
+.learn-card .card-body{padding:12px;}
+.learn-card .card-title{font-size:14px;font-weight:600;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.learn-card .card-meta{font-size:12px;color:var(--text3);}
+/* Exercise */
+.exercise-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
+@media(max-width:600px){.exercise-grid{grid-template-columns:1fr 1fr;}}
+.exercise-card{background:var(--card);border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow);cursor:pointer;transition:all 0.2s;border:2px solid transparent;}
+.exercise-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+.exercise-card.checked{border-color:var(--green);background:var(--green-light);}
+.exercise-card .ex-icon{font-size:36px;margin-bottom:6px;}
+.exercise-card .ex-name{font-size:14px;font-weight:600;margin-bottom:4px;}
+.exercise-card .ex-desc{font-size:11px;color:var(--text2);margin-bottom:10px;}
+.exercise-card .ex-check-btn{padding:5px 14px;border-radius:20px;border:none;cursor:pointer;font-size:12px;background:var(--green);color:#fff;transition:all 0.2s;}
+.exercise-card.checked .ex-check-btn{background:#ccc;cursor:default;}
+.exercise-card .ex-link{display:block;font-size:11px;color:var(--blue);margin-top:6px;text-decoration:none;}
+/* Trending */
+.trend-list{list-style:none;}
+.trend-list li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;}
+.trend-list li:last-child{border-bottom:none;}
+.trend-list .trend-rank{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;color:#fff;}
+.trend-list .trend-rank.r1{background:var(--red);}
+.trend-list .trend-rank.r2{background:var(--orange);}
+.trend-list .trend-rank.r3{background:var(--orange);}
+.trend-list .trend-rank.rn{background:#b0bec5;}
+.trend-list .trend-info{flex:1;min-width:0;}
+.trend-list .trend-title{font-size:13px;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.trend-list .trend-hot{font-size:11px;color:var(--text3);}
+.trend-list .trend-platform{font-size:10px;padding:2px 8px;border-radius:10px;flex-shrink:0;margin-top:2px;}
+.trend-list .trend-platform.xhs{background:#FFE8EC;color:var(--pink);}
+.trend-list .trend-platform.dy{background:#E8F0FE;color:var(--blue);}
+.trend-list .trend-platform.bili{background:#FFF3E0;color:var(--orange);}
+/* Modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:100;display:flex;align-items:center;justify-content:center;}
+.modal{background:#fff;border-radius:var(--radius);width:90%;max-width:400px;box-shadow:var(--shadow-lg);overflow:hidden;}
+.modal .modal-header{padding:14px 18px;border-bottom:1px solid #eee;font-size:15px;font-weight:700;display:flex;justify-content:space-between;align-items:center;}
+.modal .modal-close{background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);}
+.modal .modal-body{padding:16px;}
+.modal .form-group{margin-bottom:12px;}
+.modal .form-group label{display:block;font-size:13px;color:var(--text2);margin-bottom:5px;}
+.modal .form-group input,.modal .form-group select,.modal .form-group textarea{width:100%;padding:9px 10px;border:1px solid #ddd;border-radius:var(--radius-xs);font-size:14px;font-family:inherit;outline:none;transition:border 0.2s;}
+.modal .form-group input:focus,.modal .form-group select:focus,.modal .form-group textarea:focus{border-color:var(--green);}
+.modal .form-group textarea{resize:vertical;min-height:50px;}
+.modal .btn-primary{width:100%;padding:10px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-xs);font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s;}
+.modal .btn-primary:hover{background:var(--green-dark);}
+.confirm-dialog{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:200;display:flex;align-items:center;justify-content:center;}
+.confirm-dialog .confirm-box{background:#fff;border-radius:var(--radius);padding:24px;text-align:center;max-width:300px;width:90%;box-shadow:var(--shadow-lg);}
+.confirm-dialog .confirm-box p{margin-bottom:16px;font-size:14px;}
+.confirm-dialog .confirm-box .confirm-btns{display:flex;gap:10px;}
+.confirm-dialog .confirm-box button{flex:1;padding:10px;border-radius:var(--radius-xs);font-size:14px;cursor:pointer;border:none;}
+.confirm-dialog .confirm-box .btn-cancel{background:#f0f0f0;}
+.confirm-dialog .confirm-box .btn-confirm{background:var(--red);color:#fff;}
+.empty-state{text-align:center;padding:30px 16px;color:var(--text3);}
+.empty-state .empty-icon{font-size:40px;margin-bottom:10px;display:block;}
+.empty-state .empty-text{font-size:13px;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#c0c0c0;border-radius:10px;}
+</style>
+</head>
+<body>
+
+<div class="main-header">
+  <div class="greeting" id="greeting">👋 下午好，<em>漂亮宝贝</em></div>
+  <div class="header-right">
+    <span style="font-size:12px;color:var(--text3);white-space:nowrap;" id="headerDate"></span>
+    <button class="reset-btn" id="resetBtn">🔄 重置今日</button>
+  </div>
+</div>
+
+<div class="main-content" id="mainContent">
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div class="dashboard-grid">
+      <div class="card dash-inspire full-width">
+        <div class="quote-cn" id="quoteCn">每一天都是新的开始，用微笑迎接清晨的第一缕阳光。</div>
+        <div class="quote-en" id="quoteEn">Every day is a fresh start. Greet the morning sun with a smile.</div>
+        <button class="play-btn" id="playBtn" onclick="playQuote()">🔊 朗读</button>
+      </div>
+      <div class="card dash-pet">
+        <img src="data:image/jpeg;base64,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" alt="切尔西">
+        <div class="pet-name">🐶 切尔西小助手</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>💼 今日工作任务</h3></div>
+        <div id="dashWorkTasks" class="task-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>🏪 今日秀场任务</h3></div>
+        <div id="dashShopTasks" class="task-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>🏃 今日运动</h3></div>
+        <div id="dashExercise"></div>
+      </div>
+    </div>
+  </div>
+  <!-- WORK -->
+  <div class="page" id="page-work">
+    <div class="card">
+      <div class="calendar" id="workCalendar"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>💼 工作任务 <span id="workDateLabel" style="font-weight:400;font-size:12px;color:var(--text3);margin-left:6px;"></span></h3>
+        <button class="add-btn" onclick="openTaskModal('work')">+</button>
+      </div>
+      <ul class="task-list" id="workTaskList"></ul>
+    </div>
+  </div>
+  <!-- SHOP -->
+  <div class="page" id="page-shop">
+    <div class="card">
+      <div class="calendar" id="shopCalendar"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>🏪 秀场任务 <span id="shopDateLabel" style="font-weight:400;font-size:12px;color:var(--text3);margin-left:6px;"></span></h3>
+        <button class="add-btn" onclick="openTaskModal('shop')">+</button>
+      </div>
+      <ul class="task-list" id="shopTaskList"></ul>
+    </div>
+  </div>
+  <!-- NOTES -->
+  <div class="page" id="page-notes">
+    <div class="card">
+      <div class="card-header"><h3>📝 内容发布日历</h3></div>
+      <div class="calendar" id="notesCalendar"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>📋 发布计划 <span id="notesDateLabel" style="font-weight:400;font-size:12px;color:var(--text3);margin-left:6px;"></span></h3>
+        <button class="add-btn" onclick="openTaskModal('notes')">+</button>
+      </div>
+      <ul class="task-list" id="notesTaskList"></ul>
+    </div>
+  </div>
+  <!-- LEARN -->
+  <div class="page" id="page-learn">
+    <div class="learn-category">
+      <span class="cat-name">🗣️ 日常口语</span>
+      <div class="learn-cards" id="learnDaily"></div>
+    </div>
+    <div class="learn-category">
+      <span class="cat-name">💼 商务英语</span>
+      <div class="learn-cards" id="learnBiz"></div>
+    </div>
+    <div class="learn-category">
+      <span class="cat-name">👂 听力磨耳朵</span>
+      <div class="learn-cards" id="learnListen"></div>
+    </div>
+    <div class="learn-category">
+      <span class="cat-name">🎬 博主 Vlog</span>
+      <div class="learn-cards" id="learnVlog"></div>
+    </div>
+  </div>
+  <!-- EXERCISE -->
+  <div class="page" id="page-exercise">
+    <div class="card">
+      <div class="card-header"><h3>🏃 运动日历</h3></div>
+      <div class="calendar" id="exCalendar"></div>
+    </div>
+    <div class="exercise-grid" id="exerciseCards"></div>
+  </div>
+  <!-- TOPICS -->
+  <div class="page" id="page-topics">
+    <div class="card">
+      <div class="card-header"><h3>💡 今日热门选题 TOP10</h3></div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;">
+        <span style="font-size:11px;color:var(--text2);">数据来源：</span>
+        <span style="font-size:10px;background:#FFE8EC;color:var(--pink);padding:2px 7px;border-radius:10px;">小红书</span>
+        <span style="font-size:10px;background:#E8F0FE;color:var(--blue);padding:2px 7px;border-radius:10px;">抖音</span>
+        <span style="font-size:10px;background:#FFF3E0;color:var(--orange);padding:2px 7px;border-radius:10px;">B站</span>
+      </div>
+      <ul class="trend-list" id="topicsTrendList"></ul>
+    </div>
+  </div>
+  <!-- AI -->
+  <div class="page" id="page-ai">
+    <div class="card">
+      <div class="card-header"><h3>🤖 AI 热门趋势</h3></div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;">
+        <span style="font-size:11px;color:var(--text2);">数据来源：</span>
+        <span style="font-size:10px;background:#FFE8EC;color:var(--pink);padding:2px 7px;border-radius:10px;">小红书</span>
+        <span style="font-size:10px;background:#E8F0FE;color:var(--blue);padding:2px 7px;border-radius:10px;">抖音</span>
+        <span style="font-size:10px;background:#FFF3E0;color:var(--orange);padding:2px 7px;border-radius:10px;">B站</span>
+      </div>
+      <ul class="trend-list" id="aiTrendList"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav" id="bottomNav">
+  <div class="nav-item active" data-page="home">
+    <span class="nav-icon">🏠</span><span class="nav-label">首页</span>
+  </div>
+  <div class="nav-item" data-page="work">
+    <span class="nav-icon">💼</span><span class="nav-label">职场</span>
+  </div>
+  <div class="nav-item" data-page="shop">
+    <span class="nav-icon">🏪</span><span class="nav-label">秀场</span>
+  </div>
+  <div class="nav-item" data-page="notes">
+    <span class="nav-icon">📝</span><span class="nav-label">笔记</span>
+  </div>
+  <div class="nav-item" data-page="learn">
+    <span class="nav-icon">📚</span><span class="nav-label">学习</span>
+  </div>
+  <div class="nav-item" data-page="exercise">
+    <span class="nav-icon">🏃</span><span class="nav-label">运动</span>
+  </div>
+  <div class="nav-item" data-page="topics">
+    <span class="nav-icon">💡</span><span class="nav-label">选题</span>
+  </div>
+  <div class="nav-item" data-page="ai">
+    <span class="nav-icon">🤖</span><span class="nav-label">AI</span>
+  </div>
+</div>
+
+<!-- Task Modal -->
+<div class="modal-overlay" id="taskModal" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modalTitle">新建任务</span>
+      <button class="modal-close" onclick="closeTaskModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>📅 日期</label>
+        <input type="date" id="taskDate">
+      </div>
+      <div class="form-group">
+        <label>📝 任务内容</label>
+        <input type="text" id="taskTitle" placeholder="输入任务内容...">
+      </div>
+      <div class="form-group" id="priorityGroup">
+        <label>⭐ 优先级</label>
+        <select id="taskPriority">
+          <option value="low">🟢 低</option>
+          <option value="med" selected>🟡 中</option>
+          <option value="high">🔴 高</option>
+        </select>
+      </div>
+      <div class="form-group" id="platformGroup" style="display:none;">
+        <label>📱 平台</label>
+        <select id="taskPlatform">
+          <option value="小红书">小红书</option>
+          <option value="抖音">抖音</option>
+          <option value="B站">B站</option>
+          <option value="公众号">公众号</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>💬 备注</label>
+        <textarea id="taskNote" placeholder="可选备注..."></textarea>
+      </div>
+      <button class="btn-primary" id="modalSubmit" onclick="saveTask()">✅ 保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Dialog -->
+<div class="confirm-dialog" id="confirmDialog" style="display:none;">
+  <div class="confirm-box">
+    <p>⚠️ 确定要重置今日所有数据吗？<br><small style="color:var(--text3);">此操作不可恢复！</small></p>
+    <div class="confirm-btns">
+      <button class="btn-cancel" onclick="closeConfirm()">取消</button>
+      <button class="btn-confirm" onclick="doReset()">确认重置</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATA STORE =====
+const KEYS = {
+  work: 'wb_v3_work',
+  shop: 'wb_v3_shop',
+  notes: 'wb_v3_notes',
+  exercise: 'wb_v3_exercise'
+};
+
+function load(k) { try { return JSON.parse(localStorage.getItem(KEYS[k]) || '[]'); } catch(e) { return []; } }
+function save(k, v) { localStorage.setItem(KEYS[k], JSON.stringify(v)); }
+
+// ===== STATE =====
+let currentPage = 'home';
+let currentModal = null;
+let calendars = {};
+let calendarDates = {};
+
+// ===== QUOTES =====
+const quotes = [
+  {cn:'每一天都是新的开始，用微笑迎接清晨的第一缕阳光。',en:'Every day is a fresh start. Greet the morning sun with a smile.'},
+  {cn:'成功的秘诀在于每天比别人多努力一点点。',en:'The secret of success is to do a little more each day than everyone else.'},
+  {cn:'生活不会辜负每一个努力向上的人。',en:'Life never fails those who strive upward.'},
+  {cn:'你的未来取决于你今天做了什么。',en:'Your future depends on what you do today.'},
+  {cn:'与其羡慕别人的光芒，不如点亮自己的灯。',en:'Instead of envying others\' light, light your own lamp.'},
+  {cn:'坚持做对的事，时间会给你答案。',en:'Keep doing the right thing, and time will give you the answer.'},
+  {cn:'每一个优秀的人，都有一段沉默的时光。',en:'Every outstanding person has had a period of silent effort.'},
+  {cn:'不积跬步，无以至千里；不积小流，无以成江海。',en:'A journey of a thousand miles begins with a single step.'},
+  {cn:'努力不一定会成功，但不努力一定很轻松？不，不努力一定会后悔。',en:'Hard work may not guarantee success, but not trying guarantees regret.'},
+  {cn:'人生最大的遗憾不是失败，而是我本可以。',en:'The biggest regret in life is not failure, but "I could have."'},
+];
+
+// ===== INIT =====
+function init() {
+  let q = quotes[new Date().getDate() % quotes.length];
+  document.getElementById('quoteCn').textContent = q.cn;
+  document.getElementById('quoteEn').textContent = q.en;
+
+  let now = new Date();
+  let h = now.getHours();
+  let g = h<12?'早上好':h<18?'下午好':'晚上好';
+  document.getElementById('greeting').innerHTML = '👋 '+g+'，<em>漂亮宝贝</em>';
+  document.getElementById('headerDate').textContent = now.toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+
+  // 底部导航事件委托
+  var bottomNav = document.getElementById('bottomNav');
+  if(bottomNav) {
+    bottomNav.addEventListener('click', function(e) {
+      var item = e.target.closest('.nav-item');
+      if(!item) return;
+      var page = item.getAttribute('data-page');
+      if(page) navTo(page);
+    });
+    bottomNav.addEventListener('touchend', function(e) {
+      var item = e.target.closest('.nav-item');
+      if(!item) return;
+      var page = item.getAttribute('data-page');
+      if(page) { e.preventDefault(); navTo(page); }
+    });
+  }
+
+  // 重置按钮事件
+  var resetBtn = document.querySelector('.reset-btn');
+  if(resetBtn) {
+    resetBtn.addEventListener('click', confirmReset);
+  }
+
+  initCalendars();
+  navTo('home');
+  refreshAll();
+}
+
+function navTo(page) {
+  console.log('[navTo] switching to:', page);
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  var pageEl = document.getElementById('page-'+page);
+  if(pageEl) pageEl.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  let target = document.querySelector('.nav-item[data-page="'+page+'"]');
+  if(target) target.classList.add('active');
+  refreshPage(page);
+  document.getElementById('mainContent').scrollTop = 0;
+}
+
+// ===== CALENDAR =====
+function initCalendars() {
+  ['work','shop','notes'].forEach(t=>{
+    if(!calendars[t]) calendars[t]={month:new Date().getMonth(),year:new Date().getFullYear()};
+    if(!calendarDates[t]) calendarDates[t]=formatDate(new Date());
+  });
+  if(!calendars.ex) calendars.ex={month:new Date().getMonth(),year:new Date().getFullYear()};
+}
+
+function formatDate(d) {
+  let m=''+(d.getMonth()+1),dd=''+d.getDate();
+  return d.getFullYear()+'-'+(m.length<2?'0':'')+m+'-'+(dd.length<2?'0':'')+dd;
+}
+
+function renderCalendar(containerId, type) {
+  let c = calendars[type];
+  let el = document.getElementById(containerId);
+  if(!el) return;
+  let today = new Date();
+  let tasks = load(type);
+  let taskDays = new Set(tasks.map(t=>t.date));
+
+  let firstDay = new Date(c.year, c.month, 1);
+  let lastDay = new Date(c.year, c.month+1, 0);
+  let startOffset = firstDay.getDay();
+  let months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  let weeks = ['日','一','二','三','四','五','六'];
+
+  let selDate = calendarDates[type];
+  let todayStr = formatDate(today);
+
+  let html = '<div class="cal-header">';
+  html += '<button class="cal-nav-btn" onclick="calNav(\''+type+'\',-1)">◀</button>';
+  html += '<span class="month-label">'+c.year+'年 '+months[c.month]+'</span>';
+  html += '<button class="cal-nav-btn" onclick="calNav(\''+type+'\',1)">▶</button>';
+  html += '</div>';
+  html += '<div class="cal-weekdays">'+weeks.map(w=>'<span>'+w+'</span>').join('')+'</div>';
+  html += '<div class="cal-days">';
+
+  for(let i=0;i<startOffset;i++) html += '<div class="cal-day other-month"></div>';
+
+  for(let d=1;d<=lastDay.getDate();d++) {
+    let ds = c.year+'-'+(c.month<9?'0':'')+(c.month+1)+'-'+(d<10?'0':'')+d;
+    let cls = 'cal-day';
+    if(ds===todayStr) cls+=' today';
+    if(ds===selDate) cls+=' selected';
+    if(taskDays.has(ds)) cls+=' has-tasks';
+    html += '<div class="'+cls+'" onclick="selectDate(\''+type+'\',\''+ds+'\')">'+d+'</div>';
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function calNav(type, dir) {
+  let c = calendars[type];
+  c.month+=dir;
+  if(c.month<0){c.month=11;c.year--;}
+  if(c.month>11){c.month=0;c.year++;}
+  renderCalFor(type);
+}
+
+function selectDate(type, ds) {
+  calendarDates[type]=ds;
+  renderCalFor(type);
+  renderTaskList(type);
+  updateDateLabel(type, ds);
+}
+
+function renderCalFor(type) {
+  let map={work:'workCalendar',shop:'shopCalendar',notes:'notesCalendar',ex:'exCalendar'};
+  renderCalendar(map[type], type);
+}
+
+function updateDateLabel(type, ds) {
+  let map={work:'workDateLabel',shop:'shopDateLabel',notes:'notesDateLabel'};
+  let el = document.getElementById(map[type]);
+  if(el) el.textContent = '— '+ds;
+}
+
+// ===== TASKS =====
+function renderTaskList(type) {
+  let tasks = load(type);
+  let ds = calendarDates[type];
+  let list = tasks.filter(t=>t.date===ds);
+  let elId = type==='work'?'workTaskList':type==='shop'?'shopTaskList':'notesTaskList';
+  let el = document.getElementById(elId);
+  let dashId = type==='work'?'dashWorkTasks':(type==='shop'?'dashShopTasks':null);
+  let dashEl = document.getElementById(dashId||'');
+
+  let today = formatDate(new Date());
+  let todayTasks = tasks.filter(t=>t.date===today);
+
+  let render = function(target, items, showDate) {
+    if(!target) return;
+    if(!items.length) {
+      target.innerHTML = '<div class="empty-state"><span class="empty-icon">📋</span><div class="empty-text">暂无任务</div></div>';
+      return;
+    }
+    target.innerHTML = items.map((t,i)=>{
+      let pCls = t.priority||'med';
+      let pLabel = {high:'🔴 高',med:'🟡 中',low:'🟢 低'}[pCls]||'中';
+      let platformTag = t.platform ? '<span class="task-date">'+escHtml(t.platform)+'</span>' : '';
+      return '<li>'
+        +'<div class="task-check'+(t.done?' done':'')+'" onclick="toggleTask(\''+type+'\','+tasks.indexOf(t)+')">'+(t.done?'✓':'')+'</div>'
+        +'<div class="task-info">'
+        +'<div class="task-title'+(t.done?' done-text':'')+'">'+escHtml(t.title)+'</div>'
+        +(showDate?'<div class="task-date">'+t.date+'</div>':'')
+        +platformTag
+        +'</div>'
+        +'<span class="task-priority '+pCls+'">'+pLabel+'</span>'
+        +'<span class="task-del" onclick="event.stopPropagation();delTask(\''+type+'\','+tasks.indexOf(t)+')">×</span>'
+        +'</li>';
+    }).join('');
+  };
+
+  render(el, list, false);
+  if(type==='work'||type==='shop') render(dashEl, todayTasks, false);
+
+  if(type==='work'||type==='shop') updateDateLabel(type, ds);
+  if(type==='notes') updateDateLabel('notes', ds);
+}
+
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function toggleTask(type, idx) {
+  let tasks = load(type);
+  if(!tasks[idx]) return;
+  tasks[idx].done = !tasks[idx].done;
+  save(type, tasks);
+  renderTaskList(type);
+}
+
+function delTask(type, idx) {
+  let tasks = load(type);
+  tasks.splice(idx,1);
+  save(type, tasks);
+  if(type==='work'){renderCalFor('work');renderTaskList('work');}
+  else if(type==='shop'){renderCalFor('shop');renderTaskList('shop');}
+  else if(type==='notes'){renderCalFor('notes');renderTaskList('notes');}
+}
+
+function openTaskModal(type) {
+  currentModal = type;
+  document.getElementById('taskModal').style.display='flex';
+  document.getElementById('modalTitle').textContent = (type==='work'?'💼 新建工作任务':type==='shop'?'🏪 新建秀场任务':'📝 新建发布计划');
+  document.getElementById('taskDate').value = calendarDates[type]||formatDate(new Date());
+  document.getElementById('taskTitle').value = '';
+  document.getElementById('taskNote').value = '';
+  document.getElementById('priorityGroup').style.display = (type==='notes')?'none':'block';
+  document.getElementById('platformGroup').style.display = (type==='notes')?'block':'none';
+}
+
+function closeTaskModal() { document.getElementById('taskModal').style.display='none'; currentModal=null; }
+
+function saveTask() {
+  if(!currentModal) return;
+  let date = document.getElementById('taskDate').value;
+  let title = document.getElementById('taskTitle').value.trim();
+  if(!title) { alert('请输入任务内容'); return; }
+  let tasks = load(currentModal);
+  let item = {date,title,done:false};
+  if(currentModal==='notes') {
+    item.platform = document.getElementById('taskPlatform').value;
+  } else {
+    item.priority = document.getElementById('taskPriority').value;
+  }
+  item.note = document.getElementById('taskNote').value.trim();
+  tasks.push(item);
+  save(currentModal, tasks);
+  closeTaskModal();
+  renderCalFor(currentModal);
+  renderTaskList(currentModal);
+}
+
+// ===== EXERCISE =====
+function refreshExercise() {
+  let exercises = [
+    {id:'dance',icon:'💃',name:'舞蹈',desc:'跟跳一支舞，燃脂又快乐',link:'',checked:false},
+    {id:'baduanjin',icon:'🧘',name:'八段锦',desc:'国家体育总局12分钟版',link:'https://www.bilibili.com/video/BV1LJftBnETr',checked:false},
+    {id:'posture',icon:'🧍',name:'体态矫正',desc:'欧阳春晓体态训练',link:'https://search.bilibili.com/all?keyword=欧阳春晓+体态',checked:false},
+  ];
+  let checks = load('exercise');
+  let today = formatDate(new Date());
+  let todayChecks = new Set(checks.filter(c=>c.date===today).map(c=>c.id));
+
+  exercises.forEach(e=>{ e.checked = todayChecks.has(e.id); });
+
+  let el = document.getElementById('exerciseCards');
+  el.innerHTML = exercises.map(e=>'<div class="exercise-card'+(e.checked?' checked':'')+'">'
+    +'<div class="ex-icon">'+e.icon+'</div>'
+    +'<div class="ex-name">'+e.name+'</div>'
+    +'<div class="ex-desc">'+e.desc+'</div>'
+    +(e.checked
+      ?'<button class="ex-check-btn">✅ 已打卡</button>'
+      :'<button class="ex-check-btn" onclick="checkIn(\''+e.id+'\')">打卡签到</button>')
+    +(e.link?'<a class="ex-link" href="'+e.link+'" target="_blank">🔗 查看视频 →</a>':'')
+    +'</div>').join('');
+
+  let dashEl = document.getElementById('dashExercise');
+  if(dashEl) {
+    let doneItems = exercises.filter(e=>e.checked);
+    let todoItems = exercises.filter(e=>!e.checked);
+    dashEl.innerHTML = doneItems.length
+      ? doneItems.map(e=>'<div style="display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;"><span>✅</span><span>'+e.icon+' '+e.name+' 已完成</span></div>').join('')
+        + todoItems.map(e=>'<div style="display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;color:var(--text3);"><span>⬜</span><span>'+e.icon+' '+e.name+' 未打卡</span></div>').join('')
+      : '<div class="empty-state"><span class="empty-icon">🏃</span><div class="empty-text">今天还没运动哦</div></div>';
+  }
+}
+
+function checkIn(id) {
+  let checks = load('exercise');
+  checks.push({id,date:formatDate(new Date())});
+  save('exercise', checks);
+  refreshExercise();
+  renderCalFor('ex');
+}
+
+// ===== LEARN =====
+function refreshLearn() {
+  let videos = {
+    daily:[
+      {title:'日常英语口语100句 | 每天一遍',bvid:'BV1hV4y1J7ZU',thumb:'🗣️',author:'英语兔'},
+      {title:'英语口语 | 地道表达合集',bvid:'BV1Vv4y1N7Fm',thumb:'💬',author:'Real麦克老师'},
+      {title:'每天5分钟 | 实用口语练习',bvid:'BV1aM4y1y7LT',thumb:'⏰',author:'早安英文'},
+    ],
+    biz:[
+      {title:'商务英语面试必备 | 全流程',bvid:'BV1mh411v7ed',thumb:'💼',author:'商务英语课堂'},
+      {title:'职场英语邮件写作 | 模板',bvid:'BV1pZ4y1h7TY',thumb:'📧',author:'English With Lucy'},
+      {title:'商务谈判英语 | 实战句型',bvid:'BV15R4y1H7Ey',thumb:'🤝',author:'华尔街英语'},
+    ],
+    listen:[
+      {title:'BBC 6 Minute English | 合集',bvid:'BV1Wb411J7eX',thumb:'🎧',author:'BBC Learning English'},
+      {title:'TED演讲 | 中英字幕精选',bvid:'BV1s4411N7pF',thumb:'🎤',author:'TED官方'},
+      {title:'VOA慢速英语 | 每日听力',bvid:'BV1i7411d7JX',thumb:'📻',author:'VOA英语'},
+    ],
+    vlog:[
+      {title:'英国生活Vlog | 真实日常英语',bvid:'BV1GJ411m7HL',thumb:'🇬🇧',author:'Lucy Bella'},
+      {title:'美国博主日常 | 地道表达',bvid:'BV1kA41187dG',thumb:'🇺🇸',author:'Ariannita la Gringa'},
+      {title:'澳洲Vlog | 旅行英语',bvid:'BV1yT4y1S7FQ',thumb:'🦘',author:'English with Adriana'},
+    ]
+  };
+  for(let k in videos) {
+    let el = document.getElementById(k==='daily'?'learnDaily':k==='biz'?'learnBiz':k==='listen'?'learnListen':'learnVlog');
+    if(!el) continue;
+    el.innerHTML = videos[k].map(v=>'<div class="learn-card" onclick="window.open(\'https://www.bilibili.com/video/'+v.bvid+'\',\'_blank\')">'
+      +'<div class="card-thumb">'+v.thumb+'</div>'
+      +'<div class="card-body"><div class="card-title">'+v.title+'</div>'
+      +'<div class="card-meta">📺 '+v.author+' | B站</div></div></div>').join('');
+  }
+}
+
+// ===== TRENDING =====
+function genTrendData(type) {
+  let isAi = type==='ai';
+  let data = isAi ? [
+    {title:'Sora 新功能发布：AI视频生成进入新纪元',hot:'🔥 182万',platform:'xhs',label:'小红书'},
+    {title:'Claude 4 重磅更新：推理能力大幅提升',hot:'🔥 156万',platform:'dy',label:'抖音'},
+    {title:'AI绘画进阶教程：Stable Diffusion参数详解',hot:'🔥 134万',platform:'bili',label:'B站'},
+    {title:'GPT-5 即将发布？最新消息汇总',hot:'🔥 128万',platform:'xhs',label:'小红书'},
+    {title:'AI自动化工作流：从零搭建效率工具',hot:'🔥 115万',platform:'bili',label:'B站'},
+    {title:'AI数字人带货实战：月入10万经验分享',hot:'🔥 98万',platform:'dy',label:'抖音'},
+    {title:'大模型本地部署指南：Mac也能跑',hot:'🔥 87万',platform:'bili',label:'B站'},
+    {title:'AI换装工具推荐：服装电商必备',hot:'🔥 76万',platform:'xhs',label:'小红书'},
+    {title:'ChatGPT隐藏技巧：99%的人不知道',hot:'🔥 65万',platform:'dy',label:'抖音'},
+    {title:'2026年AI工具大盘点：效率提升10倍',hot:'🔥 58万',platform:'xhs',label:'小红书'},
+  ] : [
+    {title:'今年夏季最火的连衣裙穿搭合集',hot:'🔥 245万',platform:'xhs',label:'小红书'},
+    {title:'一周通勤穿搭不重样',hot:'🔥 198万',platform:'dy',label:'抖音'},
+    {title:'小个子女生穿搭显高秘籍',hot:'🔥 176万',platform:'xhs',label:'小红书'},
+    {title:'1688平价好店推荐合集',hot:'🔥 154万',platform:'bili',label:'B站'},
+    {title:'平替测评：百元vs千元质感对比',hot:'🔥 132万',platform:'dy',label:'抖音'},
+    {title:'初秋新款预告：早秋氛围感穿搭',hot:'🔥 118万',platform:'xhs',label:'小红书'},
+    {title:'服装创业日记：从0到月销10万',hot:'🔥 105万',platform:'dy',label:'抖音'},
+    {title:'今年必入的新中式穿搭合集',hot:'🔥 92万',platform:'xhs',label:'小红书'},
+    {title:'服装面料知识大全：图文并茂',hot:'🔥 78万',platform:'bili',label:'B站'},
+    {title:'配饰搭配技巧：提升整体质感',hot:'🔥 65万',platform:'dy',label:'抖音'},
+  ];
+  return data;
+}
+
+function refreshTrending() {
+  let topicsData = genTrendData('topics');
+  let aiData = genTrendData('ai');
+
+  let renderTrend = function(elId, data) {
+    let el = document.getElementById(elId);
+    if(!el) return;
+    el.innerHTML = data.map((t,i)=>{
+      let rCls = i<3?'r'+(i+1):'rn';
+      return '<li>'
+        +'<div class="trend-rank '+rCls+'">'+(i+1)+'</div>'
+        +'<div class="trend-info"><div class="trend-title">'+t.title+'</div>'
+        +'<div class="trend-hot">'+t.hot+'</div></div>'
+        +'<span class="trend-platform '+t.platform+'">'+t.label+'</span>'
+        +'</li>';
+    }).join('');
+  };
+
+  renderTrend('topicsTrendList', topicsData);
+  renderTrend('aiTrendList', aiData);
+}
+
+// ===== SPEECH =====
+function playQuote() {
+  let btn = document.getElementById('playBtn');
+  let cn = document.getElementById('quoteCn').textContent;
+  let en = document.getElementById('quoteEn').textContent;
+  let text = cn + '. ' + en;
+  if(window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    btn.classList.remove('playing');
+    btn.textContent = '🔊 朗读';
+    return;
+  }
+  let u = new SpeechSynthesisUtterance(text);
+  u.lang = 'zh-CN';
+  u.rate = 0.9;
+  u.onstart = ()=>{ btn.classList.add('playing'); btn.textContent = '⏸ 停止'; };
+  u.onend = ()=>{ btn.classList.remove('playing'); btn.textContent = '🔊 朗读'; };
+  u.onerror = ()=>{ btn.classList.remove('playing'); btn.textContent = '🔊 朗读'; };
+  window.speechSynthesis.speak(u);
+}
+
+// ===== RESET =====
+function confirmReset() { document.getElementById('confirmDialog').style.display='flex'; }
+function closeConfirm() { document.getElementById('confirmDialog').style.display='none'; }
+function doReset() {
+  let today = formatDate(new Date());
+  ['work','shop','notes'].forEach(k=>{
+    let tasks = load(k).filter(t=>t.date!==today);
+    save(k, tasks);
+  });
+  let checks = load('exercise').filter(c=>c.date!==today);
+  save('exercise', checks);
+  closeConfirm();
+  refreshAll();
+}
+
+// ===== REFRESH =====
+function refreshAll() {
+  initCalendars();
+  renderCalFor('work'); renderCalFor('shop'); renderCalFor('notes');
+  if(calendars.ex) renderCalFor('ex');
+  renderTaskList('work'); renderTaskList('shop'); renderTaskList('notes');
+  refreshExercise();
+  refreshLearn();
+  refreshTrending();
+}
+
+function refreshPage(page) {
+  if(page==='work'){renderCalFor('work');renderTaskList('work');}
+  else if(page==='shop'){renderCalFor('shop');renderTaskList('shop');}
+  else if(page==='notes'){renderCalFor('notes');renderTaskList('notes');}
+  else if(page==='learn') refreshLearn();
+  else if(page==='exercise'){renderCalFor('ex');refreshExercise();}
+  else if(page==='topics'||page==='ai') refreshTrending();
+  else if(page==='home') refreshAll();
+}
+
+// ===== CLICK OUTSIDE MODAL =====
+document.addEventListener('click', function(e) {
+  if(e.target.id==='taskModal') closeTaskModal();
+  if(e.target.id==='confirmDialog') closeConfirm();
+});
+
+document.addEventListener('keydown', function(e) {
+  if(e.key==='Escape') { closeTaskModal(); closeConfirm(); }
+});
+
+// ===== START =====
+init();
+</script>
+</body>
+</html>
