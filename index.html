@@ -646,13 +646,40 @@ function closeImportModal() {
 }
 
 // ============ 粘贴解析1688订单文本 ============
-async function pasteAndParse() {
-  try {
-    var text = await navigator.clipboard.readText();
-    if (!text || text.length < 10) { alert('剪贴板为空或内容太短，请先在1688页面全选复制订单文本'); return; }
+let pasteModalOpen = false;
+function pasteAndParse() {
+  // 创建一个粘贴弹窗，避免剪贴板API权限问题
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
+  
+  var box = document.createElement('div');
+  box.style.cssText = 'background:#fff;border-radius:12px;padding:24px;width:90%;max-width:600px;max-height:90vh;display:flex;flex-direction:column;';
+  box.innerHTML = '<h3 style="margin:0 0 8px;">📋 粘贴解析 1688 订单</h3>' +
+    '<p style="font-size:13px;color:#636e72;margin:0 0 12px;">在1688「已买到的货品」页面 <b>Ctrl+A</b> 全选 → <b>Ctrl+C</b> 复制，然后在下框 <b>Ctrl+V</b> 粘贴，点「解析」。</p>' +
+    '<textarea id="pasteTextarea" style="flex:1;min-height:200px;border:1px solid #ddd;border-radius:8px;padding:12px;font-size:13px;resize:vertical;font-family:inherit;" placeholder="Ctrl+V 粘贴1688页面内容到这里..."></textarea>' +
+    '<div style="margin-top:12px;text-align:right;display:flex;gap:8px;justify-content:flex-end;">' +
+    '<button id="pasteCancelBtn" style="padding:8px 20px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;font-size:14px;">取消</button>' +
+    '<button id="pasteParseBtn" style="padding:8px 20px;border:none;border-radius:6px;background:#f39c12;color:#fff;cursor:pointer;font-size:14px;font-weight:600;">解析</button>' +
+    '</div>';
+  
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+  pasteModalOpen = true;
+  
+  document.getElementById('pasteCancelBtn').onclick = function() {
+    document.body.removeChild(overlay);
+    pasteModalOpen = false;
+  };
+  
+  document.getElementById('pasteParseBtn').onclick = function() {
+    var text = document.getElementById('pasteTextarea').value;
+    document.body.removeChild(overlay);
+    pasteModalOpen = false;
+    
+    if (!text || text.length < 20) { alert('内容为空或太短，请先在1688页面全选复制订单文本。'); return; }
     var orders = parse1688Text(text);
-    if (!orders.length) { alert('未能从粘贴内容中识别出订单。\n\n请确认复制了1688「已买到的货品」页面的完整内容。'); return; }
-
+    if (!orders.length) { alert('未能从粘贴内容中识别出订单。\n\n可能原因：\n1. 未复制完整页面内容\n2. 1688文本格式特殊\n\n请联系阿爪粘贴示例文本调试。'); return; }
+    
     importPreviewData = orders.map(function(o, i) {
       return {
         id: o.orderId || ('1688_' + Date.now() + '_' + i),
@@ -675,56 +702,109 @@ async function pasteAndParse() {
       '粘贴解析：共识别 ' + importPreviewData.length + ' 笔订单，合计 ¥' + totalAmount.toFixed(2);
     document.getElementById('importPreview').innerHTML = previewHTML;
     document.getElementById('importModal').style.display = 'flex';
-  } catch(e) {
-    alert('读取剪贴板失败：' + e.message + '\n\n请在1688页面 Ctrl+A 全选 → Ctrl+C 复制 → 回到本页点「粘贴解析」');
-  }
+  };
 }
 
 function parse1688Text(text) {
   var orders = [];
+  // Normalize: replace various yuan symbols, and normalize common ANSI/Unicode junk
+  text = text.replace(/[\uffe5]/g, '\u00a5'); // ￥ -> ¥
   var lines = text.split(/\n/);
-  var pricePattern = /[¥￥]\s*(\d+\.?\d{0,2})/g;
+  var pricePattern = /[¥]\s*(\d+(?:,\d{3})*(?:\.\d{1,2})?)/g;
 
+  // First pass: find all lines with ¥ amounts, record (lineIndex, amounts[], lineText)
+  var priceLines = [];
   for (var i = 0; i < lines.length; i++) {
-    var line = lines[i].trim();
-    if (!line) continue;
-    var prices = line.match(pricePattern);
-    if (!prices) continue;
+    var l = lines[i];
+    var ms = [];
+    var m;
+    pricePattern.lastIndex = 0;
+    while ((m = pricePattern.exec(l)) !== null) {
+      var amt = parseFloat(m[1].replace(/,/g, ''));
+      if (amt > 0 && amt <= 1000000) ms.push(amt);
+    }
+    if (ms.length > 0) {
+      priceLines.push({ idx: i, amounts: ms, line: l.trim() });
+    }
+  }
 
-    // 取这一行最后一个价格作为实付款
-    var amount = parseFloat(prices[prices.length-1].replace(/[¥￥\s]/g, ''));
-    if (!amount || amount <= 0 || amount > 1000000) continue;
+  if (priceLines.length === 0) return orders;
 
-    // 寻找商品名：向前查找（1688通常是 商品名在前，价格在后，或在同一行）
+  // Second pass: decide which amounts are order totals
+  // Heuristic: if a line has multiple ¥, the LAST one is the total (eg. ¥20.75 × 12 = ¥249.00)
+  // If only one ¥, it's the total
+  for (var pi = 0; pi < priceLines.length; pi++) {
+    var pl = priceLines[pi];
+    var amount = pl.amounts[pl.amounts.length - 1]; // last amount = total
+
+    // Skip amounts that are clearly unit prices (if there's a larger total in the same line)
+    if (pl.amounts.length > 1 && amount < pl.amounts[0]) {
+      amount = pl.amounts[0]; // fallback to first
+    }
+    
+    if (amount <= 0 || amount > 1000000) continue;
+
+    // Find product name: look at nearby lines
     var product = '';
-    // 同一行中去掉价格和数字后的文本
-    var productPart = line.replace(pricePattern, '').replace(/[\d.x×\s]+$/g, '').trim();
-    if (productPart && productPart.length > 1 && productPart.length < 100) {
-      product = productPart;
+    var cleanLine = pl.line.replace(pricePattern, '').replace(/[\d.x×\s=\-+]+$/g, '').trim();
+    if (cleanLine && cleanLine.length > 1 && cleanLine.length < 100) {
+      product = cleanLine;
     } else {
-      // 向前找名称行（商品名通常在价格上方1-3行）
-      for (var j = i-1; j >= Math.max(0, i-3); j--) {
-        var prev = lines[j].trim();
-        if (prev && !prev.match(/[¥￥]/) && !prev.match(/^\d+$/) && prev.length > 2 && prev.length < 100) {
-          product = prev;
-          break;
+      // Search upward and downward for product name
+      for (var d = 1; d <= 5; d++) {
+        // Try above first
+        var upIdx = pl.idx - d;
+        if (upIdx >= 0) {
+          var upLine = lines[upIdx].trim();
+          if (upLine && !/[¥]/.test(upLine) && !/^\d+$/.test(upLine) && !/订单|查看|收货|发货|退款|售后|物流|客服|提醒|确认|删除|共\d+笔/.test(upLine) && upLine.length > 2 && upLine.length < 100) {
+            product = upLine;
+            break;
+          }
+        }
+        // Then try below
+        var dnIdx = pl.idx + d;
+        if (dnIdx < lines.length) {
+          var dnLine = lines[dnIdx].trim();
+          if (dnLine && !/[¥]/.test(dnLine) && !/^\d+$/.test(dnLine) && !/订单|查看|收货|发货|退款|售后|物流|客服|提醒|确认|删除|共\d+笔/.test(dnLine) && dnLine.length > 2 && dnLine.length < 100) {
+            product = dnLine;
+            break;
+          }
         }
       }
     }
     if (!product) product = '1688订单';
 
-    // 寻找日期
-    var date = '';
-    var dateMatch = text.match(/\d{4}-\d{2}-\d{2}/);
-    if (dateMatch) date = dateMatch[0];
-
-    // 寻找订单号
+    // Find order ID: 15-20 digit number on this or nearby lines
     var orderId = '';
-    var oidMatch = line.match(/\d{15,20}/);
-    if (oidMatch) orderId = oidMatch[0];
+    var oidMatch = pl.line.match(/\d{15,20}/);
+    if (!oidMatch) {
+      for (var dd = 1; dd <= 3; dd++) {
+        var ni = pl.idx + dd;
+        if (ni < lines.length) { var nm = lines[ni].match(/\d{15,20}/); if (nm) { orderId = nm[0]; break; } }
+        ni = pl.idx - dd;
+        if (ni >= 0) { nm = lines[ni].match(/\d{15,20}/); if (nm) { orderId = nm[0]; break; } }
+      }
+    } else {
+      orderId = oidMatch[0];
+    }
 
-    // 去重（同一行多个价格时取最后一个）
-    var dup = orders.find(function(o) { return o.amount === amount && o.product === product; });
+    // Find date: search wider range
+    var date = '';
+    for (var dd2 = 0; dd2 < 10; dd2++) {
+      var ni2 = pl.idx + dd2;
+      if (ni2 < lines.length) { var dm2 = lines[ni2].match(/\d{4}[-/]\d{1,2}[-/]\d{1,2}/); if (dm2) { date = dm2[0]; break; } }
+      ni2 = pl.idx - dd2 - 1;
+      if (ni2 >= 0) { dm2 = lines[ni2].match(/\d{4}[-/]\d{1,2}[-/]\d{1,2}/); if (dm2) { date = dm2[0]; break; } }
+    }
+
+    // If no date per order, pick first date found in entire text
+    if (!date) {
+      var globalDate = text.match(/\d{4}[-/]\d{1,2}[-/]\d{1,2}/);
+      if (globalDate) date = globalDate[0];
+    }
+
+    // Dedupe by amount + product
+    var dup = orders.find(function(o) { return Math.abs(o.amount - amount) < 0.01 && o.product === product; });
     if (!dup) {
       orders.push({ amount: amount, product: product, date: date, orderId: orderId });
     }
