@@ -203,6 +203,75 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .inv-form-group input,.inv-form-group select{width:100%;padding:9px 10px;border:1px solid #ddd;border-radius:var(--radius-xs);font-size:14px;font-family:inherit;outline:none;transition:border 0.2s;}
 .inv-form-group input:focus,.inv-form-group select:focus{border-color:var(--green);}
 .inv-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* ===== FITNESS: HIIT Timer ===== */
+.fitness-section{margin-bottom:16px;}
+.hiit-presets{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.hiit-preset{padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid #ddd;background:#fff;color:var(--text);transition:all 0.2s;}
+.hiit-preset.active{background:var(--green);color:#fff;border-color:var(--green);}
+.hiit-config{display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap;font-size:12px;}
+.hiit-config input{width:48px;padding:5px;border:1px solid #ddd;border-radius:6px;text-align:center;font-size:12px;}
+.hiit-timer-display{text-align:center;padding:20px;border-radius:var(--radius);margin-bottom:10px;transition:background 0.3s;}
+.hiit-timer-display.work{background:#E8F5E9;}
+.hiit-timer-display.rest{background:#FFF3E0;}
+.hiit-timer-display.ready{background:#F5F5F5;}
+.hiit-timer-display .hiit-phase{font-size:13px;font-weight:700;margin-bottom:2px;}
+.hiit-timer-display .hiit-time{font-size:48px;font-weight:800;font-family:monospace;}
+.hiit-timer-display .hiit-round{font-size:12px;color:var(--text2);}
+.hiit-controls{display:flex;gap:8px;justify-content:center;}
+.hiit-controls button{padding:8px 20px;border-radius:20px;font-size:13px;cursor:pointer;border:none;font-weight:600;transition:all 0.2s;}
+.hiit-controls .btn-start{background:var(--green);color:#fff;}
+.hiit-controls .btn-start:hover{background:var(--green-dark);}
+.hiit-controls .btn-pause{background:#f0f0f0;color:var(--text);}
+.hiit-controls .btn-reset{background:#fff;border:1px solid #ddd;color:var(--text2);}
+
+/* ===== FITNESS: Training Plan ===== */
+.tp-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px;font-size:10px;text-align:center;}
+.tp-day-header{padding:6px 2px;border-radius:6px;font-weight:600;background:#f5f5f5;}
+.tp-day-header.today{background:var(--green);color:#fff;}
+.tp-day-slot{min-height:60px;background:#fafafa;border-radius:6px;padding:4px;cursor:pointer;transition:all 0.2s;border:1px solid transparent;}
+.tp-day-slot:hover{border-color:var(--green);}
+.tp-ex-item{font-size:10px;padding:3px 5px;margin-bottom:2px;background:#fff;border-radius:4px;display:flex;align-items:center;justify-content:space-between;gap:3px;}
+.tp-ex-item.done{text-decoration:line-through;color:var(--text3);}
+.tp-ex-item .tp-ex-del{color:var(--red);cursor:pointer;font-size:10px;opacity:0.5;}
+.tp-ex-item:hover .tp-ex-del{opacity:1;}
+.tp-add-btn{display:block;width:100%;padding:3px;font-size:16px;text-align:center;color:var(--text3);background:none;border:none;cursor:pointer;border-radius:4px;}
+.tp-add-btn:hover{background:#e8e8e8;color:var(--green);}
+
+/* ===== FITNESS: Achievements ===== */
+.ach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.ach-badge{text-align:center;padding:12px 6px;border-radius:var(--radius);background:#fafafa;border:1px solid #eee;transition:all 0.3s;}
+.ach-badge.locked{opacity:0.45;filter:grayscale(0.8);}
+.ach-badge.unlocked{background:var(--green-light);border-color:var(--green);animation:achPop 0.5s ease;}
+@keyframes achPop{0%{transform:scale(1);}50%{transform:scale(1.15);}100%{transform:scale(1);}}
+.ach-badge .ach-icon{font-size:28px;margin-bottom:4px;}
+.ach-badge .ach-name{font-size:10px;font-weight:600;margin-bottom:2px;}
+.ach-badge .ach-prog{font-size:9px;color:var(--text3);}
+
+/* ===== FITNESS: Virtual Journey ===== */
+.vj-route{background:#fafafa;border-radius:var(--radius);padding:12px;margin-bottom:8px;}
+.vj-route .vj-name{font-weight:600;font-size:13px;margin-bottom:8px;}
+.vj-progress-bar{height:18px;background:#e8e8e8;border-radius:9px;overflow:hidden;position:relative;margin-bottom:8px;}
+.vj-progress-text{font-size:11px;color:var(--text2);display:flex;justify-content:space-between;}
+.vj-progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#4caf50);border-radius:9px;transition:width 0.5s ease;}
+.vj-input-row{display:flex;gap:8px;align-items:center;}
+.vj-input-row input{flex:1;padding:7px;border:1px solid #ddd;border-radius:6px;font-size:12px;text-align:center;}
+.vj-input-row button{padding:7px 14px;background:var(--green);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;}
+.vj-checkpoint{font-size:10px;padding:2px 6px;background:var(--green-light);border-radius:10px;white-space:nowrap;}
+
+/* ===== FITNESS: Calorie Tracker ===== */
+.cal-input-row{display:flex;gap:6px;margin-bottom:12px;align-items:flex-end;flex-wrap:wrap;}
+.cal-input-row select{flex:1;min-width:90px;padding:7px;border:1px solid #ddd;border-radius:6px;font-size:12px;}
+.cal-input-row input{width:60px;padding:7px;border:1px solid #ddd;border-radius:6px;font-size:12px;text-align:center;}
+.cal-input-row button{padding:7px 14px;background:var(--green);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;}
+.cal-today{border-radius:var(--radius);padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:12px;}
+.cal-today .cal-total{font-size:28px;font-weight:800;font-family:monospace;}
+.cal-today .cal-total.over{color:var(--green);}
+.cal-today .cal-label{font-size:11px;color:var(--text3);}
+.cal-log{max-height:150px;overflow-y:auto;}
+.cal-log-item{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid #f0f0f0;}
+.cal-log-item .cal-log-del{color:var(--red);opacity:0.3;cursor:pointer;margin-left:6px;}
+.cal-log-item:hover .cal-log-del{opacity:1;}
 </style>
 </head>
 <body>
@@ -300,6 +369,67 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
       <div class="calendar" id="exCalendar"></div>
     </div>
     <div class="exercise-grid" id="exerciseCards"></div>
+    <!-- HIIT Timer -->
+    <div class="card fitness-section">
+      <div class="card-header"><h3>⏱️ HIIT 计时器</h3></div>
+      <div class="hiit-presets" id="hiitPresets"></div>
+      <div class="hiit-config">
+        <span>训练</span><input type="number" id="hiitWork" value="30" min="5" max="300">秒
+        <span>休息</span><input type="number" id="hiitRest" value="15" min="5" max="300">秒
+        <span>轮数</span><input type="number" id="hiitRounds" value="8" min="1" max="50">
+      </div>
+      <div class="hiit-timer-display ready" id="hiitDisplay">
+        <div class="hiit-phase">准备开始</div>
+        <div class="hiit-time">00:30</div>
+        <div class="hiit-round">共 8 轮</div>
+      </div>
+      <div class="hiit-controls">
+        <button class="btn-start" id="hiitStart" onclick="hiitToggle()">▶ 开始</button>
+        <button class="btn-reset" onclick="hiitReset()">↺ 重置</button>
+      </div>
+    </div>
+    <!-- Calorie Tracker -->
+    <div class="card fitness-section">
+      <div class="card-header"><h3>🔥 热量估算</h3></div>
+      <div class="cal-input-row">
+        <select id="calType"><option value="">选运动类型</option></select>
+        <input type="number" id="calMins" placeholder="分钟" value="30" min="1" max="300">
+        <button onclick="calAdd()">+ 记录</button>
+      </div>
+      <div class="cal-today">
+        <div><span class="cal-total" id="calTotal">0</span><span style="font-size:16px;"> kcal</span></div>
+        <div class="cal-label">今日已消耗</div>
+      </div>
+      <div class="cal-log" id="calLog"></div>
+    </div>
+    <!-- Training Plan -->
+    <div class="card fitness-section">
+      <div class="card-header"><h3>🏋️ 训练计划</h3><button class="add-btn" onclick="tpAddWeek()">↻ 本周</button></div>
+      <div class="tp-week" id="tpWeek"></div>
+    </div>
+    <!-- Virtual Journey -->
+    <div class="card fitness-section">
+      <div class="card-header"><h3>🗺️ 虚拟旅程</h3></div>
+      <div class="vj-route" id="vjRoute">
+        <div class="vj-name" id="vjName">🏁 杭州 → 丽江  (共 2,500 km)</div>
+        <div class="vj-progress-bar">
+          <div class="vj-progress-fill" id="vjFill" style="width:0%"></div>
+        </div>
+        <div class="vj-progress-text">
+          <span id="vjProgress">0 / 2,500 km</span>
+          <span id="vjPercent">0%</span>
+        </div>
+      </div>
+      <div class="vj-input-row">
+        <input type="number" id="vjDistance" placeholder="本次距离(km)" value="5" min="0.1" step="0.1">
+        <button onclick="vjAdd()">🏃 记录</button>
+      </div>
+    </div>
+    <!-- Achievements -->
+    <div class="card fitness-section">
+      <div class="card-header"><h3>🏆 成就徽章</h3></div>
+      <div class="ach-grid" id="achGrid"></div>
+    </div>
   </div>
   <!-- TOPICS -->
   <div class="page" id="page-topics">
@@ -434,7 +564,12 @@ const KEYS = {
   shop: 'wb_v3_shop',
   notes: 'wb_v3_notes',
   exercise: 'wb_v3_exercise',
-  inventory: 'wb_v3_inventory'
+  inventory: 'wb_v3_inventory',
+  hiit: 'wb_v3_hiit',
+  tplan: 'wb_v3_tplan',
+  vjourney: 'wb_v3_vjourney',
+  cals: 'wb_v3_cals',
+  achievs: 'wb_v3_achievs'
 };
 
 function load(k) { try { return JSON.parse(localStorage.getItem(KEYS[k]) || '[]'); } catch(e) { return []; } }
@@ -496,8 +631,11 @@ function init() {
   }
 
   initCalendars();
+  calInit();
+  initHiitPresets();
   navTo('home');
   refreshAll();
+  setTimeout(checkAchievements, 500);
 }
 
 function navTo(page) {
@@ -737,6 +875,369 @@ function checkIn(id) {
   save('exercise', checks);
   refreshExercise();
   renderCalFor('ex');
+  checkAchievements();
+}
+
+// ===== HIIT TIMER =====
+let hiitTimer = null, hiitRunning = false, hiitSeconds = 30, hiitPhase = 'work';
+let hiitRound = 1, hiitTotalRounds = 8, hiitWorkSec = 30, hiitRestSec = 15;
+
+function hiitApplyPreset(type) {
+  hiitRunning = false; if(hiitTimer) clearInterval(hiitTimer); hiitTimer = null;
+  let presets = {tabata:{work:20,rest:10,rounds:8}, standard:{work:30,rest:15,rounds:10}, amrap:{work:40,rest:20,rounds:5}};
+  let p = presets[type] || {work:30,rest:15,rounds:8};
+  document.getElementById('hiitWork').value = p.work; document.getElementById('hiitRest').value = p.rest; document.getElementById('hiitRounds').value = p.rounds;
+  hiitReset();
+  document.querySelectorAll('.hiit-preset').forEach(el=>el.classList.remove('active'));
+  document.querySelector('.hiit-preset[data-preset="'+type+'"]')?.classList.add('active');
+  save('hiit', {work:p.work,rest:p.rest,rounds:p.rounds});
+}
+
+function hiitReset() {
+  hiitRunning = false; if(hiitTimer) clearInterval(hiitTimer); hiitTimer = null;
+  hiitWorkSec = parseInt(document.getElementById('hiitWork').value)||30;
+  hiitRestSec = parseInt(document.getElementById('hiitRest').value)||15;
+  hiitTotalRounds = parseInt(document.getElementById('hiitRounds').value)||8;
+  hiitRound = 1; hiitPhase = 'work'; hiitSeconds = hiitWorkSec;
+  let d = document.getElementById('hiitDisplay');
+  d.className = 'hiit-timer-display ready';
+  d.querySelector('.hiit-phase').textContent = '准备开始';
+  d.querySelector('.hiit-time').textContent = hiitFmt(hiitSeconds);
+  d.querySelector('.hiit-round').textContent = '共 '+hiitTotalRounds+' 轮';
+  let btn = document.getElementById('hiitStart');
+  btn.textContent = '▶ 开始'; btn.className = 'btn-start';
+  save('hiit', {work:hiitWorkSec,rest:hiitRestSec,rounds:hiitTotalRounds});
+}
+
+function hiitFmt(s){ let m=Math.floor(s/60), sec=s%60; return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0'); }
+
+function hiitToggle() {
+  if(hiitRunning) { hiitPause(); return; }
+  hiitRunning = true;
+  let btn = document.getElementById('hiitStart');
+  btn.textContent = '⏸ 暂停'; btn.className = 'btn-pause';
+  hiitPhase = 'work'; hiitSeconds = hiitWorkSec; hiitRound = 1;
+  hiitTick();
+  hiitTimer = setInterval(hiitTick, 1000);
+}
+
+function hiitPause() {
+  hiitRunning = false;
+  if(hiitTimer) clearInterval(hiitTimer); hiitTimer = null;
+  let btn = document.getElementById('hiitStart');
+  btn.textContent = '▶ 继续'; btn.className = 'btn-start';
+}
+
+function hiitTick() {
+  let d = document.getElementById('hiitDisplay');
+  d.querySelector('.hiit-time').textContent = hiitFmt(hiitSeconds);
+  d.className = 'hiit-timer-display ' + hiitPhase;
+  d.querySelector('.hiit-phase').textContent = hiitPhase==='work'?'💪 训练中':hiitPhase==='rest'?'😮‍💨 休息':'🎉 完成!';
+  d.querySelector('.hiit-round').textContent = '第 '+hiitRound+' / '+hiitTotalRounds+' 轮';
+  if(hiitSeconds <= 3 && hiitSeconds > 0) { try { playBeep(800,100); } catch(e){} }
+  if(hiitSeconds <= 0) {
+    if(hiitPhase === 'work') { hiitPhase = 'rest'; hiitSeconds = hiitRestSec; try { playBeep(600,200); } catch(e){} }
+    else { hiitRound++; if(hiitRound > hiitTotalRounds) { hiitDone(); return; } hiitPhase = 'work'; hiitSeconds = hiitWorkSec; try { playBeep(1000,100); } catch(e){} }
+  } else { hiitSeconds--; }
+}
+
+function hiitDone() {
+  hiitRunning = false; if(hiitTimer) clearInterval(hiitTimer); hiitTimer = null;
+  let d = document.getElementById('hiitDisplay');
+  d.className = 'hiit-timer-display ready';
+  d.querySelector('.hiit-phase').textContent = '🎉 训练完成!';
+  d.querySelector('.hiit-time').textContent = '🏆';
+  d.querySelector('.hiit-round').textContent = '太棒了!';
+  let btn = document.getElementById('hiitStart'); btn.textContent = '▶ 重新开始'; btn.className = 'btn-start';
+  hiitRound = 1; hiitPhase = 'work'; hiitSeconds = hiitWorkSec;
+  checkAchievements();
+}
+
+function playBeep(freq,dur) {
+  try { let ctx = new (window.AudioContext||window.webkitAudioContext)(); let o=ctx.createOscillator(); let g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value=freq; o.type='sine'; g.gain.value=0.1; o.start(); o.stop(ctx.currentTime+dur/1000); setTimeout(()=>ctx.close(),dur+100); } catch(e){}
+}
+
+function initHiitPresets() {
+  let presetsEl = document.getElementById('hiitPresets');
+  let presets = [
+    {id:'tabata',name:'Tabata 20/10 ×8'},
+    {id:'standard',name:'标准 30/15 ×10'},
+    {id:'amrap',name:'AMRAP 40/20 ×5'},
+    {id:'custom',name:'自定义'}
+  ];
+  presetsEl.innerHTML = presets.map(p=>'<span class="hiit-preset" data-preset="'+p.id+'" onclick="hiitApplyPreset(\''+p.id+'\')">'+p.name+'</span>').join('');
+  let saved = load('hiit');
+  if(saved.length===0) {
+    document.getElementById('hiitWork').value = 30;
+    document.getElementById('hiitRest').value = 15;
+    document.getElementById('hiitRounds').value = 8;
+  } else {
+    let s = saved[saved.length-1];
+    document.getElementById('hiitWork').value = s.work||30;
+    document.getElementById('hiitRest').value = s.rest||15;
+    document.getElementById('hiitRounds').value = s.rounds||8;
+  }
+  document.querySelector('.hiit-preset[data-preset="standard"]')?.classList.add('active');
+  hiitReset();
+}
+
+// ===== CALORIE TRACKER =====
+const CAL_TYPES = [
+  {n:'跑步(8km/h)',cal:8.3},{n:'快走(6km/h)',cal:5.5},{n:'跳绳',cal:12},{n:'游泳',cal:9.8},
+  {n:'骑行(16km/h)',cal:7.5},{n:'HIIT',cal:10.5},{n:'瑜伽',cal:3.5},{n:'力量训练',cal:6},
+  {n:'舞蹈',cal:7},{n:'爬楼梯',cal:9},{n:'椭圆机',cal:7.3},{n:'划船机',cal:8.5}
+];
+
+function calInit() {
+  let sel = document.getElementById('calType');
+  sel.innerHTML = CAL_TYPES.map(t=>'<option value="'+t.n+'">'+t.n+' (~'+t.cal+' kcal/min)</option>').join('');
+}
+
+function calAdd() {
+  let type = document.getElementById('calType').value;
+  let mins = parseInt(document.getElementById('calMins').value)||0;
+  if(!type || mins<=0) return;
+  let rate = CAL_TYPES.find(t=>t.n===type);
+  let kcal = Math.round((rate?rate.cal:5) * mins);
+  let data = load('cals');
+  data.push({type,mins,kcal,ts:Date.now(),date:formatDate(new Date())});
+  save('cals', data);
+  calRender();
+  checkAchievements();
+}
+
+function calRender() {
+  let data = load('cals');
+  let today = formatDate(new Date());
+  let todayItems = data.filter(d=>d.date===today);
+  let total = todayItems.reduce((s,d)=>s+d.kcal,0);
+  let el = document.getElementById('calTotal');
+  el.textContent = total;
+  el.className = 'cal-total'+(total>=300?' over':'');
+  let logEl = document.getElementById('calLog');
+  if(todayItems.length===0) { logEl.innerHTML = '<div style="font-size:11px;color:var(--text3);text-align:center;padding:10px;">今天还没记录热量</div>'; return; }
+  logEl.innerHTML = todayItems.reverse().map((d,i)=>{
+    let t = new Date(d.ts); let tm = String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+    return '<div class="cal-log-item"><span>'+d.type+' · '+d.mins+'分钟</span><span><b>'+d.kcal+' kcal</b><span class="cal-log-del" onclick="calDel('+i+')">✕</span></span></div>';
+  }).join('');
+}
+
+function calDel(idx) { let data=load('cals'); let today=formatDate(new Date()); let todayItems=data.filter(d=>d.date===today); let item=todayItems.reverse()[idx]; data=data.filter(d=>d!==item); save('cals',data); calRender(); }
+
+// ===== TRAINING PLAN =====
+function tpRender() {
+  let data = load('tplan');
+  let now = new Date();
+  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
+  let weekKey = formatDate(mon);
+  let plan = data.find(w=>w.key===weekKey);
+  if(!plan) { plan = {key:weekKey,days:{}}; }
+  let days = ['一','二','三','四','五','六','日'];
+  let todayIdx = (now.getDay()+6)%7;
+  let el = document.getElementById('tpWeek');
+  let html = days.map((d,i)=>{
+    let date = new Date(mon); date.setDate(mon.getDate()+i);
+    return '<div class="tp-day-header'+(i===todayIdx?' today':'')+'">'+d+'<br>'+date.getDate()+'日</div>';
+  }).join('');
+  html += days.map((d,i)=>{
+    let exs = plan.days[i]||[];
+    return '<div class="tp-day-slot" onclick="tpOpenDay('+i+')">'
+      + exs.map((e,j)=>
+        '<div class="tp-ex-item'+(e.done?' done':'')+'" onclick="event.stopPropagation();tpToggle('+i+','+j+')">'
+        +'<span>'+(e.done?'✅ ':'⬜ ')+e.name+'</span>'
+        +'<span class="tp-ex-del" onclick="event.stopPropagation();tpDel('+i+','+j+')">✕</span></div>'
+      ).join('')
+      +'<button class="tp-add-btn" onclick="event.stopPropagation();tpAdd('+i+')">+</button></div>';
+  }).join('');
+  el.innerHTML = html;
+}
+
+function tpAdd(dayIdx) {
+  let name = prompt('添加训练项目（如：深蹲 3x15）：');
+  if(!name || !name.trim()) return;
+  let data = load('tplan');
+  let now = new Date();
+  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
+  let weekKey = formatDate(mon);
+  let plan = data.find(w=>w.key===weekKey);
+  if(!plan) { plan = {key:weekKey,days:{}}; data.push(plan); }
+  plan.days[dayIdx] = plan.days[dayIdx] || [];
+  plan.days[dayIdx].push({name:name.trim(),done:false});
+  save('tplan', data);
+  tpRender();
+}
+
+function tpAddWeek() {
+  let data = load('tplan');
+  let now = new Date();
+  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
+  let weekKey = formatDate(mon);
+  let plan = data.find(w=>w.key===weekKey);
+  if(!plan) { plan = {key:weekKey,days:{}}; data.push(plan); }
+  save('tplan', data);
+  tpRender();
+}
+
+function tpToggle(dayIdx, exIdx) {
+  let data = load('tplan');
+  let now = new Date();
+  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
+  let weekKey = formatDate(mon);
+  let plan = data.find(w=>w.key===weekKey);
+  if(!plan || !plan.days[dayIdx]) return;
+  plan.days[dayIdx][exIdx].done = !plan.days[dayIdx][exIdx].done;
+  save('tplan', data);
+  tpRender();
+  checkAchievements();
+}
+
+function tpDel(dayIdx, exIdx) {
+  let data = load('tplan');
+  let now = new Date();
+  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
+  let weekKey = formatDate(mon);
+  let plan = data.find(w=>w.key===weekKey);
+  if(!plan || !plan.days[dayIdx]) return;
+  plan.days[dayIdx].splice(exIdx,1);
+  save('tplan', data);
+  tpRender();
+}
+
+function tpOpenDay(dayIdx) { tpAdd(dayIdx); }
+
+// ===== VIRTUAL JOURNEY =====
+const VJ_ROUTES = [
+  {name:'🏁 杭州 → 丽江',total:2500,icon:'🏔️'},
+  {name:'🏁 北京 → 拉萨',total:3700,icon:'⛰️'},
+  {name:'🏁 丝绸之路',total:6400,icon:'🐫'},
+  {name:'🏁 环台湾岛',total:1200,icon:'🏝️'},
+  {name:'🏁 日本四国遍路',total:1200,icon:'⛩️'},
+  {name:'🏁 川藏线',total:2140,icon:'🏔️'},
+];
+
+function vjRender() {
+  let data = load('vjourney');
+  let total = data.reduce((s,d)=>s+d.km,0);
+  let routeIdx = data.length>0 ? ((data[data.length-1].routeIdx||0) % VJ_ROUTES.length) : 0;
+  let route = VJ_ROUTES[routeIdx];
+  let routeTotal = 0;
+  for(let i=data.length-1; i>=0; i--) { if(data[i].routeIdx===routeIdx) routeTotal+=data[i].km; else break; }
+  let pct = Math.min(100, (routeTotal/route.total*100));
+  let elName = document.getElementById('vjName');
+  elName.textContent = route.name+'  (共 '+route.total.toLocaleString()+' km)';
+  document.getElementById('vjFill').style.width = pct+'%';
+  document.getElementById('vjProgress').textContent = routeTotal.toLocaleString()+' / '+route.total.toLocaleString()+' km';
+  document.getElementById('vjPercent').textContent = pct.toFixed(1)+'%';
+}
+
+function vjAdd() {
+  let km = parseFloat(document.getElementById('vjDistance').value) || 0;
+  if(km <= 0) return;
+  let data = load('vjourney');
+  let total = data.reduce((s,d)=>s+d.km,0);
+  let routeIdx = data.length>0 ? data[data.length-1].routeIdx : 0;
+  let route = VJ_ROUTES[routeIdx];
+  let routeTotal = 0;
+  for(let i=data.length-1; i>=0; i--) { if(data[i].routeIdx===routeIdx) routeTotal+=data[i].km; else break; }
+  routeTotal += km;
+  if(routeTotal >= route.total) { routeIdx = (routeIdx+1) % VJ_ROUTES.length; routeTotal = 0; }
+  data.push({km,date:formatDate(new Date()),ts:Date.now(),routeIdx});
+  save('vjourney', data);
+  vjRender();
+  document.getElementById('vjDistance').value = '';
+  checkAchievements();
+}
+
+// ===== ACHIEVEMENTS =====
+const ACHIEVEMENTS = [
+  {id:'first_check',icon:'🎯',name:'初次打卡',desc:'完成第一次运动打卡',check(){let c=load('exercise');return c.length>=1;}},
+  {id:'streak3',icon:'🔥',name:'三日连练',desc:'连续3天运动打卡',check(){return calcStreak(load('exercise'))>=3;}},
+  {id:'streak7',icon:'💪',name:'一周满勤',desc:'连续7天运动打卡',check(){return calcStreak(load('exercise'))>=7;}},
+  {id:'streak30',icon:'👑',name:'月度铁人',desc:'连续30天运动打卡',check(){return calcStreak(load('exercise'))>=30;}},
+  {id:'hiit_master',icon:'⏱️',name:'HIIT达人',desc:'完成5次HIIT训练',check(){return hiitDoneCount()>=5;}},
+  {id:'cal500',icon:'🔥',name:'燃烧500',desc:'单日消耗500大卡',check(){let d=load('cals');let t=formatDate(new Date());return d.filter(x=>x.date===t).reduce((s,x)=>s+x.kcal,0)>=500;}},
+  {id:'cal1000',icon:'💥',name:'千卡猎人',desc:'单日消耗1000大卡',check(){let d=load('cals');let t=formatDate(new Date());return d.filter(x=>x.date===t).reduce((s,x)=>s+x.kcal,0)>=1000;}},
+  {id:'run_marathon',icon:'🏃',name:'马拉松',desc:'累计跑完42km',check(){return vjGetTotal()>=42;}},
+  {id:'journey_100',icon:'🗺️',name:'百公里',desc:'虚拟旅程累计100km',check(){return vjGetTotal()>=100;}},
+  {id:'journey_500',icon:'🌏',name:'五百公里',desc:'虚拟旅程累计500km',check(){return vjGetTotal()>=500;}},
+  {id:'plan_complete',icon:'📋',name:'完美一周',desc:'训练计划本周全完成',check(){return isTPlanWeekDone();}},
+  {id:'tp5done',icon:'✅',name:'5项完成',desc:'本周完成5项训练任务',check(){return tpWeekDoneCount()>=5;}},
+];
+
+function calcStreak(checks) {
+  if(!checks.length) return 0;
+  let dates = [...new Set(checks.map(c=>c.date))].sort().reverse();
+  let streak = 0, today = new Date();
+  let expect = formatDate(today);
+  if(dates[0] !== expect && dates[0] !== formatDate(new Date(today.setDate(today.getDate()-1)))) return 0;
+  for(let i=0; i<dates.length; i++) {
+    let d = new Date(dates[i]);
+    let e = new Date(today); e.setDate(e.getDate()-i);
+    if(dates[i] === formatDate(e)) streak++; else break;
+  }
+  return streak;
+}
+
+function hiitDoneCount() {
+  let e = load('exercise');
+  return e.filter(c=>c.id==='hiit').length;
+}
+
+function vjGetTotal() { return load('vjourney').reduce((s,d)=>s+d.km, 0); }
+
+function tpWeekDoneCount() {
+  let data = load('tplan');
+  let now = new Date();
+  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
+  let weekKey = formatDate(mon);
+  let plan = data.find(w=>w.key===weekKey);
+  if(!plan) return 0;
+  let count = 0;
+  for(let i=0;i<7;i++) if(plan.days[i]) count += plan.days[i].filter(e=>e.done).length;
+  return count;
+}
+
+function isTPlanWeekDone() {
+  let data = load('tplan');
+  let now = new Date();
+  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
+  let weekKey = formatDate(mon);
+  let plan = data.find(w=>w.key===weekKey);
+  if(!plan) return false;
+  let total = 0, done = 0;
+  for(let i=0;i<7;i++) {
+    if(plan.days[i]) { total += plan.days[i].length; done += plan.days[i].filter(e=>e.done).length; }
+  }
+  return total > 0 && done === total;
+}
+
+function checkAchievements() {
+  let unlocked = load('achievs');
+  let newlyUnlocked = [];
+  ACHIEVEMENTS.forEach(a=>{
+    if(unlocked.includes(a.id)) return;
+    try { if(a.check()) { unlocked.push(a.id); newlyUnlocked.push(a); } } catch(e){}
+  });
+  save('achievs', unlocked);
+  achRender();
+  if(newlyUnlocked.length) {
+    setTimeout(()=>{
+      let msg = newlyUnlocked.map(a=>a.icon+a.name).join(' ');
+      alert('🏆 解锁新成就！\n\n'+newlyUnlocked.map(a=>a.icon+' '+a.name+'：'+a.desc).join('\n'));
+    }, 300);
+  }
+}
+
+function achRender() {
+  let unlocked = load('achievs');
+  let el = document.getElementById('achGrid');
+  el.innerHTML = ACHIEVEMENTS.map(a=>{
+    let isUnlocked = unlocked.includes(a.id);
+    return '<div class="ach-badge'+(isUnlocked?' unlocked':' locked')+'">'
+      +'<div class="ach-icon">'+a.icon+'</div>'
+      +'<div class="ach-name">'+a.name+'</div>'
+      +'<div class="ach-prog">'+(isUnlocked?'已解锁':'未解锁')+'</div></div>';
+  }).join('');
 }
 
 // ===== LEARN =====
@@ -866,7 +1367,7 @@ function refreshPage(page) {
   else if(page==='shop'){renderCalFor('shop');renderTaskList('shop');}
   else if(page==='notes'){renderCalFor('notes');renderTaskList('notes');}
   else if(page==='learn') refreshLearn();
-  else if(page==='exercise'){renderCalFor('ex');refreshExercise();}
+  else if(page==='exercise'){renderCalFor('ex');refreshExercise();tpRender();vjRender();calRender();achRender();}
   else if(page==='topics'||page==='ai') refreshTrending();
   else if(page==='inventory') refreshInventory();
   else if(page==='home') refreshAll();
