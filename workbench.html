@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="漂亮宝贝工作台">
 <meta name="theme-color" content="#F0F7F4">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <link rel="apple-touch-icon" href="data:image/jpeg;base64,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">
 <title>漂亮宝贝的工作台</title>
 <style>
@@ -225,20 +226,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .hiit-controls .btn-pause{background:#f0f0f0;color:var(--text);}
 .hiit-controls .btn-reset{background:#fff;border:1px solid #ddd;color:var(--text2);}
 
-/* ===== FITNESS: Training Plan ===== */
-.tp-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px;font-size:10px;text-align:center;}
-.tp-day-header{padding:6px 2px;border-radius:6px;font-weight:600;background:#f5f5f5;}
-.tp-day-header.today{background:var(--green);color:#fff;}
-.tp-day-slot{min-height:60px;background:#fafafa;border-radius:6px;padding:4px;cursor:pointer;transition:all 0.2s;border:1px solid transparent;}
-.tp-day-slot:hover{border-color:var(--green);}
-.tp-ex-item{font-size:10px;padding:3px 5px;margin-bottom:2px;background:#fff;border-radius:4px;display:flex;align-items:center;justify-content:space-between;gap:3px;}
-.tp-ex-item.done{text-decoration:line-through;color:var(--text3);}
-.tp-ex-item .tp-ex-del{color:var(--red);cursor:pointer;font-size:10px;opacity:0.5;}
-.tp-ex-item:hover .tp-ex-del{opacity:1;}
-.tp-add-btn{display:block;width:100%;padding:3px;font-size:16px;text-align:center;color:var(--text3);background:none;border:none;cursor:pointer;border-radius:4px;}
-.tp-add-btn:hover{background:#e8e8e8;color:var(--green);}
+/* ===== FITNESS: Health Dashboard ===== */
+.health-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.health-stat-card{background:var(--green-light);border-radius:var(--radius-sm);padding:14px;text-align:center;position:relative;}
+.health-stat-card.hs-garmin{border:1px solid #C8E6C9;}
+.health-stat-card .hs-icon{font-size:26px;margin-bottom:4px;}
+.health-stat-card .hs-val{font-size:22px;font-weight:700;color:var(--green);}
+.health-stat-card .hs-label{font-size:11px;color:var(--text2);margin-top:2px;}
+.health-stat-card .hs-change{font-size:10px;color:var(--text3);margin-top:3px;}
+.health-stat-card .hs-badge{font-size:9px;background:#C8E6C9;color:#2E7D32;padding:1px 5px;border-radius:8px;position:absolute;top:6px;right:6px;}
+.sync-badge{display:inline-block;font-size:10px;font-weight:500;background:#E8F5E9;color:var(--green);padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle;}
+.sync-badge.manual{background:#FFF3E0;color:var(--orange);}
+.chart-toggle{display:flex;gap:6px;margin-bottom:10px;}
+.chart-toggle button{padding:5px 12px;border-radius:14px;border:1px solid #ddd;background:#fff;font-size:11px;cursor:pointer;color:var(--text2);transition:all 0.2s;}
+.chart-toggle button.active{background:var(--green);color:#fff;border-color:var(--green);}
+.chart-wrap{height:180px;position:relative;margin-top:6px;}
 
-/* ===== FITNESS: Achievements ===== */
+/* ===== FITNESS: Reports ===== */
+.rpt-period{display:flex;gap:6px;margin-bottom:10px;}
+.rpt-period button{padding:6px 14px;border-radius:16px;border:1px solid #ddd;background:#fff;font-size:12px;cursor:pointer;color:var(--text2);transition:all 0.2s;}
+.rpt-period button.active{background:var(--green);color:#fff;border-color:var(--green);}
+.rpt-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
+.rpt-stat{background:var(--bg);border-radius:10px;padding:10px;text-align:center;}
+.rpt-stat .rs-icon{font-size:20px;margin-bottom:3px;}
+.rpt-stat .rs-val{font-size:16px;font-weight:700;}
+.rpt-stat .rs-label{font-size:10px;color:var(--text2);}
+
+/* ===== FITNESS: Achievements (keep) ===== */
 .ach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
 .ach-badge{text-align:center;padding:12px 6px;border-radius:var(--radius);background:#fafafa;border:1px solid #eee;transition:all 0.3s;}
 .ach-badge.locked{opacity:0.45;filter:grayscale(0.8);}
@@ -247,31 +261,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .ach-badge .ach-icon{font-size:28px;margin-bottom:4px;}
 .ach-badge .ach-name{font-size:10px;font-weight:600;margin-bottom:2px;}
 .ach-badge .ach-prog{font-size:9px;color:var(--text3);}
-
-/* ===== FITNESS: Virtual Journey ===== */
-.vj-route{background:#fafafa;border-radius:var(--radius);padding:12px;margin-bottom:8px;}
-.vj-route .vj-name{font-weight:600;font-size:13px;margin-bottom:8px;}
-.vj-progress-bar{height:18px;background:#e8e8e8;border-radius:9px;overflow:hidden;position:relative;margin-bottom:8px;}
-.vj-progress-text{font-size:11px;color:var(--text2);display:flex;justify-content:space-between;}
-.vj-progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#4caf50);border-radius:9px;transition:width 0.5s ease;}
-.vj-input-row{display:flex;gap:8px;align-items:center;}
-.vj-input-row input{flex:1;padding:7px;border:1px solid #ddd;border-radius:6px;font-size:12px;text-align:center;}
-.vj-input-row button{padding:7px 14px;background:var(--green);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;}
-.vj-checkpoint{font-size:10px;padding:2px 6px;background:var(--green-light);border-radius:10px;white-space:nowrap;}
-
-/* ===== FITNESS: Calorie Tracker ===== */
-.cal-input-row{display:flex;gap:6px;margin-bottom:12px;align-items:flex-end;flex-wrap:wrap;}
-.cal-input-row select{flex:1;min-width:90px;padding:7px;border:1px solid #ddd;border-radius:6px;font-size:12px;}
-.cal-input-row input{width:60px;padding:7px;border:1px solid #ddd;border-radius:6px;font-size:12px;text-align:center;}
-.cal-input-row button{padding:7px 14px;background:var(--green);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;}
-.cal-today{border-radius:var(--radius);padding:12px;margin-bottom:10px;display:flex;align-items:center;gap:12px;}
-.cal-today .cal-total{font-size:28px;font-weight:800;font-family:monospace;}
-.cal-today .cal-total.over{color:var(--green);}
-.cal-today .cal-label{font-size:11px;color:var(--text3);}
-.cal-log{max-height:150px;overflow-y:auto;}
-.cal-log-item{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid #f0f0f0;}
-.cal-log-item .cal-log-del{color:var(--red);opacity:0.3;cursor:pointer;margin-left:6px;}
-.cal-log-item:hover .cal-log-del{opacity:1;}
 </style>
 </head>
 <body>
@@ -364,6 +353,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   </div>
   <!-- EXERCISE -->
   <div class="page" id="page-exercise">
+    <!-- Health Data Dashboard (Garmin synced) - placed ABOVE calendar -->
+    <div class="card fitness-section">
+      <div class="card-header"><h3>📊 今日健康 <span class="sync-badge" id="syncBadge" style="display:none;">🔄 同步中...</span></h3></div>
+      <div class="health-stats" id="healthStats"></div>
+      <div class="card" style="margin-top:10px;padding:14px;">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">📈 7日趋势</div>
+        <div class="chart-toggle" id="healthChartToggle">
+          <button class="active" data-metric="steps">步数</button>
+          <button data-metric="hr">心率</button>
+          <button data-metric="sleep">睡眠</button>
+        </div>
+        <div class="chart-wrap"><canvas id="healthChart"></canvas></div>
+      </div>
+    </div>
     <div class="card">
       <div class="card-header"><h3>🏃 运动日历</h3></div>
       <div class="calendar" id="exCalendar"></div>
@@ -388,47 +391,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
         <button class="btn-reset" onclick="hiitReset()">↺ 重置</button>
       </div>
     </div>
-    <!-- Calorie Tracker -->
-    <div class="card fitness-section">
-      <div class="card-header"><h3>🔥 热量估算</h3></div>
-      <div class="cal-input-row">
-        <select id="calType"><option value="">选运动类型</option></select>
-        <input type="number" id="calMins" placeholder="分钟" value="30" min="1" max="300">
-        <button onclick="calAdd()">+ 记录</button>
-      </div>
-      <div class="cal-today">
-        <div><span class="cal-total" id="calTotal">0</span><span style="font-size:16px;"> kcal</span></div>
-        <div class="cal-label">今日已消耗</div>
-      </div>
-      <div class="cal-log" id="calLog"></div>
-    </div>
-    <!-- Training Plan -->
-    <div class="card fitness-section">
-      <div class="card-header"><h3>🏋️ 训练计划</h3><button class="add-btn" onclick="tpAddWeek()">↻ 本周</button></div>
-      <div class="tp-week" id="tpWeek"></div>
-    </div>
-    <!-- Virtual Journey -->
-    <div class="card fitness-section">
-      <div class="card-header"><h3>🗺️ 虚拟旅程</h3></div>
-      <div class="vj-route" id="vjRoute">
-        <div class="vj-name" id="vjName">🏁 杭州 → 丽江  (共 2,500 km)</div>
-        <div class="vj-progress-bar">
-          <div class="vj-progress-fill" id="vjFill" style="width:0%"></div>
-        </div>
-        <div class="vj-progress-text">
-          <span id="vjProgress">0 / 2,500 km</span>
-          <span id="vjPercent">0%</span>
-        </div>
-      </div>
-      <div class="vj-input-row">
-        <input type="number" id="vjDistance" placeholder="本次距离(km)" value="5" min="0.1" step="0.1">
-        <button onclick="vjAdd()">🏃 记录</button>
-      </div>
-    </div>
     <!-- Achievements -->
     <div class="card fitness-section">
       <div class="card-header"><h3>🏆 成就徽章</h3></div>
       <div class="ach-grid" id="achGrid"></div>
+    </div>
+    <!-- Reports -->
+    <div class="card fitness-section">
+      <div class="card-header"><h3>📈 运动报告</h3></div>
+      <div class="rpt-period" id="rptPeriod"></div>
+      <div class="rpt-stats" id="rptStats"></div>
+      <div class="chart-wrap"><canvas id="reportChart"></canvas></div>
     </div>
   </div>
   <!-- TOPICS -->
@@ -566,10 +539,8 @@ const KEYS = {
   exercise: 'wb_v3_exercise',
   inventory: 'wb_v3_inventory',
   hiit: 'wb_v3_hiit',
-  tplan: 'wb_v3_tplan',
-  vjourney: 'wb_v3_vjourney',
-  cals: 'wb_v3_cals',
-  achievs: 'wb_v3_achievs'
+  achievs: 'wb_v3_achievs',
+  exlog: 'wb_v3_exlog'
 };
 
 function load(k) { try { return JSON.parse(localStorage.getItem(KEYS[k]) || '[]'); } catch(e) { return []; } }
@@ -631,10 +602,10 @@ function init() {
   }
 
   initCalendars();
-  calInit();
   initHiitPresets();
   navTo('home');
   refreshAll();
+  loadGarminData();
   setTimeout(checkAchievements, 500);
 }
 
@@ -981,171 +952,161 @@ function initHiitPresets() {
   hiitReset();
 }
 
-// ===== CALORIE TRACKER =====
-const CAL_TYPES = [
-  {n:'跑步(8km/h)',cal:8.3},{n:'快走(6km/h)',cal:5.5},{n:'跳绳',cal:12},{n:'游泳',cal:9.8},
-  {n:'骑行(16km/h)',cal:7.5},{n:'HIIT',cal:10.5},{n:'瑜伽',cal:3.5},{n:'力量训练',cal:6},
-  {n:'舞蹈',cal:7},{n:'爬楼梯',cal:9},{n:'椭圆机',cal:7.3},{n:'划船机',cal:8.5}
-];
+// ===== GARMIN HEALTH DASHBOARD =====
+let garminData=null, garminLoaded=false;
+// Health chart toggle
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(function(){
+    var toggle=document.getElementById('healthChartToggle');
+    if(toggle) toggle.addEventListener('click',function(e){
+      if(e.target.tagName==='BUTTON'){
+        this.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+        e.target.classList.add('active');
+        renderHealthChart(e.target.dataset.metric);
+      }
+    });
+  },300);
+});
 
-function calInit() {
-  let sel = document.getElementById('calType');
-  sel.innerHTML = CAL_TYPES.map(t=>'<option value="'+t.n+'">'+t.n+' (~'+t.cal+' kcal/min)</option>').join('');
+function loadGarminData(){
+  var badge=document.getElementById('syncBadge');
+  if(!badge) return;
+  badge.style.display='inline'; badge.textContent='🔄 同步中...'; badge.className='sync-badge';
+  fetch('./garmin_data.json?'+Date.now())
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(d){
+      garminData=d; garminLoaded=true;
+      var ago=timeAgo(d.synced_at);
+      badge.innerHTML='⌚ Garmin · '+ago; badge.className='sync-badge';
+      refreshHealthDashboard();
+    })
+    .catch(function(e){
+      badge.innerHTML='⌚ Garmin 离线'; badge.className='sync-badge manual';
+      refreshHealthDashboard();
+    });
+}
+function timeAgo(isoStr){
+  if(!isoStr) return '未知';
+  var diff=(Date.now()-new Date(isoStr).getTime())/1000;
+  if(diff<60) return '刚刚';
+  if(diff<3600) return Math.floor(diff/60)+'分钟前';
+  if(diff<86400) return Math.floor(diff/3600)+'小时前';
+  return Math.floor(diff/86400)+'天前';
+}
+function getGarminDay(ds){
+  if(!garminData||!garminData.daily) return null;
+  return garminData.daily[ds]||null;
+}
+function formatDate2(d){
+  var m=''+(d.getMonth()+1),dd=''+d.getDate();
+  return d.getFullYear()+'-'+(m.length<2?'0':'')+m+'-'+(dd.length<2?'0':'')+dd;
+}
+function todayStr2(){ return formatDate2(new Date()); }
+
+function refreshHealthDashboard(){
+  var g=getGarminDay(todayStr2());
+  var prevStr=formatDate2(new Date(Date.now()-86400000));
+  var gPrev=getGarminDay(prevStr);
+  if(!g) g={steps:null,resting_hr:null,sleep:null};
+  var steps=g.steps||'—', hr=g.resting_hr||'—', sleep=g.sleep||'—';
+  var stepsCh='', hrCh='', sleepCh='';
+  if(gPrev){
+    if(gPrev.steps) stepsCh='vs 昨日: '+(((steps-gPrev.steps)/gPrev.steps*100).toFixed(0))+'%';
+    if(gPrev.resting_hr) hrCh='vs 昨日: '+(gPrev.resting_hr-hr)+'bpm';
+    if(gPrev.sleep) sleepCh='vs 昨日: '+(sleep-gPrev.sleep).toFixed(1)+'h';
+  }
+  var gTag=garminData?' <span class="hs-badge">⌚ Garmin</span>':'';
+  var el=document.getElementById('healthStats');
+  if(!el) return;
+  el.innerHTML=
+    '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'"><div class="hs-icon">🚶</div><div class="hs-val">'+(typeof steps==='number'?steps.toLocaleString():steps)+'</div><div class="hs-label">步数'+gTag+'</div><div class="hs-change">'+stepsCh+'</div></div>'+
+    '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'"><div class="hs-icon">💓</div><div class="hs-val">'+hr+'</div><div class="hs-label">静息心率 bpm'+gTag+'</div><div class="hs-change">'+hrCh+'</div></div>'+
+    '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'"><div class="hs-icon">😴</div><div class="hs-val">'+sleep+'</div><div class="hs-label">睡眠 小时'+gTag+'</div><div class="hs-change">'+sleepCh+(g.sleep_score?' · 评分 '+g.sleep_score:'')+'</div></div>'+
+    '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'" style="opacity:'+(garminData?'1':'0.5')+'"><div class="hs-icon">🔥</div><div class="hs-val">'+(g.calories||'—')+'</div><div class="hs-label">消耗卡路里'+gTag+'</div><div class="hs-change">'+(g.step_goal?'🎯 目标 '+g.step_goal:'—')+'</div></div>';
+  var metric=document.getElementById('healthChartToggle');
+  var m=metric?metric.querySelector('.active')?metric.querySelector('.active').dataset.metric:'steps':'steps';
+  renderHealthChart(m);
 }
 
-function calAdd() {
-  let type = document.getElementById('calType').value;
-  let mins = parseInt(document.getElementById('calMins').value)||0;
-  if(!type || mins<=0) return;
-  let rate = CAL_TYPES.find(t=>t.n===type);
-  let kcal = Math.round((rate?rate.cal:5) * mins);
-  let data = load('cals');
-  data.push({type,mins,kcal,ts:Date.now(),date:formatDate(new Date())});
-  save('cals', data);
-  calRender();
-  checkAchievements();
+function renderHealthChart(metric){
+  if(!garminData||!garminData.daily){ return; }
+  var dates=[], vals=[];
+  for(var i=6;i>=0;i--){
+    var dt=new Date(); dt.setDate(dt.getDate()-i);
+    var ds=formatDate2(dt); dates.push(ds.slice(5));
+    var g=getGarminDay(ds);
+    if(metric==='steps') vals.push(g&&g.steps!==undefined?g.steps:0);
+    else if(metric==='hr') vals.push(g&&g.resting_hr!==undefined?g.resting_hr:0);
+    else vals.push(g&&g.sleep!==undefined?g.sleep:0);
+  }
+  var colors={steps:['rgba(45,157,92,0.2)','#2D9D5C'],hr:['rgba(231,76,60,0.2)','#E74C3C'],sleep:['rgba(175,82,222,0.2)','#AF52DE']};
+  var c=colors[metric];
+  if(window._healthChart) window._healthChart.destroy();
+  var ctx=document.getElementById('healthChart'); if(!ctx) return;
+  window._healthChart=new Chart(ctx.getContext('2d'),{
+    type:'bar',data:{labels:dates,datasets:[{label:metric==='steps'?'步数':metric==='hr'?'心率(bpm)':'睡眠(h)',data:vals,backgroundColor:c[0],borderColor:c[1],borderWidth:2,borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#E5E5EA'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}
+  });
 }
 
-function calRender() {
-  let data = load('cals');
-  let today = formatDate(new Date());
-  let todayItems = data.filter(d=>d.date===today);
-  let total = todayItems.reduce((s,d)=>s+d.kcal,0);
-  let el = document.getElementById('calTotal');
-  el.textContent = total;
-  el.className = 'cal-total'+(total>=300?' over':'');
-  let logEl = document.getElementById('calLog');
-  if(todayItems.length===0) { logEl.innerHTML = '<div style="font-size:11px;color:var(--text3);text-align:center;padding:10px;">今天还没记录热量</div>'; return; }
-  logEl.innerHTML = todayItems.reverse().map((d,i)=>{
-    let t = new Date(d.ts); let tm = String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
-    return '<div class="cal-log-item"><span>'+d.type+' · '+d.mins+'分钟</span><span><b>'+d.kcal+' kcal</b><span class="cal-log-del" onclick="calDel('+i+')">✕</span></span></div>';
-  }).join('');
+// ===== REPORTS =====
+var reportMode='week';
+function renderRptTabs(){
+  var el=document.getElementById('rptPeriod');
+  if(!el) return;
+  el.innerHTML='<button class="'+(reportMode==='week'?'active':'')+'" onclick="reportMode=\'week\';refreshReports();">本周</button><button class="'+(reportMode==='month'?'active':'')+'" onclick="reportMode=\'month\';refreshReports();">本月</button>';
 }
-
-function calDel(idx) { let data=load('cals'); let today=formatDate(new Date()); let todayItems=data.filter(d=>d.date===today); let item=todayItems.reverse()[idx]; data=data.filter(d=>d!==item); save('cals',data); calRender(); }
-
-// ===== TRAINING PLAN =====
-function tpRender() {
-  let data = load('tplan');
-  let now = new Date();
-  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
-  let weekKey = formatDate(mon);
-  let plan = data.find(w=>w.key===weekKey);
-  if(!plan) { plan = {key:weekKey,days:{}}; }
-  let days = ['一','二','三','四','五','六','日'];
-  let todayIdx = (now.getDay()+6)%7;
-  let el = document.getElementById('tpWeek');
-  let html = days.map((d,i)=>{
-    let date = new Date(mon); date.setDate(mon.getDate()+i);
-    return '<div class="tp-day-header'+(i===todayIdx?' today':'')+'">'+d+'<br>'+date.getDate()+'日</div>';
-  }).join('');
-  html += days.map((d,i)=>{
-    let exs = plan.days[i]||[];
-    return '<div class="tp-day-slot" onclick="tpOpenDay('+i+')">'
-      + exs.map((e,j)=>
-        '<div class="tp-ex-item'+(e.done?' done':'')+'" onclick="event.stopPropagation();tpToggle('+i+','+j+')">'
-        +'<span>'+(e.done?'✅ ':'⬜ ')+e.name+'</span>'
-        +'<span class="tp-ex-del" onclick="event.stopPropagation();tpDel('+i+','+j+')">✕</span></div>'
-      ).join('')
-      +'<button class="tp-add-btn" onclick="event.stopPropagation();tpAdd('+i+')">+</button></div>';
-  }).join('');
-  el.innerHTML = html;
-}
-
-function tpAdd(dayIdx) {
-  let name = prompt('添加训练项目（如：深蹲 3x15）：');
-  if(!name || !name.trim()) return;
-  let data = load('tplan');
-  let now = new Date();
-  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
-  let weekKey = formatDate(mon);
-  let plan = data.find(w=>w.key===weekKey);
-  if(!plan) { plan = {key:weekKey,days:{}}; data.push(plan); }
-  plan.days[dayIdx] = plan.days[dayIdx] || [];
-  plan.days[dayIdx].push({name:name.trim(),done:false});
-  save('tplan', data);
-  tpRender();
-}
-
-function tpAddWeek() {
-  let data = load('tplan');
-  let now = new Date();
-  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
-  let weekKey = formatDate(mon);
-  let plan = data.find(w=>w.key===weekKey);
-  if(!plan) { plan = {key:weekKey,days:{}}; data.push(plan); }
-  save('tplan', data);
-  tpRender();
-}
-
-function tpToggle(dayIdx, exIdx) {
-  let data = load('tplan');
-  let now = new Date();
-  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
-  let weekKey = formatDate(mon);
-  let plan = data.find(w=>w.key===weekKey);
-  if(!plan || !plan.days[dayIdx]) return;
-  plan.days[dayIdx][exIdx].done = !plan.days[dayIdx][exIdx].done;
-  save('tplan', data);
-  tpRender();
-  checkAchievements();
-}
-
-function tpDel(dayIdx, exIdx) {
-  let data = load('tplan');
-  let now = new Date();
-  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
-  let weekKey = formatDate(mon);
-  let plan = data.find(w=>w.key===weekKey);
-  if(!plan || !plan.days[dayIdx]) return;
-  plan.days[dayIdx].splice(exIdx,1);
-  save('tplan', data);
-  tpRender();
-}
-
-function tpOpenDay(dayIdx) { tpAdd(dayIdx); }
-
-// ===== VIRTUAL JOURNEY =====
-const VJ_ROUTES = [
-  {name:'🏁 杭州 → 丽江',total:2500,icon:'🏔️'},
-  {name:'🏁 北京 → 拉萨',total:3700,icon:'⛰️'},
-  {name:'🏁 丝绸之路',total:6400,icon:'🐫'},
-  {name:'🏁 环台湾岛',total:1200,icon:'🏝️'},
-  {name:'🏁 日本四国遍路',total:1200,icon:'⛩️'},
-  {name:'🏁 川藏线',total:2140,icon:'🏔️'},
-];
-
-function vjRender() {
-  let data = load('vjourney');
-  let total = data.reduce((s,d)=>s+d.km,0);
-  let routeIdx = data.length>0 ? ((data[data.length-1].routeIdx||0) % VJ_ROUTES.length) : 0;
-  let route = VJ_ROUTES[routeIdx];
-  let routeTotal = 0;
-  for(let i=data.length-1; i>=0; i--) { if(data[i].routeIdx===routeIdx) routeTotal+=data[i].km; else break; }
-  let pct = Math.min(100, (routeTotal/route.total*100));
-  let elName = document.getElementById('vjName');
-  elName.textContent = route.name+'  (共 '+route.total.toLocaleString()+' km)';
-  document.getElementById('vjFill').style.width = pct+'%';
-  document.getElementById('vjProgress').textContent = routeTotal.toLocaleString()+' / '+route.total.toLocaleString()+' km';
-  document.getElementById('vjPercent').textContent = pct.toFixed(1)+'%';
-}
-
-function vjAdd() {
-  let km = parseFloat(document.getElementById('vjDistance').value) || 0;
-  if(km <= 0) return;
-  let data = load('vjourney');
-  let total = data.reduce((s,d)=>s+d.km,0);
-  let routeIdx = data.length>0 ? data[data.length-1].routeIdx : 0;
-  let route = VJ_ROUTES[routeIdx];
-  let routeTotal = 0;
-  for(let i=data.length-1; i>=0; i--) { if(data[i].routeIdx===routeIdx) routeTotal+=data[i].km; else break; }
-  routeTotal += km;
-  if(routeTotal >= route.total) { routeIdx = (routeIdx+1) % VJ_ROUTES.length; routeTotal = 0; }
-  data.push({km,date:formatDate(new Date()),ts:Date.now(),routeIdx});
-  save('vjourney', data);
-  vjRender();
-  document.getElementById('vjDistance').value = '';
-  checkAchievements();
+function refreshReports(){
+  renderRptTabs();
+  // Get local exercise logs
+  var logs=load('exlog');
+  // Add Garmin activities
+  var allLogs=logs.map(function(l){ return {source:'local',date:l.date,type:l.type,dist:l.dist||0,dur:l.dur||0,cal:l.cal||0,hr:l.hr}; });
+  if(garminData&&garminData.activities){
+    garminData.activities.forEach(function(a){
+      var exists=logs.some(function(l){ return l.garminId&&l.garminId===a.id; });
+      if(!exists){
+        var dur=a.duration_min||0; var dist=a.distance_km||0; var cal=a.calories||0;
+        allLogs.push({source:'garmin',date:a.date,type:a.type,dist:dist,dur:dur,cal:cal,hr:a.avg_hr});
+      }
+    });
+  }
+  var now=new Date();
+  var start=new Date();
+  if(reportMode==='week'){
+    start.setDate(now.getDate()-(now.getDay()||7)+1); start.setHours(0,0,0,0);
+  } else {
+    start=new Date(now.getFullYear(),now.getMonth(),1);
+  }
+  var startStr=formatDate2(start), today=todayStr2();
+  var filtered=allLogs.filter(function(l){ return l.date>=startStr&&l.date<=today; });
+  var totalDist=filtered.reduce(function(s,l){return s+(l.dist||0);},0).toFixed(1);
+  var totalCal=filtered.reduce(function(s,l){return s+(l.cal||0);},0);
+  var totalDur=filtered.reduce(function(s,l){return s+(l.dur||0);},0);
+  var sessions=filtered.length;
+  // Stats
+  var st=document.getElementById('rptStats');
+  if(st) st.innerHTML=
+    '<div class="rpt-stat"><div class="rs-icon">🏃</div><div class="rs-val">'+sessions+'</div><div class="rs-label">运动次数</div></div>'+
+    '<div class="rpt-stat"><div class="rs-icon">📏</div><div class="rs-val">'+totalDist+'</div><div class="rs-label">总距离 km</div></div>'+
+    '<div class="rpt-stat"><div class="rs-icon">🔥</div><div class="rs-val">'+totalCal.toLocaleString()+'</div><div class="rs-label">消耗卡路里</div></div>'+
+    '<div class="rpt-stat"><div class="rs-icon">⏱️</div><div class="rs-val">'+Math.floor(totalDur/60)+'h'+(totalDur%60)+'m</div><div class="rs-label">运动时长</div></div>'+
+    '<div class="rpt-stat"><div class="rs-icon">📊</div><div class="rs-val">'+new Set(filtered.map(function(l){return l.type;})).size+'</div><div class="rs-label">运动种类</div></div>'+
+    '<div class="rpt-stat"><div class="rs-icon">🎯</div><div class="rs-val">'+(sessions>0?Math.round(totalDur/sessions):0)+'</div><div class="rs-label">平均分钟/次</div></div>';
+  // Chart
+  var labels=[], vals=[];
+  if(reportMode==='week'){
+    for(var i=0;i<7;i++){ var d=new Date(start.getTime()+i*86400000),ds=formatDate2(d); labels.push(ds.slice(5)); vals.push(filtered.filter(function(l){return l.date===ds;}).reduce(function(s,l){return s+(l.cal||0);},0)); }
+  } else {
+    var dim=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+    for(var i2=0;i2<dim;i2++){ var ds2=formatDate2(new Date(now.getFullYear(),now.getMonth(),i2+1)); labels.push(ds2.slice(5)); vals.push(filtered.filter(function(l){return l.date===ds2;}).reduce(function(s,l){return s+(l.cal||0);},0)); }
+  }
+  if(window._reportChart) window._reportChart.destroy();
+  var ctx2=document.getElementById('reportChart');
+  if(ctx2) window._reportChart=new Chart(ctx2.getContext('2d'),{
+    type:'bar',data:{labels:labels,datasets:[{label:'消耗卡路里 (kcal)',data:vals,backgroundColor:'rgba(45,157,92,0.25)',borderColor:'#2D9D5C',borderWidth:2,borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#E5E5EA'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}
+  });
 }
 
 // ===== ACHIEVEMENTS =====
@@ -1155,13 +1116,6 @@ const ACHIEVEMENTS = [
   {id:'streak7',icon:'💪',name:'一周满勤',desc:'连续7天运动打卡',check(){return calcStreak(load('exercise'))>=7;}},
   {id:'streak30',icon:'👑',name:'月度铁人',desc:'连续30天运动打卡',check(){return calcStreak(load('exercise'))>=30;}},
   {id:'hiit_master',icon:'⏱️',name:'HIIT达人',desc:'完成5次HIIT训练',check(){return hiitDoneCount()>=5;}},
-  {id:'cal500',icon:'🔥',name:'燃烧500',desc:'单日消耗500大卡',check(){let d=load('cals');let t=formatDate(new Date());return d.filter(x=>x.date===t).reduce((s,x)=>s+x.kcal,0)>=500;}},
-  {id:'cal1000',icon:'💥',name:'千卡猎人',desc:'单日消耗1000大卡',check(){let d=load('cals');let t=formatDate(new Date());return d.filter(x=>x.date===t).reduce((s,x)=>s+x.kcal,0)>=1000;}},
-  {id:'run_marathon',icon:'🏃',name:'马拉松',desc:'累计跑完42km',check(){return vjGetTotal()>=42;}},
-  {id:'journey_100',icon:'🗺️',name:'百公里',desc:'虚拟旅程累计100km',check(){return vjGetTotal()>=100;}},
-  {id:'journey_500',icon:'🌏',name:'五百公里',desc:'虚拟旅程累计500km',check(){return vjGetTotal()>=500;}},
-  {id:'plan_complete',icon:'📋',name:'完美一周',desc:'训练计划本周全完成',check(){return isTPlanWeekDone();}},
-  {id:'tp5done',icon:'✅',name:'5项完成',desc:'本周完成5项训练任务',check(){return tpWeekDoneCount()>=5;}},
 ];
 
 function calcStreak(checks) {
@@ -1181,34 +1135,6 @@ function calcStreak(checks) {
 function hiitDoneCount() {
   let e = load('exercise');
   return e.filter(c=>c.id==='hiit').length;
-}
-
-function vjGetTotal() { return load('vjourney').reduce((s,d)=>s+d.km, 0); }
-
-function tpWeekDoneCount() {
-  let data = load('tplan');
-  let now = new Date();
-  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
-  let weekKey = formatDate(mon);
-  let plan = data.find(w=>w.key===weekKey);
-  if(!plan) return 0;
-  let count = 0;
-  for(let i=0;i<7;i++) if(plan.days[i]) count += plan.days[i].filter(e=>e.done).length;
-  return count;
-}
-
-function isTPlanWeekDone() {
-  let data = load('tplan');
-  let now = new Date();
-  let mon = new Date(now); mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
-  let weekKey = formatDate(mon);
-  let plan = data.find(w=>w.key===weekKey);
-  if(!plan) return false;
-  let total = 0, done = 0;
-  for(let i=0;i<7;i++) {
-    if(plan.days[i]) { total += plan.days[i].length; done += plan.days[i].filter(e=>e.done).length; }
-  }
-  return total > 0 && done === total;
 }
 
 function checkAchievements() {
@@ -1367,7 +1293,7 @@ function refreshPage(page) {
   else if(page==='shop'){renderCalFor('shop');renderTaskList('shop');}
   else if(page==='notes'){renderCalFor('notes');renderTaskList('notes');}
   else if(page==='learn') refreshLearn();
-  else if(page==='exercise'){renderCalFor('ex');refreshExercise();tpRender();vjRender();calRender();achRender();}
+  else if(page==='exercise'){renderCalFor('ex');refreshExercise();refreshHealthDashboard();refreshReports();achRender();}
   else if(page==='topics'||page==='ai') refreshTrending();
   else if(page==='inventory') refreshInventory();
   else if(page==='home') refreshAll();
