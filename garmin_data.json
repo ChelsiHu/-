@@ -1,4 +1,163 @@
 {
-  "synced_at": null,
-  "note": "Run garmin_sync.py to populate this file with real data from Garmin Connect"
+  "synced_at": "2026-08-07T18:21:51.185212",
+  "account": "8613720012911",
+  "daily": {
+    "2026-08-07": {
+      "steps": 4487,
+      "step_goal": 4300,
+      "sleep": 6.6,
+      "deep_sleep_seconds": 3600,
+      "light_sleep_seconds": 16080,
+      "rem_sleep_seconds": 4020,
+      "awake_sleep_seconds": 2700,
+      "sleep_score": 75
+    },
+    "2026-08-06": {
+      "steps": 4969,
+      "step_goal": 4300,
+      "sleep": 8.7,
+      "deep_sleep_seconds": 4440,
+      "light_sleep_seconds": 20820,
+      "rem_sleep_seconds": 6000,
+      "awake_sleep_seconds": 180,
+      "sleep_score": 92
+    },
+    "2026-08-05": {
+      "steps": 505,
+      "step_goal": 4300,
+      "sleep": 7.2,
+      "deep_sleep_seconds": 3480,
+      "light_sleep_seconds": 19200,
+      "rem_sleep_seconds": 3120,
+      "awake_sleep_seconds": 780,
+      "sleep_score": 80
+    },
+    "2026-08-04": {
+      "steps": 7458,
+      "step_goal": 4300,
+      "sleep": 6.2,
+      "deep_sleep_seconds": 5880,
+      "light_sleep_seconds": 11160,
+      "rem_sleep_seconds": 5280,
+      "awake_sleep_seconds": 0,
+      "sleep_score": 80
+    },
+    "2026-08-03": {
+      "steps": 4799,
+      "step_goal": 4300,
+      "sleep": 6.9,
+      "deep_sleep_seconds": 2880,
+      "light_sleep_seconds": 16440,
+      "rem_sleep_seconds": 5520,
+      "awake_sleep_seconds": 780,
+      "sleep_score": 82
+    },
+    "2026-08-02": {
+      "steps": 3113,
+      "step_goal": 4300,
+      "sleep": 8.7,
+      "deep_sleep_seconds": 3600,
+      "light_sleep_seconds": 20820,
+      "rem_sleep_seconds": 6900,
+      "awake_sleep_seconds": 540,
+      "sleep_score": 91
+    },
+    "2026-08-01": {
+      "steps": 281,
+      "step_goal": 4300,
+      "sleep": 7.6,
+      "deep_sleep_seconds": 4020,
+      "light_sleep_seconds": 16620,
+      "rem_sleep_seconds": 6720,
+      "awake_sleep_seconds": 360,
+      "sleep_score": 93
+    }
+  },
+  "profile": {},
+  "activities": [
+    {
+      "id": 616642719,
+      "type": "walking",
+      "name": "步行",
+      "date": "2026-07-14",
+      "start_time": "2026-07-14 17:28:17",
+      "duration_min": 11.7,
+      "distance_km": 0.65,
+      "calories": 37.0,
+      "avg_hr": 92.0,
+      "max_hr": 112.0,
+      "avg_pace": 0.921999990940094,
+      "elevation_gain": null
+    },
+    {
+      "id": 605499613,
+      "type": "walking",
+      "name": "步行",
+      "date": "2026-06-12",
+      "start_time": "2026-06-12 21:48:30",
+      "duration_min": 12.8,
+      "distance_km": 0.75,
+      "calories": 45.0,
+      "avg_hr": 107.0,
+      "max_hr": 117.0,
+      "avg_pace": 0.9850000143051147,
+      "elevation_gain": null
+    },
+    {
+      "id": 603019097,
+      "type": "running",
+      "name": "跑步",
+      "date": "2026-06-06",
+      "start_time": "2026-06-06 14:48:20",
+      "duration_min": 2.3,
+      "distance_km": 0.11,
+      "calories": 8.0,
+      "avg_hr": 105.0,
+      "max_hr": 118.0,
+      "avg_pace": 0.8270000219345093,
+      "elevation_gain": null
+    },
+    {
+      "id": 588743126,
+      "type": "walking",
+      "name": "步行",
+      "date": "2026-04-27",
+      "start_time": "2026-04-27 19:28:41",
+      "duration_min": 12.4,
+      "distance_km": 0.15,
+      "calories": 41.0,
+      "avg_hr": 104.0,
+      "max_hr": 156.0,
+      "avg_pace": 0.19699999690055847,
+      "elevation_gain": null
+    },
+    {
+      "id": 567365086,
+      "type": "running",
+      "name": "跑步",
+      "date": "2026-02-21",
+      "start_time": "2026-02-21 23:18:13",
+      "duration_min": 2.4,
+      "distance_km": 0.36,
+      "calories": 13.0,
+      "avg_hr": 128.0,
+      "max_hr": 135.0,
+      "avg_pace": 2.4839999675750732,
+      "elevation_gain": null
+    },
+    {
+      "id": 554588871,
+      "type": "breathwork",
+      "name": "放松和专注",
+      "date": "2026-01-04",
+      "start_time": "2026-01-04 19:04:18",
+      "duration_min": 5.6,
+      "distance_km": 0.0,
+      "calories": 0.0,
+      "avg_hr": 80.0,
+      "max_hr": 91.0,
+      "avg_pace": null,
+      "elevation_gain": null
+    }
+  ]
 }
