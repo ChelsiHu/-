@@ -137,12 +137,18 @@ label{font-size:12px;color:var(--text2);font-weight:600;display:block;margin-bot
 .sec-toggle{display:flex;gap:8px;margin-bottom:12px;}
 .sec-toggle button{flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--sep);background:var(--card);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--text2);}
 .sec-toggle button.active{background:var(--green);color:#fff;border-color:var(--green);}
+
+.sync-badge{font-size:10px;font-weight:500;background:#E8F5E9;color:var(--green);padding:2px 8px;border-radius:10px;margin-left:8px;white-space:nowrap;}
+.sync-badge.error{background:#FFEBEE;color:var(--red);}
+.sync-badge.manual{background:#FFF3E0;color:var(--orange);}
+
+.stat-card.garmin{background:#F0FFF5;border:1px solid #C8E6C9;}
 </style>
 </head>
 <body>
 
 <nav class="nav-bar">
-  <h1><span class="logo">🏃</span>Garmin+ 运动助手</h1>
+  <h1><span class="logo">🏃</span>Garmin+ 运动助手<span class="sync-badge" id="syncBadge" style="display:none;">🔄 同步中...</span></h1>
   <div class="nav-tabs" id="navTabs">
     <div class="nav-tab active" data-tab="dashboard"><span class="tab-icon">📊</span>健康数据</div>
     <div class="nav-tab" data-tab="exercise"><span class="tab-icon">🏃</span>运动记录</div>
@@ -305,6 +311,63 @@ function fmtDate(d){ let y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'
 function todayStr(){ return fmtDate(new Date()); }
 function weekStart(d){ let s=new Date(d); s.setDate(s.getDate()-(s.getDay()||7)+1); s.setHours(0,0,0,0); return s; }
 
+// ===== GARMIN DATA LOADER =====
+let garminData=null, garminLoaded=false, garminError=null;
+function loadGarminData(){
+  let badge=document.getElementById('syncBadge');
+  badge.style.display='inline';
+  badge.textContent='🔄 同步中...';
+  badge.className='sync-badge';
+  // Try same-origin (works on GitHub Pages and local server)
+  fetch('./garmin_data.json?'+Date.now())
+    .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(d=>{
+      garminData=d; garminLoaded=true;
+      let ago=timeAgo(d.synced_at);
+      badge.innerHTML='⌚ Garmin · '+ago;
+      badge.className='sync-badge';
+      refreshDashboard(); refreshExLog();
+    })
+    .catch(e=>{
+      garminError=e.message;
+      badge.innerHTML='⌚ Garmin 离线';
+      badge.className='sync-badge manual';
+      refreshDashboard();
+    });
+}
+function timeAgo(isoStr){
+  if(!isoStr) return '未知';
+  let diff=(Date.now()-new Date(isoStr).getTime())/1000;
+  if(diff<60) return '刚刚';
+  if(diff<3600) return Math.floor(diff/60)+'分钟前';
+  if(diff<86400) return Math.floor(diff/3600)+'小时前';
+  return Math.floor(diff/86400)+'天前';
+}
+function getGarminDay(ds){
+  if(!garminData||!garminData.daily) return null;
+  return garminData.daily[ds]||null;
+}
+function mergeHealth(local, garmin){
+  let r={...local};
+  if(garmin){
+    if(garmin.steps!==undefined&&garmin.steps!==null) r.steps=garmin.steps;
+    if(garmin.resting_hr!==undefined&&garmin.resting_hr!==null) r.hr=garmin.resting_hr;
+    if(garmin.sleep!==undefined&&garmin.sleep!==null) r.sleep=garmin.sleep;
+    r.body_battery=garmin.body_battery_max||null;
+    r.stress_avg=garmin.stress_avg||null;
+    r.sleep_score=garmin.sleep_score||null;
+  }
+  if(garminData&&garminData.profile){
+    if(garminData.profile.weight) r.weight=garminData.profile.weight;
+  }
+  return r;
+}
+function getGarminDaysBack(n){
+  let days={};
+  for(let i=0;i<=n;i++){ let d=new Date(); d.setDate(d.getDate()-i); let ds=fmtDate(d); let g=getGarminDay(ds); if(g) days[ds]=g; }
+  return days;
+}
+
 // ===== 1. HEALTH DASHBOARD =====
 function getHealthData(){
   let d=ls('health')||{};
@@ -339,33 +402,57 @@ function openHealthModal(){
   document.getElementById('healthModal').classList.add('show');
 }
 function refreshDashboard(){
-  let d=getHealthData(),t=d[todayStr()];
-  // Calc change
-  let prevStr=''; let curD=new Date(); curD.setDate(curD.getDate()-1); prevStr=fmtDate(curD);
-  let pv=d[prevStr];
-  let stCh='',hrCh='',slCh='';
-  if(pv){
-    if(t.steps>0&&pv.steps>0) stCh=((t.steps-pv.steps)/pv.steps*100).toFixed(0)+'%';
-    if(t.hr>0&&pv.hr>0) hrCh=(pv.hr-t.hr)+'bpm';
-    if(t.sleep>0&&pv.sleep>0) slCh=((t.sleep-pv.sleep)).toFixed(1)+'h';
-  }
+  let d=getHealthData(),t_raw=d[todayStr()]||{};
+  let garmin=getGarminDay(todayStr());
+  let t=mergeHealth(t_raw,garmin);
+  let prevStr=fmtDate(new Date(Date.now()-86400000));
+  let garminPrev=getGarminDay(prevStr);
+
+  // Steps
+  let stCh='', stPrev=0;
+  if(garminPrev&&garminPrev.steps){ stPrev=garminPrev.steps; stCh=((t.steps-stPrev)/stPrev*100).toFixed(0)+'%'; }
+  else if(garmin){ for(let i=1;i<=7;i++){ let ds=fmtDate(new Date(Date.now()-i*86400000)); let g=getGarminDay(ds); if(g&&g.steps){ stPrev=g.steps; stCh=((t.steps-stPrev)/stPrev*100).toFixed(0)+'%'; break; } } }
+
+  // HR
+  let hrPrev='', hrCh='';
+  if(garminPrev&&garminPrev.resting_hr){ hrPrev=garminPrev.resting_hr; hrCh=(garminPrev.resting_hr-t.hr)+'bpm'; }
+
+  // Sleep
+  let slCh='';
+  if(garminPrev&&garminPrev.sleep){ slCh=((t.sleep-(garminPrev.sleep||0))).toFixed(1)+'h'; }
+
+  let sourceTag=garmin?' <span style="font-size:9px;background:#C8E6C9;color:#2E7D32;padding:1px 5px;border-radius:8px;">Garmin</span>':'';
+
   document.getElementById('todayStats').innerHTML=`
-    <div class="stat-card"><div class="stat-icon">🚶</div><div class="stat-val">${t.steps.toLocaleString()||0}</div><div class="stat-label">步数</div><div class="stat-change">${stCh?'vs 昨日: '+stCh:'—'}</div></div>
-    <div class="stat-card"><div class="stat-icon">💓</div><div class="stat-val">${t.hr||'—'}</div><div class="stat-label">心率 / bpm</div><div class="stat-change">${hrCh?'vs 昨日: '+hrCh:'—'}</div></div>
-    <div class="stat-card"><div class="stat-icon">😴</div><div class="stat-val">${t.sleep||'—'}</div><div class="stat-label">睡眠 / 小时</div><div class="stat-change">${slCh?'vs 昨日: '+slCh:'—'}</div></div>
-    <div class="stat-card"><div class="stat-icon">⚖️</div><div class="stat-val">${t.weight||'—'}</div><div class="stat-label">体重 / kg</div><div class="stat-change">${t.water?'💧 '+t.water+'杯':'—'}</div></div>
+    <div class="stat-card${garmin?' garmin':''}"><div class="stat-icon">🚶</div><div class="stat-val">${t.steps?t.steps.toLocaleString():'—'}</div><div class="stat-label">步数${sourceTag}</div><div class="stat-change">${stCh?'vs 昨日: '+stCh:(stPrev?'→ 昨日 '+stPrev.toLocaleString():'—')}</div></div>
+    <div class="stat-card${garmin?' garmin':''}"><div class="stat-icon">💓</div><div class="stat-val">${t.hr||'—'}</div><div class="stat-label">静息心率 / bpm${sourceTag}</div><div class="stat-change">${hrCh?'vs 昨日: '+hrCh:(hrPrev?'→ 昨日 '+hrPrev+'bpm':'—')}</div></div>
+    <div class="stat-card${garmin?' garmin':''}"><div class="stat-icon">😴</div><div class="stat-val">${t.sleep||'—'}</div><div class="stat-label">睡眠 / 小时${sourceTag}</div><div class="stat-change">${slCh?'vs 昨日: '+slCh:'—'}${t.sleep_score?(' · 评分 '+t.sleep_score):''}</div></div>
+    <div class="stat-card${garmin?' garmin':''}"><div class="stat-icon">🔋</div><div class="stat-val">${t.body_battery||'—'}</div><div class="stat-label">Body Battery${sourceTag}</div><div class="stat-change">${t.stress_avg?'🧘 压力 '+t.stress_avg:'—'}</div></div>
+    <div class="stat-card${garmin?' garmin':''}"><div class="stat-icon">⚖️</div><div class="stat-val">${t.weight||'—'}</div><div class="stat-label">体重 / kg${sourceTag}</div><div class="stat-change">${t.water?'💧 '+t.water+'杯':''}</div></div>
+    <div class="stat-card" onclick="openHealthModal()" style="cursor:pointer;background:var(--bg);"><div class="stat-icon">✏️</div><div class="stat-val" style="color:var(--text2);">+</div><div class="stat-label">手动录入</div><div class="stat-change">饮水/备注</div></div>
   `;
   renderHealthChart(document.getElementById('chartToggle').querySelector('.active')?.dataset.metric||'steps');
 }
 function renderHealthChart(metric){
   let d=getHealthData();
+  let garminDays=getGarminDaysBack(7);
   let dates=[]; for(let i=6;i>=0;i--){let dt=new Date();dt.setDate(dt.getDate()-i);dates.push(fmtDate(dt));}
-  let vals=dates.map(dt=>{
-    let v=d[dt];
-    if(!v) return 0;
-    if(metric==='steps') return v.steps||0;
-    if(metric==='hr') return v.hr||0;
-    if(metric==='sleep') return v.sleep||0;
+  let vals=dates.map(ds=>{
+    let local=d[ds]||{};
+    let g=garminDays[ds];
+    if(!g&&!local) return 0;
+    if(metric==='steps'){
+      if(g&&g.steps!==undefined) return g.steps;
+      return local.steps||0;
+    }
+    if(metric==='hr'){
+      if(g&&g.resting_hr!==undefined) return g.resting_hr;
+      return local.hr||0;
+    }
+    if(metric==='sleep'){
+      if(g&&g.sleep!==undefined) return g.sleep;
+      return local.sleep||0;
+    }
     return 0;
   });
   let labels=dates.map(d=>d.slice(5));
@@ -373,7 +460,7 @@ function renderHealthChart(metric){
   let c=colors[metric];
   if(window._healthChart) window._healthChart.destroy();
   let ctx=document.getElementById('healthChart').getContext('2d');
-  window._healthChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:metric==='steps'?'步数':metric==='hr'?'心率(bpm)':'睡眠(h)',data:vals,backgroundColor:c[0],borderColor:c[1],borderWidth:2,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#E5E5EA'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});
+  window._healthChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:metric==='steps'?'步数':metric==='hr'?'心率(bpm)':'睡眠(h)',data:vals,backgroundColor:c[0],borderColor:c[1],borderWidth:2,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},subtitle:{display:!!garminData,text:'数据来源: Garmin Connect',position:'bottom',font:{size:9},color:'#2E7D32',padding:4}},scales:{y:{beginAtZero:true,grid:{color:'#E5E5EA'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});
 }
 document.getElementById('chartToggle').addEventListener('click',function(e){
   if(e.target.tagName==='BUTTON'){
@@ -421,14 +508,43 @@ function delEx(id){
 function refreshExLog(){
   let logs=getExLogs();
   let el=document.getElementById('exLogList');
-  if(!logs.length){ el.innerHTML='<div class="empty"><div class="empty-icon">🏃</div><div class="empty-text">还没有运动记录<br>点击右下角 + 开始记录</div></div>'; return; }
-  let typeNames={running:'跑步',cycling:'骑行',swimming:'游泳',walking:'快走',hiit_train:'HIIT',yoga:'瑜伽',strength:'力量训练',other:'其他'};
-  let typeIcons={running:'🏃',cycling:'🚴',swimming:'🏊',walking:'🚶',hiit_train:'🔥',yoga:'🧘',strength:'🏋️',other:'📌'};
-  el.innerHTML=logs.map(l=>`<div class="ex-log-item">
-    <div class="ex-type">${typeIcons[l.type]||'📌'}</div>
-    <div class="ex-info"><div class="ex-name">${typeNames[l.type]||l.type}</div><div class="ex-meta">${l.date}${l.dist?' · '+l.dist+'km':''}${l.pace?' · 配速 '+l.pace:''}</div></div>
-    <div class="ex-stats"><div class="val">${l.cal||'—'}</div><div class="unit">🔥 卡路里</div><div style="font-size:10px;color:var(--text3);">${l.dur||0}分钟</div></div>
-    <button class="ex-del" onclick="delEx(${l.id})">✕</button>
+  let typeNames={running:'跑步',cycling:'骑行',swimming:'游泳',walking:'快走',hiit_train:'HIIT',yoga:'瑜伽',strength:'力量训练',other:'其他',
+    trail_running:'越野跑',road_biking:'公路骑行',mountain_biking:'山地骑行',pool_swimming:'游泳',open_water_swimming:'公开水域',walking:'快走',hiking:'徒步',
+    indoor_cardio:'室内有氧',indoor_cycling:'室内骑行',elliptical:'椭圆机',stair_stepping:'爬楼机',rowing:'划船',indoor_running:'跑步机'};
+  let typeIcons={running:'🏃',cycling:'🚴',swimming:'🏊',walking:'🚶',hiit_train:'🔥',yoga:'🧘',strength:'🏋️',other:'📌',
+    trail_running:'🏔️',road_biking:'🚴',mountain_biking:'🚵',pool_swimming:'🏊',open_water_swimming:'🌊',hiking:'🥾',
+    indoor_cardio:'💪',indoor_cycling:'🚲',elliptical:'🔄',stair_stepping:'🪜',rowing:'🚣',indoor_running:'🏃'};
+
+  // Merge Garmin activities
+  let garminActs=[];
+  if(garminData&&garminData.activities){
+    garminActs=garminData.activities.filter(a=>{
+      return !logs.some(l=>l.garminId&&l.garminId===a.id) && !logs.some(l=>l.date===a.date&&l.type===a.type&&Math.abs((l.dist||0)-(a.distance_km||0))<0.1);
+    });
+  }
+
+  let allItems=[];
+  // Map local logs
+  logs.forEach(l=>{
+    allItems.push({source:'local',date:l.date,id:l.id,garminId:l.garminId,type:l.type,name:typeNames[l.type]||l.type,icon:typeIcons[l.type]||'📌',dist:l.dist,dur:l.dur,cal:l.cal,pace:l.pace,hr:l.hr});
+  });
+  // Map Garmin activities
+  garminActs.forEach(a=>{
+    let tn=typeNames[a.type]||a.type; tn=(a.name&&a.name!==tn)?a.name:tn;
+    let pace='';
+    if(a.duration_min>0&&a.distance_km>0){ let p=a.duration_min/a.distance_km; let m=Math.floor(p),s=Math.round((p-m)*60); pace=m+"'"+String(s).padStart(2,'0')+'/km"'; }
+    else if(a.avg_pace){ let mps=a.avg_pace; if(mps>0){ let pk=1000/mps/60; let m=Math.floor(pk),s=Math.round((pk-m)*60); pace=m+"'"+String(s).padStart(2,'0')+'/km"'; } }
+    allItems.push({source:'garmin',date:a.date,id:a.id,name:tn,icon:typeIcons[a.type]||'🏃',type:a.type,dist:a.distance_km,dur:a.duration_min,cal:a.calories,pace,hr:a.avg_hr,start_time:a.start_time});
+  });
+  // Sort by date desc
+  allItems.sort((a,b)=>b.date.localeCompare(a.date)||(b.start_time||'').localeCompare(a.start_time||''));
+
+  if(!allItems.length){ el.innerHTML='<div class="empty"><div class="empty-icon">🏃</div><div class="empty-text">还没有运动记录<br>戴上Garmin手环运动一次就会自动同步</div></div>'; return; }
+  el.innerHTML=allItems.map(l=>`<div class="ex-log-item">
+    <div class="ex-type">${l.icon}</div>
+    <div class="ex-info"><div class="ex-name">${l.name}${l.source==='garmin'?' <span style="font-size:9px;background:#C8E6C9;color:#2E7D32;padding:1px 4px;border-radius:6px;">⌚</span>':''}</div><div class="ex-meta">${l.date}${l.dist?' · '+l.dist+'km':''}${l.pace?' · 配速 '+l.pace:''}</div></div>
+    <div class="ex-stats"><div class="val">${l.cal||'—'}</div><div class="unit">🔥 卡路里</div><div style="font-size:10px;color:var(--text3);">${l.dur||0}分钟${l.hr?' · 💓'+l.hr:''}</div></div>
+    ${l.source==='local'?`<button class="ex-del" onclick="delEx(${l.id})">✕</button>`:`<span style="font-size:10px;color:var(--text3);">Garmin</span>`}
   </div>`).join('');
 }
 
@@ -567,12 +683,22 @@ function renderReportTabs(){
 }
 function renderReportData(){
   let logs=getExLogs();
+  // Add Garmin activities to report
+  let allLogs=[...logs.map(l=>({...l,source:'local'}))];
+  if(garminData&&garminData.activities){
+    garminData.activities.forEach(a=>{
+      let exists=logs.some(l=>l.garminId&&l.garminId===a.id);
+      if(!exists){
+        allLogs.push({source:'garmin',date:a.date,type:a.type,dist:a.distance_km,dur:a.duration_min,cal:a.calories,hr:a.avg_hr,id:a.id});
+      }
+    });
+  }
   let now=new Date();
   let start=new Date();
   if(reportMode==='week'){ start=weekStart(now); }
   else { start=new Date(now.getFullYear(),now.getMonth(),1); }
   let startStr=fmtDate(start);
-  let filtered=logs.filter(l=>l.date>=startStr&&l.date<=todayStr());
+  let filtered=allLogs.filter(l=>l.date>=startStr&&l.date<=todayStr());
   let totalDist=filtered.reduce((s,l)=>s+(l.dist||0),0).toFixed(1);
   let totalCal=filtered.reduce((s,l)=>s+(l.cal||0),0);
   let totalDur=filtered.reduce((s,l)=>s+(l.dur||0),0);
@@ -606,7 +732,7 @@ document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click
 
 // ===== INIT =====
 selectPreset('tabata');
-refreshDashboard();
+loadGarminData();  // Load Garmin data first, then refresh all
 </script>
 </body>
 </html>
