@@ -138,6 +138,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .trend-list .trend-platform.xhs{background:#FFE8EC;color:var(--pink);}
 .trend-list .trend-platform.dy{background:#E8F0FE;color:var(--blue);}
 .trend-list .trend-platform.bili{background:#FFF3E0;color:var(--orange);}
+.trend-list .trend-platform.web{background:#F3E5F5;color:#8E24AA;}
+.trend-list .trend-title a{color:inherit;text-decoration:none;cursor:pointer;}
+.trend-list .trend-title a:hover{color:var(--green);}
+.trend-list .trend-source-link{display:inline-block;font-size:11px;color:var(--blue);margin-top:3px;text-decoration:none;}
+.trend-list .trend-source-link:hover{text-decoration:underline;color:var(--green);}
+.exercise-card .ex-links{margin-top:6px;text-align:left;}
+.exercise-card .ex-links a{display:block;font-size:11px;color:var(--blue);text-decoration:none;padding:4px 8px;border-radius:6px;background:var(--green-light);margin-bottom:3px;transition:all 0.2s;}
+.exercise-card .ex-links a:hover{background:var(--green-soft);color:var(--green-dark);}
 /* Modal */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:100;display:flex;align-items:center;justify-content:center;}
 .modal{background:#fff;border-radius:var(--radius);width:90%;max-width:400px;box-shadow:var(--shadow-lg);overflow:hidden;}
@@ -164,6 +172,37 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:#c0c0c0;border-radius:10px;}
+/* Inventory */
+.inv-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
+.inv-stat{background:var(--card);border-radius:var(--radius-sm);padding:12px 10px;text-align:center;box-shadow:var(--shadow);}
+.inv-stat .stat-num{font-size:22px;font-weight:700;color:var(--green);}
+.inv-stat .stat-label{font-size:11px;color:var(--text2);margin-top:2px;}
+.inv-stat.warn .stat-num{color:var(--orange);}
+.inv-cat-filter{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.inv-cat-filter .cat-pill{padding:5px 12px;border-radius:20px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:12px;color:var(--text2);white-space:nowrap;transition:all 0.2s;user-select:none;}
+.inv-cat-filter .cat-pill:hover{border-color:var(--green);color:var(--green);}
+.inv-cat-filter .cat-pill.active{background:var(--green);color:#fff;border-color:var(--green);}
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;}
+.inv-card{background:var(--card);border-radius:var(--radius-sm);padding:14px;box-shadow:var(--shadow);border-left:4px solid var(--green-soft);position:relative;transition:all 0.2s;}
+.inv-card.expiring{border-left-color:var(--orange);background:#FFFDF5;}
+.inv-card.expired{border-left-color:var(--red);background:#FEF5F5;}
+.inv-card .inv-name{font-size:14px;font-weight:700;margin-bottom:4px;padding-right:50px;}
+.inv-card .inv-brand{font-size:11px;color:var(--text3);margin-bottom:8px;}
+.inv-card .inv-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--text2);}
+.inv-card .inv-meta span{background:var(--bg);padding:2px 8px;border-radius:8px;white-space:nowrap;}
+.inv-card .inv-meta .meta-urgent{background:#FFF0F0;color:var(--red);}
+.inv-card .inv-actions{position:absolute;top:10px;right:10px;display:flex;gap:4px;}
+.inv-card .inv-actions button{width:26px;height:26px;border-radius:50%;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.inv-card .inv-actions .edit-btn:hover{border-color:var(--green);color:var(--green);}
+.inv-card .inv-actions .del-btn:hover{border-color:var(--red);color:var(--red);background:#fff5f5;}
+.inv-add-fab{position:fixed;bottom:80px;right:20px;width:48px;height:48px;border-radius:50%;background:var(--green);color:#fff;border:none;cursor:pointer;font-size:24px;box-shadow:0 4px 16px rgba(45,157,92,0.35);z-index:50;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.inv-add-fab:hover{transform:scale(1.1);background:var(--green-dark);}
+/* Inventory form */
+.inv-form-group{margin-bottom:12px;}
+.inv-form-group label{display:block;font-size:13px;color:var(--text2);margin-bottom:5px;}
+.inv-form-group input,.inv-form-group select{width:100%;padding:9px 10px;border:1px solid #ddd;border-radius:var(--radius-xs);font-size:14px;font-family:inherit;outline:none;transition:border 0.2s;}
+.inv-form-group input:focus,.inv-form-group select:focus{border-color:var(--green);}
+.inv-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 </style>
 </head>
 <body>
@@ -246,20 +285,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   <!-- LEARN -->
   <div class="page" id="page-learn">
     <div class="learn-category">
-      <span class="cat-name">🗣️ 日常口语</span>
-      <div class="learn-cards" id="learnDaily"></div>
-    </div>
-    <div class="learn-category">
-      <span class="cat-name">💼 商务英语</span>
-      <div class="learn-cards" id="learnBiz"></div>
-    </div>
-    <div class="learn-category">
-      <span class="cat-name">👂 听力磨耳朵</span>
+      <span class="cat-name">🎧 听力磨耳朵</span>
       <div class="learn-cards" id="learnListen"></div>
     </div>
     <div class="learn-category">
-      <span class="cat-name">🎬 博主 Vlog</span>
-      <div class="learn-cards" id="learnVlog"></div>
+      <span class="cat-name">📻 日常英语播客</span>
+      <div class="learn-cards" id="learnDaily"></div>
     </div>
   </div>
   <!-- EXERCISE -->
@@ -273,28 +304,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   <!-- TOPICS -->
   <div class="page" id="page-topics">
     <div class="card">
-      <div class="card-header"><h3>💡 今日热门选题 TOP10</h3></div>
-      <div style="display:flex;gap:6px;margin-bottom:10px;">
-        <span style="font-size:11px;color:var(--text2);">数据来源：</span>
+      <div class="card-header"><h3>💡 今日热门选题 TOP10</h3><span style="font-size:11px;color:var(--text3);">📅 更新于 2026-08-07</span></div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;align-items:center;">
+        <span style="font-size:11px;color:var(--text2);">来源：</span>
         <span style="font-size:10px;background:#FFE8EC;color:var(--pink);padding:2px 7px;border-radius:10px;">小红书</span>
-        <span style="font-size:10px;background:#E8F0FE;color:var(--blue);padding:2px 7px;border-radius:10px;">抖音</span>
-        <span style="font-size:10px;background:#FFF3E0;color:var(--orange);padding:2px 7px;border-radius:10px;">B站</span>
+        <span style="font-size:10px;color:var(--text3);">📅 每日7点更新 · 互动1000+收录</span>
       </div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">💡 点击标题跳转小红书查看原文</div>
       <ul class="trend-list" id="topicsTrendList"></ul>
     </div>
   </div>
   <!-- AI -->
   <div class="page" id="page-ai">
     <div class="card">
-      <div class="card-header"><h3>🤖 AI 热门趋势</h3></div>
-      <div style="display:flex;gap:6px;margin-bottom:10px;">
-        <span style="font-size:11px;color:var(--text2);">数据来源：</span>
-        <span style="font-size:10px;background:#FFE8EC;color:var(--pink);padding:2px 7px;border-radius:10px;">小红书</span>
-        <span style="font-size:10px;background:#E8F0FE;color:var(--blue);padding:2px 7px;border-radius:10px;">抖音</span>
-        <span style="font-size:10px;background:#FFF3E0;color:var(--orange);padding:2px 7px;border-radius:10px;">B站</span>
+      <div class="card-header"><h3>🤖 AI 最新资讯</h3><span style="font-size:11px;color:var(--text3);">📅 更新于 2026-08-07</span></div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
+        <span style="font-size:11px;color:var(--text2);">来源：</span>
+        <span style="font-size:10px;background:#FFF3E0;color:var(--orange);padding:2px 7px;border-radius:10px;">新浪财经</span>
+        <span style="font-size:10px;background:#E8F0FE;color:var(--blue);padding:2px 7px;border-radius:10px;">今日头条</span>
+        <span style="font-size:10px;background:#FFE8EC;color:var(--pink);padding:2px 7px;border-radius:10px;">中新经纬</span>
+        <span style="font-size:10px;background:#E8F5E9;color:var(--green);padding:2px 7px;border-radius:10px;">网易</span>
       </div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">💡 点击标题可查看原文</div>
       <ul class="trend-list" id="aiTrendList"></ul>
     </div>
+  </div>
+  <!-- INVENTORY -->
+  <div class="page" id="page-inventory">
+    <div class="inv-stats" id="invStats"></div>
+    <div class="inv-cat-filter" id="invCatFilter"></div>
+    <div class="inv-grid" id="invGrid"></div>
+    <div class="empty-state" id="invEmpty" style="display:none;">
+      <span class="empty-icon">🧴</span>
+      <span class="empty-text">还没有护肤品记录，点右下角 + 添加吧</span>
+    </div>
+    <button class="inv-add-fab" id="invAddFab" title="添加护肤品">+</button>
   </div>
 </div>
 
@@ -323,6 +367,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   </div>
   <div class="nav-item" data-page="ai">
     <span class="nav-icon">🤖</span><span class="nav-label">AI</span>
+  </div>
+  <div class="nav-item" data-page="inventory">
+    <span class="nav-icon">🧴</span><span class="nav-label">库存</span>
   </div>
 </div>
 
@@ -386,7 +433,8 @@ const KEYS = {
   work: 'wb_v3_work',
   shop: 'wb_v3_shop',
   notes: 'wb_v3_notes',
-  exercise: 'wb_v3_exercise'
+  exercise: 'wb_v3_exercise',
+  inventory: 'wb_v3_inventory'
 };
 
 function load(k) { try { return JSON.parse(localStorage.getItem(KEYS[k]) || '[]'); } catch(e) { return []; } }
@@ -461,6 +509,9 @@ function navTo(page) {
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   let target = document.querySelector('.nav-item[data-page="'+page+'"]');
   if(target) target.classList.add('active');
+  // toggle FAB
+  var fab = document.getElementById('invAddFab');
+  if(fab) fab.style.display = page==='inventory' ? 'flex' : 'none';
   refreshPage(page);
   document.getElementById('mainContent').scrollTop = 0;
 }
@@ -643,8 +694,12 @@ function saveTask() {
 function refreshExercise() {
   let exercises = [
     {id:'dance',icon:'💃',name:'舞蹈',desc:'跟跳一支舞，燃脂又快乐',link:'',checked:false},
-    {id:'baduanjin',icon:'🧘',name:'八段锦',desc:'国家体育总局12分钟版',link:'https://www.bilibili.com/video/BV1LJftBnETr',checked:false},
-    {id:'posture',icon:'🧍',name:'体态矫正',desc:'欧阳春晓体态训练',link:'https://search.bilibili.com/all?keyword=欧阳春晓+体态',checked:false},
+    {id:'baduanjin',icon:'🧘',name:'八段锦',desc:'国家体育总局12分钟完整版',link:'https://www.bilibili.com/video/BV1VsDpYXEqD',checked:false},
+    {id:'posture',icon:'🧍',name:'体态矫正',desc:'肩颈矫正·改善富贵包',links:[
+      {title:'5MIN纠正肩内扣头前伸',url:'https://www.bilibili.com/video/BV1h94y167WX'},
+      {title:'欧阳春晓矫正头前倾',url:'https://www.bilibili.com/video/BV1HtMD6vEw4'},
+      {title:'12min矫正脖颈前伸·天鹅颈',url:'https://www.bilibili.com/video/BV18F41187eS'},
+    ],checked:false},
   ];
   let checks = load('exercise');
   let today = formatDate(new Date());
@@ -660,7 +715,9 @@ function refreshExercise() {
     +(e.checked
       ?'<button class="ex-check-btn">✅ 已打卡</button>'
       :'<button class="ex-check-btn" onclick="checkIn(\''+e.id+'\')">打卡签到</button>')
-    +(e.link?'<a class="ex-link" href="'+e.link+'" target="_blank">🔗 查看视频 →</a>':'')
+    +(e.links
+      ? '<div class="ex-links">'+e.links.map(l=>'<a href="'+l.url+'" target="_blank">🔗 '+l.title+' →</a>').join('')+'</div>'
+      : (e.link?'<a class="ex-link" href="'+e.link+'" target="_blank">🔗 查看视频 →</a>':''))
     +'</div>').join('');
 
   let dashEl = document.getElementById('dashExercise');
@@ -685,29 +742,15 @@ function checkIn(id) {
 // ===== LEARN =====
 function refreshLearn() {
   let videos = {
-    daily:[
-      {title:'日常英语口语100句 | 每天一遍',bvid:'BV1hV4y1J7ZU',thumb:'🗣️',author:'英语兔'},
-      {title:'英语口语 | 地道表达合集',bvid:'BV1Vv4y1N7Fm',thumb:'💬',author:'Real麦克老师'},
-      {title:'每天5分钟 | 实用口语练习',bvid:'BV1aM4y1y7LT',thumb:'⏰',author:'早安英文'},
-    ],
-    biz:[
-      {title:'商务英语面试必备 | 全流程',bvid:'BV1mh411v7ed',thumb:'💼',author:'商务英语课堂'},
-      {title:'职场英语邮件写作 | 模板',bvid:'BV1pZ4y1h7TY',thumb:'📧',author:'English With Lucy'},
-      {title:'商务谈判英语 | 实战句型',bvid:'BV15R4y1H7Ey',thumb:'🤝',author:'华尔街英语'},
-    ],
     listen:[
-      {title:'BBC 6 Minute English | 合集',bvid:'BV1Wb411J7eX',thumb:'🎧',author:'BBC Learning English'},
-      {title:'TED演讲 | 中英字幕精选',bvid:'BV1s4411N7pF',thumb:'🎤',author:'TED官方'},
-      {title:'VOA慢速英语 | 每日听力',bvid:'BV1i7411d7JX',thumb:'📻',author:'VOA英语'},
+      {title:'YouTube最好的英语播客 | 初级版，适合每天磨耳朵',bvid:'BV1MN4dewEQZ',thumb:'🎧',author:'英语听力频道'},
     ],
-    vlog:[
-      {title:'英国生活Vlog | 真实日常英语',bvid:'BV1GJ411m7HL',thumb:'🇬🇧',author:'Lucy Bella'},
-      {title:'美国博主日常 | 地道表达',bvid:'BV1kA41187dG',thumb:'🇺🇸',author:'Ariannita la Gringa'},
-      {title:'澳洲Vlog | 旅行英语',bvid:'BV1yT4y1S7FQ',thumb:'🦘',author:'English with Adriana'},
+    daily:[
+      {title:'日常英语播客 Daily English Podcast | 持续更新',bvid:'BV1ZLkfBvEMX',thumb:'📻',author:'英语播客频道'},
     ]
   };
   for(let k in videos) {
-    let el = document.getElementById(k==='daily'?'learnDaily':k==='biz'?'learnBiz':k==='listen'?'learnListen':'learnVlog');
+    let el = document.getElementById(k==='listen'?'learnListen':'learnDaily');
     if(!el) continue;
     el.innerHTML = videos[k].map(v=>'<div class="learn-card" onclick="window.open(\'https://www.bilibili.com/video/'+v.bvid+'\',\'_blank\')">'
       +'<div class="card-thumb">'+v.thumb+'</div>'
@@ -720,27 +763,27 @@ function refreshLearn() {
 function genTrendData(type) {
   let isAi = type==='ai';
   let data = isAi ? [
-    {title:'Sora 新功能发布：AI视频生成进入新纪元',hot:'🔥 182万',platform:'xhs',label:'小红书'},
-    {title:'Claude 4 重磅更新：推理能力大幅提升',hot:'🔥 156万',platform:'dy',label:'抖音'},
-    {title:'AI绘画进阶教程：Stable Diffusion参数详解',hot:'🔥 134万',platform:'bili',label:'B站'},
-    {title:'GPT-5 即将发布？最新消息汇总',hot:'🔥 128万',platform:'xhs',label:'小红书'},
-    {title:'AI自动化工作流：从零搭建效率工具',hot:'🔥 115万',platform:'bili',label:'B站'},
-    {title:'AI数字人带货实战：月入10万经验分享',hot:'🔥 98万',platform:'dy',label:'抖音'},
-    {title:'大模型本地部署指南：Mac也能跑',hot:'🔥 87万',platform:'bili',label:'B站'},
-    {title:'AI换装工具推荐：服装电商必备',hot:'🔥 76万',platform:'xhs',label:'小红书'},
-    {title:'ChatGPT隐藏技巧：99%的人不知道',hot:'🔥 65万',platform:'dy',label:'抖音'},
-    {title:'2026年AI工具大盘点：效率提升10倍',hot:'🔥 58万',platform:'xhs',label:'小红书'},
+    {title:'Kimi K3正式开源：全球首个3万亿级参数开源模型',hot:'📅 7月27日',platform:'bili',label:'新浪财经',url:'https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/839305186041/index.phtml'},
+    {title:'OpenAI GPT-5.6降价80%，Luna输入价降至$0.2/百万token',hot:'📅 7月30日',platform:'dy',label:'今日头条',url:'https://www.toutiao.com/article/7669037487494349362/'},
+    {title:'DeepSeek V4-Flash正式版上线，价格仅为Claude的1/90',hot:'📅 7月31日',platform:'dy',label:'今日头条',url:'https://www.toutiao.com/article/7669395032444797476/'},
+    {title:'MiniMax H3发布：首款开源多模态生成模型，视频编辑全球第一',hot:'📅 7月31日',platform:'bili',label:'今日头条',url:'https://www.toutiao.com/article/7669395032444797476/'},
+    {title:'字节跳动发布Seedance 2.5：新一代视频生成模型',hot:'📅 7月31日',platform:'bili',label:'今日头条',url:'https://www.toutiao.com/article/7669395032444797476/'},
+    {title:'Claude Opus 5发布：性能接近Fable 5，价格减半',hot:'📅 7月底',platform:'bili',label:'新浪财经',url:'https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/839305186041/index.phtml'},
+    {title:'Qwen3.8-Max首发上线：阿里重回开源路线，2.4T参数将开源',hot:'📅 7月底',platform:'bili',label:'新浪财经',url:'https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/839305186041/index.phtml'},
+    {title:'2025中国AI产业规模超1.2万亿元，同比增长40%',hot:'📅 8月3日',platform:'xhs',label:'中新经纬',url:'https://www.jwview.com/jingwei/html/08-03/682035.shtml'},
+    {title:'智能体互联国标出台：GB/Z185-2026为AI Agent分配唯一身份码',hot:'📅 7月底',platform:'web',label:'网易',url:'https://www.163.com/dy/article/L3E1K1C9053812HP.html'},
+    {title:'Gemini Robotics 2发布：谷歌具身智能"安卓化"路线',hot:'📅 7月底',platform:'bili',label:'新浪财经',url:'https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/839305186041/index.phtml'},
   ] : [
-    {title:'今年夏季最火的连衣裙穿搭合集',hot:'🔥 245万',platform:'xhs',label:'小红书'},
-    {title:'一周通勤穿搭不重样',hot:'🔥 198万',platform:'dy',label:'抖音'},
-    {title:'小个子女生穿搭显高秘籍',hot:'🔥 176万',platform:'xhs',label:'小红书'},
-    {title:'1688平价好店推荐合集',hot:'🔥 154万',platform:'bili',label:'B站'},
-    {title:'平替测评：百元vs千元质感对比',hot:'🔥 132万',platform:'dy',label:'抖音'},
-    {title:'初秋新款预告：早秋氛围感穿搭',hot:'🔥 118万',platform:'xhs',label:'小红书'},
-    {title:'服装创业日记：从0到月销10万',hot:'🔥 105万',platform:'dy',label:'抖音'},
-    {title:'今年必入的新中式穿搭合集',hot:'🔥 92万',platform:'xhs',label:'小红书'},
-    {title:'服装面料知识大全：图文并茂',hot:'🔥 78万',platform:'bili',label:'B站'},
-    {title:'配饰搭配技巧：提升整体质感',hot:'🔥 65万',platform:'dy',label:'抖音'},
+    {title:'千禧校园电影里那些引领时尚潮流的女孩',hot:'🔥 19w+ 互动',platform:'xhs',label:'小红书',url:'https://www.xiaohongshu.com/explore/6a6f348d0000000005029b59'},
+    {title:'这妆怎么定不住了？拖拉机开进美妆圈',hot:'🔥 2w+ 互动',platform:'xhs',label:'小红书',url:'https://www.xiaohongshu.com/explore/6a6c5a410000000028003dca'},
+    {title:'当网友说60岁老头不懂时尚穿搭时...',hot:'🔥 2w+ 互动',platform:'xhs',label:'小红书',url:'https://www.xiaohongshu.com/explore/6a6c857b000000002701d09a'},
+    {title:'最时尚单品半框眼镜和最萌除颤仪喵喵拳来啦',hot:'🔥 4w+ 互动',platform:'xhs',label:'小红书',url:'https://www.xiaohongshu.com/explore/6a7072b5000000003302ca9b'},
+    {title:'去澳门一小时就成美妆蛋了',hot:'🔥 1w+ 互动',platform:'xhs',label:'小红书',url:'https://www.xiaohongshu.com/explore/6a6d6f38000000002501037b'},
+    {title:'此女的时尚感知能力到底有多强',hot:'🔥 1w+ 互动',platform:'xhs',label:'小红书',url:'https://www.xiaohongshu.com/explore/6a6c847b000000000502adfc'},
+    {title:'VOGUE编辑买过哪些时尚但不实穿的单品？',hot:'🔥 5000+ 互动',platform:'xhs',label:'小红书',url:'https://www.xiaohongshu.com/explore/6a71a717000000002202fe8c'},
+    {title:'时尚圈大火的迷你毛绒包盲盒！隐藏竟然是？',hot:'🔥 5000+ 互动',platform:'xhs',label:'小红书',url:'https://www.xiaohongshu.com/explore/6a6ece250000000005023c83'},
+    {title:'这真不是拍美剧吗⁉️昭仪米卡时尚感好超前',hot:'🔥 5000+ 互动',platform:'xhs',label:'小红书',url:'https://www.xiaohongshu.com/explore/6a6d9e240000000033018625'},
+    {title:'时尚博主住上海3层别墅！一天只花50块钱？',hot:'🔥 5000+ 互动',platform:'xhs',label:'小红书',url:'https://www.xiaohongshu.com/explore/6a6c522d0000000028007265'},
   ];
   return data;
 }
@@ -754,9 +797,12 @@ function refreshTrending() {
     if(!el) return;
     el.innerHTML = data.map((t,i)=>{
       let rCls = i<3?'r'+(i+1):'rn';
+      let titleHtml = t.url
+        ? '<a href="'+t.url+'" target="_blank">'+t.title+'</a><a class="trend-source-link" href="'+t.url+'" target="_blank">🔗 查看原文 →</a>'
+        : t.title;
       return '<li>'
         +'<div class="trend-rank '+rCls+'">'+(i+1)+'</div>'
-        +'<div class="trend-info"><div class="trend-title">'+t.title+'</div>'
+        +'<div class="trend-info"><div class="trend-title">'+titleHtml+'</div>'
         +'<div class="trend-hot">'+t.hot+'</div></div>'
         +'<span class="trend-platform '+t.platform+'">'+t.label+'</span>'
         +'</li>';
@@ -812,6 +858,7 @@ function refreshAll() {
   refreshExercise();
   refreshLearn();
   refreshTrending();
+  refreshInventory();
 }
 
 function refreshPage(page) {
@@ -821,8 +868,164 @@ function refreshPage(page) {
   else if(page==='learn') refreshLearn();
   else if(page==='exercise'){renderCalFor('ex');refreshExercise();}
   else if(page==='topics'||page==='ai') refreshTrending();
+  else if(page==='inventory') refreshInventory();
   else if(page==='home') refreshAll();
 }
+
+// ===== INVENTORY =====
+const INV_CATS = ['清洁洗护','防晒','面霜眼霜','乳液精华水','眼部眉部','唇部','彩妆其他'];
+const INV_CAT_ICONS = { '清洁洗护':'🧼','防晒':'☀️','面霜眼霜':'🧴','乳液精华水':'💧','眼部眉部':'👁️','唇部':'💄','彩妆其他':'🎨' };
+
+let invFilter = 'all';
+let invEditingId = null;
+
+function genInvId() { return 'inv_'+Date.now()+'_'+Math.random().toString(36).slice(2,6); }
+
+function loadInv() { try { return JSON.parse(localStorage.getItem(KEYS.inventory) || '[]'); } catch(e) { return []; } }
+function saveInv(data) { localStorage.setItem(KEYS.inventory, JSON.stringify(data)); }
+
+function refreshInventory() {
+  let data = loadInv();
+  let filtered = invFilter==='all' ? data : data.filter(d=>d.category===invFilter);
+
+  // stats
+  let total = data.length;
+  let today = new Date(); today.setHours(0,0,0,0);
+  let thirtyDays = new Date(today); thirtyDays.setDate(thirtyDays.getDate()+30);
+  let expiring = data.filter(d=>d.expiryDate && new Date(d.expiryDate)<=thirtyDays && new Date(d.expiryDate)>=today).length;
+  let expired = data.filter(d=>d.expiryDate && new Date(d.expiryDate)<today).length;
+
+  document.getElementById('invStats').innerHTML =
+    '<div class="inv-stat"><div class="stat-num">'+total+'</div><div class="stat-label">总库存</div></div>'+
+    '<div class="inv-stat warn"><div class="stat-num">'+expiring+'</div><div class="stat-label">即将过期</div></div>'+
+    '<div class="inv-stat" style="'+(expired>0?'--stat-num-color:var(--red);':'')+'"><div class="stat-num" style="'+(expired>0?'color:var(--red);':'')+'">'+expired+'</div><div class="stat-label">已过期</div></div>';
+
+  // category filter
+  let catCounts = {};
+  INV_CATS.forEach(c=>{ catCounts[c]=data.filter(d=>d.category===c).length; });
+  document.getElementById('invCatFilter').innerHTML =
+    '<span class="cat-pill'+(invFilter==='all'?' active':'')+'" onclick="setInvFilter(\'all\')">全部 ('+total+')</span>'+
+    INV_CATS.map(c=>'<span class="cat-pill'+(invFilter===c?' active':'')+'" onclick="setInvFilter(\''+c+'\')">'+c+' ('+(catCounts[c]||0)+')</span>').join('');
+
+  // grid
+  let grid = document.getElementById('invGrid');
+  let empty = document.getElementById('invEmpty');
+  if(filtered.length===0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    grid.innerHTML = filtered.map(d=>{
+      let expCls = '';
+      let expLabel = '';
+      if(d.expiryDate) {
+        let exp = new Date(d.expiryDate);
+        if(exp<today) { expCls = 'expired'; expLabel = '<span class="meta-urgent">⚠️ 已过期</span>'; }
+        else if(exp<=thirtyDays) { expCls = 'expiring'; expLabel = '<span class="meta-urgent">⏰ '+Math.ceil((exp-today)/86400000)+'天后过期</span>'; }
+      }
+      return '<div class="inv-card '+expCls+'">'+
+        '<div class="inv-actions">'+
+          '<button class="edit-btn" onclick="openInvEdit(\''+d.id+'\')" title="编辑">✎</button>'+
+          '<button class="del-btn" onclick="deleteInvItem(\''+d.id+'\')" title="删除">✕</button>'+
+        '</div>'+
+        '<div class="inv-name">'+(INV_CAT_ICONS[d.category]||'')+' '+d.name+'</div>'+
+        '<div class="inv-brand">'+d.brand+'</div>'+
+        '<div class="inv-meta">'+
+          '<span>📦 数量：'+d.quantity+'</span>'+
+          (d.openDate?'<span>📅 开封：'+d.openDate+'</span>':'')+
+          (d.expiryDate?'<span>⏳ 过期：'+d.expiryDate+'</span>':'')+
+          expLabel+
+          (d.notes?'<span>📝 '+d.notes+'</span>':'')+
+        '</div>'+
+      '</div>';
+    }).join('');
+  }
+}
+
+function setInvFilter(cat) {
+  invFilter = cat;
+  refreshInventory();
+}
+
+function openInvAdd() {
+  invEditingId = null;
+  showInvForm({name:'',brand:'',category:'清洁洗护',quantity:1,openDate:'',expiryDate:'',notes:''});
+}
+
+function openInvEdit(id) {
+  let data = loadInv();
+  let item = data.find(d=>d.id===id);
+  if(!item) return;
+  invEditingId = id;
+  showInvForm(item);
+}
+
+function showInvForm(item) {
+  let overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'invFormModal';
+  overlay.innerHTML = '<div class="modal">'+
+    '<div class="modal-header"><span>'+(invEditingId?'编辑':'添加')+'护肤品</span><button class="modal-close" onclick="closeInvForm()">✕</button></div>'+
+    '<div class="modal-body">'+
+      '<div class="inv-form-group"><label>🧴 产品名称</label><input type="text" id="invFName" value="'+escHtml(item.name)+'" placeholder="如：雅诗兰黛小棕瓶"></div>'+
+      '<div class="inv-form-group"><label>🏷️ 品牌</label><input type="text" id="invFBrand" value="'+escHtml(item.brand)+'" placeholder="如：Estée Lauder"></div>'+
+      '<div class="inv-form-group"><label>📂 分类</label><select id="invFCat">'+INV_CATS.map(c=>'<option value="'+c+'"'+(item.category===c?' selected':'')+'>'+c+'</option>').join('')+'</select></div>'+
+      '<div class="inv-form-row">'+
+        '<div class="inv-form-group"><label>📦 数量</label><input type="number" id="invFQty" value="'+item.quantity+'" min="1"></div>'+
+        '<div class="inv-form-group"><label>📅 开封日期</label><input type="date" id="invFOpen" value="'+item.openDate+'"></div>'+
+      '</div>'+
+      '<div class="inv-form-group"><label>⏳ 过期日期</label><input type="date" id="invFExp" value="'+item.expiryDate+'"></div>'+
+      '<div class="inv-form-group"><label>📝 备注</label><input type="text" id="invFNote" value="'+escHtml(item.notes||'')+'" placeholder="如：已用一半"></div>'+
+      '<button class="btn-primary" onclick="saveInvItem()">✅ 保存</button>'+
+    '</div>'+
+  '</div>';
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) closeInvForm(); });
+}
+
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function closeInvForm() {
+  let el = document.getElementById('invFormModal');
+  if(el) el.remove();
+}
+
+function saveInvItem() {
+  let name = document.getElementById('invFName').value.trim();
+  if(!name) { alert('请输入产品名称'); return; }
+  let brand = document.getElementById('invFBrand').value.trim();
+  let category = document.getElementById('invFCat').value;
+  let quantity = parseInt(document.getElementById('invFQty').value)||1;
+  let openDate = document.getElementById('invFOpen').value;
+  let expiryDate = document.getElementById('invFExp').value;
+  let notes = document.getElementById('invFNote').value.trim();
+
+  let data = loadInv();
+  if(invEditingId) {
+    let idx = data.findIndex(d=>d.id===invEditingId);
+    if(idx>=0) data[idx] = {...data[idx], name, brand, category, quantity, openDate, expiryDate, notes};
+  } else {
+    data.unshift({id:genInvId(), name, brand, category, quantity, openDate, expiryDate, notes});
+  }
+  saveInv(data);
+  closeInvForm();
+  refreshInventory();
+}
+
+function deleteInvItem(id) {
+  let item = loadInv().find(d=>d.id===id);
+  if(!item) return;
+  if(!confirm('确定删除「'+item.name+'」吗？')) return;
+  let data = loadInv().filter(d=>d.id!==id);
+  saveInv(data);
+  refreshInventory();
+}
+
+// bind FAB button
+document.addEventListener('DOMContentLoaded', function() {
+  var fab = document.getElementById('invAddFab');
+  if(fab) fab.addEventListener('click', openInvAdd);
+});
 
 // ===== CLICK OUTSIDE MODAL =====
 document.addEventListener('click', function(e) {
