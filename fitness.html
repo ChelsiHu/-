@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Garmin+ 我的运动助手</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --green:#00B259; --green2:#E6F7EE; --green3:#00D46A;
+  --blue:#007AFF; --orange:#FF9500; --red:#FF3B30;
+  --pink:#FF2D55; --purple:#AF52DE;
+  --bg:#F2F2F7; --card:#FFFFFF; --text:#1C1C1E;
+  --text2:#8E8E93; --text3:#C7C7CC; --sep:#E5E5EA;
+  --shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;padding-bottom:80px;}
+
+/* Nav Bar */
+.nav-bar{position:fixed;top:0;left:0;right:0;background:var(--card);z-index:100;padding:12px 16px 0;box-shadow:var(--shadow);}
+.nav-bar h1{font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.nav-bar h1 .logo{font-size:24px;}
+.nav-tabs{display:flex;gap:0;margin-top:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{flex-shrink:0;padding:10px 14px;font-size:13px;font-weight:600;color:var(--text2);border-bottom:3px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.nav-tab.active{color:var(--green);border-bottom-color:var(--green);}
+.nav-tab .tab-icon{display:block;text-align:center;font-size:18px;margin-bottom:2px;}
+
+/* Page Content */
+.page{padding:16px;display:none;margin-top:105px;}
+.page.active{display:block;}
+
+/* Cards */
+.card{background:var(--card);border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow);}
+.card-title{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.card-subtitle{font-size:12px;color:var(--text2);margin-bottom:10px;}
+
+/* Stats Grid */
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.stat-card{background:var(--green2);border-radius:12px;padding:14px;text-align:center;}
+.stat-card .stat-icon{font-size:28px;margin-bottom:4px;}
+.stat-card .stat-val{font-size:22px;font-weight:700;color:var(--green);}
+.stat-card .stat-label{font-size:11px;color:var(--text2);margin-top:2px;}
+.stat-card .stat-change{font-size:10px;color:var(--text2);margin-top:4px;}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;border:none;cursor:pointer;transition:all .2s;}
+.btn-primary{background:var(--green);color:#fff;}
+.btn-primary:active{background:#008C47;}
+.btn-outline{border:2px solid var(--green);color:var(--green);background:transparent;}
+.btn-block{width:100%;justify-content:center;margin-top:10px;}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:8px;}
+
+/* Inputs */
+input,select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--sep);border-radius:10px;font-size:14px;font-family:inherit;background:var(--card);outline:none;transition:border .2s;}
+input:focus,select:focus{border-color:var(--green);}
+input[type="number"]{-moz-appearance:textfield;}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.form-row.col3{grid-template-columns:1fr 1fr 1fr;}
+label{font-size:12px;color:var(--text2);font-weight:600;display:block;margin-bottom:4px;}
+
+/* Exercise Log */
+.ex-log-item{display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg);border-radius:10px;margin-bottom:8px;}
+.ex-log-item .ex-type{font-size:28px;flex-shrink:0;}
+.ex-log-item .ex-info{flex:1;min-width:0;}
+.ex-log-item .ex-name{font-size:13px;font-weight:600;}
+.ex-log-item .ex-meta{font-size:11px;color:var(--text2);margin-top:1px;}
+.ex-log-item .ex-stats{text-align:right;flex-shrink:0;}
+.ex-log-item .ex-stats .val{font-size:14px;font-weight:700;color:var(--green);}
+.ex-log-item .ex-stats .unit{font-size:10px;color:var(--text2);}
+.ex-log-item .ex-del{background:none;border:none;color:var(--red);font-size:18px;cursor:pointer;padding:4px;}
+
+/* HIIT */
+.hiit-display{text-align:center;padding:20px 0;}
+.hiit-timer{font-size:80px;font-weight:900;line-height:1;color:var(--green);font-variant-numeric:tabular-nums;transition:color .3s;}
+.hiit-timer.rest{color:var(--orange);}
+.hiit-timer.warn{color:var(--red);animation:pulse 0.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+.hiit-label{font-size:16px;font-weight:600;margin-top:6px;}
+.hiit-round{font-size:13px;color:var(--text2);margin-top:4px;}
+.hiit-preset-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.hiit-preset{padding:10px;border-radius:10px;border:2px solid var(--sep);text-align:center;cursor:pointer;transition:all .2s;}
+.hiit-preset.active{border-color:var(--green);background:var(--green2);}
+.hiit-preset .pn{font-size:13px;font-weight:700;}
+.hiit-preset .pd{font-size:11px;color:var(--text2);}
+.hiit-custom{display:none;margin-top:10px;}
+.hiit-custom.show{display:block;}
+
+/* Training Plan */
+.tp-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+.tp-day{background:var(--bg);border-radius:10px;padding:8px;text-align:center;min-height:90px;position:relative;}
+.tp-day.today{border:2px solid var(--green);}
+.tp-day .day-name{font-size:10px;color:var(--text2);font-weight:600;}
+.tp-day .day-date{font-size:11px;font-weight:700;margin:2px 0 4px;}
+.tp-day .tp-task{font-size:10px;background:var(--green2);color:var(--green);border-radius:6px;padding:3px 5px;margin-top:3px;display:flex;align-items:center;gap:3px;cursor:pointer;}
+.tp-day .tp-task.done{background:var(--green);color:#fff;text-decoration:line-through;}
+.tp-day .tp-add{font-size:20px;color:var(--text3);cursor:pointer;margin-top:2px;display:block;}
+.tp-day .tp-del{position:absolute;top:2px;right:4px;background:none;border:none;font-size:14px;color:var(--red);cursor:pointer;opacity:0;transition:opacity .2s;}
+.tp-day:hover .tp-del{opacity:1;}
+
+/* Reports */
+.report-period{display:flex;gap:8px;margin-bottom:12px;}
+.report-period button{padding:6px 14px;border-radius:20px;border:1.5px solid var(--sep);background:var(--card);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--text2);}
+.report-period button.active{background:var(--green);color:#fff;border-color:var(--green);}
+.report-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.report-stat{background:var(--bg);border-radius:10px;padding:12px;text-align:center;}
+.report-stat .rs-icon{font-size:22px;margin-bottom:4px;}
+.report-stat .rs-val{font-size:18px;font-weight:700;}
+.report-stat .rs-label{font-size:10px;color:var(--text2);}
+.chart-wrap{height:200px;position:relative;margin-top:10px;}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--card);width:100%;max-width:420px;border-radius:18px 18px 0 0;padding:20px 16px 30px;max-height:80vh;overflow-y:auto;}
+.modal-box h3{font-size:16px;margin-bottom:14px;}
+
+/* Toast */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+
+/* Quick Add Float */
+.float-btn{position:fixed;bottom:100px;right:20px;width:52px;height:52px;border-radius:50%;background:var(--green);color:#fff;border:none;font-size:26px;box-shadow:0 4px 14px rgba(0,178,89,0.4);cursor:pointer;z-index:50;display:flex;align-items:center;justify-content:center;transition:transform .2s;}
+.float-btn:active{transform:scale(0.92);}
+
+/* Empty state */
+.empty{text-align:center;padding:30px;color:var(--text3);}
+.empty .empty-icon{font-size:40px;margin-bottom:8px;}
+.empty .empty-text{font-size:13px;}
+
+/* scroll */
+::-webkit-scrollbar{width:0;}
+
+/* Section toggle */
+.sec-toggle{display:flex;gap:8px;margin-bottom:12px;}
+.sec-toggle button{flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--sep);background:var(--card);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--text2);}
+.sec-toggle button.active{background:var(--green);color:#fff;border-color:var(--green);}
+</style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <h1><span class="logo">🏃</span>Garmin+ 运动助手</h1>
+  <div class="nav-tabs" id="navTabs">
+    <div class="nav-tab active" data-tab="dashboard"><span class="tab-icon">📊</span>健康数据</div>
+    <div class="nav-tab" data-tab="exercise"><span class="tab-icon">🏃</span>运动记录</div>
+    <div class="nav-tab" data-tab="hiit"><span class="tab-icon">⏱️</span>HIIT</div>
+    <div class="nav-tab" data-tab="plan"><span class="tab-icon">🗓️</span>训练计划</div>
+    <div class="nav-tab" data-tab="report"><span class="tab-icon">📈</span>报告</div>
+  </div>
+</nav>
+
+<!-- 1. Dashboard -->
+<div class="page active" id="tab-dashboard">
+  <div class="card">
+    <div class="card-title">📊 今日健康</div>
+    <div class="stat-row" id="todayStats"></div>
+    <button class="btn btn-block btn-outline" style="margin-top:6px;" onclick="openHealthModal()">✏️ 手动录入数据</button>
+  </div>
+  <div class="card">
+    <div class="card-title">📈 7日趋势</div>
+    <div class="sec-toggle" id="chartToggle">
+      <button class="active" data-metric="steps">步数</button>
+      <button data-metric="hr">心率</button>
+      <button data-metric="sleep">睡眠</button>
+    </div>
+    <div class="chart-wrap"><canvas id="healthChart"></canvas></div>
+  </div>
+</div>
+
+<!-- 2. Exercise -->
+<div class="page" id="tab-exercise">
+  <div class="card">
+    <div class="card-title">📋 运动日志</div>
+    <div id="exLogList"></div>
+  </div>
+  <button class="float-btn" onclick="openExModal()" title="添加运动">+</button>
+</div>
+
+<!-- 3. HIIT -->
+<div class="page" id="tab-hiit">
+  <div class="card">
+    <div class="card-title">⏱️ HIIT 计时器</div>
+    <div class="hiit-display">
+      <div class="hiit-timer" id="hiitTimer">00:00</div>
+      <div class="hiit-label" id="hiitLabel">准备开始</div>
+      <div class="hiit-round" id="hiitRound"></div>
+    </div>
+    <div class="hiit-preset-row">
+      <div class="hiit-preset active" data-preset="tabata" onclick="selectPreset('tabata')">
+        <div class="pn">Tabata</div><div class="pd">20s练/10s休×8</div>
+      </div>
+      <div class="hiit-preset" data-preset="standard" onclick="selectPreset('standard')">
+        <div class="pn">标准HIIT</div><div class="pd">30s练/15s休×10</div>
+      </div>
+      <div class="hiit-preset" data-preset="emom" onclick="selectPreset('emom')">
+        <div class="pn">EMOM</div><div class="pd">40s练/20s休×5</div>
+      </div>
+      <div class="hiit-preset" data-preset="custom" onclick="selectPreset('custom')">
+        <div class="pn">自定义</div><div class="pd">自由设置</div>
+      </div>
+    </div>
+    <div class="hiit-custom" id="hiitCustom">
+      <div class="form-row">
+        <div><label>练习(s)</label><input type="number" id="hiitWork" value="40" min="5" max="300"></div>
+        <div><label>休息(s)</label><input type="number" id="hiitRest" value="20" min="5" max="300"></div>
+        <div><label>轮数</label><input type="number" id="hiitRounds" value="8" min="1" max="50"></div>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-block" id="hiitStartBtn" onclick="hiitToggle()">▶ 开始训练</button>
+    <div style="text-align:center;margin-top:6px;font-size:11px;color:var(--text2);">💡 训练结束前3秒会蜂鸣提醒</div>
+  </div>
+</div>
+
+<!-- 4. Training Plan -->
+<div class="page" id="tab-plan">
+  <div class="card">
+    <div class="card-title">🗓️ 周训练计划</div>
+    <div class="card-subtitle" id="tpWeekLabel"></div>
+    <div class="tp-week" id="tpWeek"></div>
+  </div>
+</div>
+
+<!-- 5. Reports -->
+<div class="page" id="tab-report">
+  <div class="card">
+    <div class="card-title">📈 运动报告</div>
+    <div class="report-period" id="reportPeriodBtns"></div>
+    <div class="report-stats" id="reportStats"></div>
+    <div class="chart-wrap"><canvas id="reportChart"></canvas></div>
+  </div>
+</div>
+
+<!-- Modals -->
+<div class="modal-overlay" id="healthModal"><div class="modal-box">
+  <h3>✏️ 录入健康数据</h3>
+  <div class="form-row col3">
+    <div><label>步数</label><input type="number" id="hSteps" placeholder="8000"></div>
+    <div><label>心率(bpm)</label><input type="number" id="hHR" placeholder="72"></div>
+    <div><label>睡眠(h)</label><input type="number" id="hSleep" placeholder="7.5" step="0.5"></div>
+  </div>
+  <div class="form-row">
+    <div><label>体重(kg)</label><input type="number" id="hWeight" placeholder="-" step="0.1"></div>
+    <div><label>饮水量(杯)</label><input type="number" id="hWater" placeholder="8"></div>
+  </div>
+  <div><label>备注</label><input id="hNote" placeholder="可选"></div>
+  <button class="btn btn-primary btn-block" onclick="saveHealth()">保存</button>
+</div></div>
+
+<div class="modal-overlay" id="exModal"><div class="modal-box">
+  <h3>🏃 添加运动记录</h3>
+  <div><label>运动类型</label><select id="exType">
+    <option value="running">🏃 跑步</option><option value="cycling">🚴 骑行</option>
+    <option value="swimming">🏊 游泳</option><option value="walking">🚶 快走</option>
+    <option value="hiit_train">🔥 HIIT</option><option value="yoga">🧘 瑜伽</option>
+    <option value="strength">🏋️ 力量训练</option><option value="other">📌 其他</option>
+  </select></div>
+  <div class="form-row col3">
+    <div><label>距离(km)</label><input type="number" id="exDist" step="0.01" placeholder="5.0"></div>
+    <div><label>时长(分)</label><input type="number" id="exDur" placeholder="30"></div>
+    <div><label>卡路里</label><input type="number" id="exCal" placeholder="自动估算" step="1"></div>
+  </div>
+  <div class="form-row">
+    <div><label>配速/km</label><input id="exPace" placeholder="自动计算"></div>
+    <div><label>心率(bpm)</label><input type="number" id="exHR" placeholder="-"></div>
+  </div>
+  <div style="font-size:11px;color:var(--text3);margin:6px 0 10px;">💡 填写距离+时长自动估算卡路里和配速</div>
+  <button class="btn btn-primary btn-block" onclick="saveExercise()">保存记录</button>
+</div></div>
+
+<div class="modal-overlay" id="tpModal"><div class="modal-box">
+  <h3 id="tpModalTitle">添加训练</h3>
+  <div><label>训练项目</label><input id="tpTask" placeholder="例如：慢跑 5km / 深蹲 3×15"></div>
+  <input type="hidden" id="tpDayIdx">
+  <button class="btn btn-primary btn-block" onclick="saveTpTask()">添加</button>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== STORAGE =====
+const PREFIX = 'gf_';
+function ls(k,v){ if(v!==undefined) localStorage.setItem(PREFIX+k,JSON.stringify(v)); try{return JSON.parse(localStorage.getItem(PREFIX+k))||null;}catch(e){return null;} }
+
+// ===== NAVIGATION =====
+document.querySelectorAll('.nav-tab').forEach(t=>t.addEventListener('click',function(){
+  let tab = this.dataset.tab;
+  document.querySelectorAll('.nav-tab').forEach(x=>x.classList.remove('active'));
+  this.classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='dashboard') refreshDashboard();
+  else if(tab==='exercise') refreshExLog();
+  else if(tab==='plan') refreshTp();
+  else if(tab==='report') refreshReport();
+}));
+
+// ===== TOAST =====
+function toast(msg){ let t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
+
+// ===== HELPERS =====
+function fmtDate(d){ let y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+dd; }
+function todayStr(){ return fmtDate(new Date()); }
+function weekStart(d){ let s=new Date(d); s.setDate(s.getDate()-(s.getDay()||7)+1); s.setHours(0,0,0,0); return s; }
+
+// ===== 1. HEALTH DASHBOARD =====
+function getHealthData(){
+  let d=ls('health')||{};
+  if(!d[todayStr()]) d[todayStr()]={steps:0,hr:0,sleep:0,weight:null,water:0,note:''};
+  return d;
+}
+function saveHealth(){
+  let d=getHealthData();
+  let s=document.getElementById('hSteps').value.trim(), hr=document.getElementById('hHR').value.trim(),
+      sl=document.getElementById('hSleep').value.trim(), wt=document.getElementById('hWeight').value.trim(),
+      wa=document.getElementById('hWater').value.trim(), nt=document.getElementById('hNote').value.trim();
+  let today=todayStr();
+  if(s) d[today].steps=parseInt(s)||0;
+  if(hr) d[today].hr=parseInt(hr)||0;
+  if(sl) d[today].sleep=parseFloat(sl)||0;
+  if(wt) d[today].weight=parseFloat(wt)||null;
+  if(wa) d[today].water=parseInt(wa)||0;
+  d[today].note=nt||'';
+  ls('health',d);
+  document.getElementById('healthModal').classList.remove('show');
+  toast('数据已保存 ✅');
+  refreshDashboard();
+}
+function openHealthModal(){
+  let d=getHealthData(),t=d[todayStr()];
+  document.getElementById('hSteps').value=t.steps||'';
+  document.getElementById('hHR').value=t.hr||'';
+  document.getElementById('hSleep').value=t.sleep||'';
+  document.getElementById('hWeight').value=t.weight||'';
+  document.getElementById('hWater').value=t.water||'';
+  document.getElementById('hNote').value=t.note||'';
+  document.getElementById('healthModal').classList.add('show');
+}
+function refreshDashboard(){
+  let d=getHealthData(),t=d[todayStr()];
+  // Calc change
+  let prevStr=''; let curD=new Date(); curD.setDate(curD.getDate()-1); prevStr=fmtDate(curD);
+  let pv=d[prevStr];
+  let stCh='',hrCh='',slCh='';
+  if(pv){
+    if(t.steps>0&&pv.steps>0) stCh=((t.steps-pv.steps)/pv.steps*100).toFixed(0)+'%';
+    if(t.hr>0&&pv.hr>0) hrCh=(pv.hr-t.hr)+'bpm';
+    if(t.sleep>0&&pv.sleep>0) slCh=((t.sleep-pv.sleep)).toFixed(1)+'h';
+  }
+  document.getElementById('todayStats').innerHTML=`
+    <div class="stat-card"><div class="stat-icon">🚶</div><div class="stat-val">${t.steps.toLocaleString()||0}</div><div class="stat-label">步数</div><div class="stat-change">${stCh?'vs 昨日: '+stCh:'—'}</div></div>
+    <div class="stat-card"><div class="stat-icon">💓</div><div class="stat-val">${t.hr||'—'}</div><div class="stat-label">心率 / bpm</div><div class="stat-change">${hrCh?'vs 昨日: '+hrCh:'—'}</div></div>
+    <div class="stat-card"><div class="stat-icon">😴</div><div class="stat-val">${t.sleep||'—'}</div><div class="stat-label">睡眠 / 小时</div><div class="stat-change">${slCh?'vs 昨日: '+slCh:'—'}</div></div>
+    <div class="stat-card"><div class="stat-icon">⚖️</div><div class="stat-val">${t.weight||'—'}</div><div class="stat-label">体重 / kg</div><div class="stat-change">${t.water?'💧 '+t.water+'杯':'—'}</div></div>
+  `;
+  renderHealthChart(document.getElementById('chartToggle').querySelector('.active')?.dataset.metric||'steps');
+}
+function renderHealthChart(metric){
+  let d=getHealthData();
+  let dates=[]; for(let i=6;i>=0;i--){let dt=new Date();dt.setDate(dt.getDate()-i);dates.push(fmtDate(dt));}
+  let vals=dates.map(dt=>{
+    let v=d[dt];
+    if(!v) return 0;
+    if(metric==='steps') return v.steps||0;
+    if(metric==='hr') return v.hr||0;
+    if(metric==='sleep') return v.sleep||0;
+    return 0;
+  });
+  let labels=dates.map(d=>d.slice(5));
+  let colors={steps:['rgba(0,178,89,0.2)','#00B259'],hr:['rgba(255,59,48,0.2)','#FF3B30'],sleep:['rgba(175,82,222,0.2)','#AF52DE']};
+  let c=colors[metric];
+  if(window._healthChart) window._healthChart.destroy();
+  let ctx=document.getElementById('healthChart').getContext('2d');
+  window._healthChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:metric==='steps'?'步数':metric==='hr'?'心率(bpm)':'睡眠(h)',data:vals,backgroundColor:c[0],borderColor:c[1],borderWidth:2,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#E5E5EA'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});
+}
+document.getElementById('chartToggle').addEventListener('click',function(e){
+  if(e.target.tagName==='BUTTON'){
+    this.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+    e.target.classList.add('active');
+    renderHealthChart(e.target.dataset.metric);
+  }
+});
+
+// ===== 2. EXERCISE LOG =====
+function getExLogs(){ return ls('exlog')||[]; }
+function openExModal(){ document.getElementById('exModal').classList.add('show'); document.getElementById('exDist').focus(); }
+function saveExercise(){
+  let type=document.getElementById('exType').value;
+  let dist=parseFloat(document.getElementById('exDist').value)||0;
+  let dur=parseInt(document.getElementById('exDur').value)||0;
+  let cal=parseInt(document.getElementById('exCal').value)||null;
+  let pace=document.getElementById('exPace').value.trim()||null;
+  let hr=parseInt(document.getElementById('exHR').value)||null;
+  // Auto calc
+  if(!cal&&dur>0){
+    let rates={running:10,cycling:8,swimming:12,walking:5,hiit_train:14,yoga:3,strength:8,other:7};
+    cal=Math.round(rates[type]*dur);
+  }
+  if(!pace&&dist>0&&dur>0){
+    let p=dist>0?dur/dist:0; let m=Math.floor(p),s=Math.round((p-m)*60);
+    pace=m+"'"+String(s).padStart(2,'0')+'"';
+  }
+  let logs=getExLogs();
+  logs.unshift({id:Date.now(),date:todayStr(),type,dist,dur,cal,pace,hr});
+  ls('exlog',logs);
+  document.getElementById('exModal').classList.remove('show');
+  document.getElementById('exDist').value='';document.getElementById('exDur').value='';
+  document.getElementById('exCal').value='';document.getElementById('exPace').value='';
+  document.getElementById('exHR').value='';
+  toast('运动记录已保存 ✅');
+  refreshExLog();
+}
+function delEx(id){
+  if(!confirm('确定删除这条记录？')) return;
+  let logs=getExLogs().filter(l=>l.id!==id);
+  ls('exlog',logs);
+  refreshExLog();
+}
+function refreshExLog(){
+  let logs=getExLogs();
+  let el=document.getElementById('exLogList');
+  if(!logs.length){ el.innerHTML='<div class="empty"><div class="empty-icon">🏃</div><div class="empty-text">还没有运动记录<br>点击右下角 + 开始记录</div></div>'; return; }
+  let typeNames={running:'跑步',cycling:'骑行',swimming:'游泳',walking:'快走',hiit_train:'HIIT',yoga:'瑜伽',strength:'力量训练',other:'其他'};
+  let typeIcons={running:'🏃',cycling:'🚴',swimming:'🏊',walking:'🚶',hiit_train:'🔥',yoga:'🧘',strength:'🏋️',other:'📌'};
+  el.innerHTML=logs.map(l=>`<div class="ex-log-item">
+    <div class="ex-type">${typeIcons[l.type]||'📌'}</div>
+    <div class="ex-info"><div class="ex-name">${typeNames[l.type]||l.type}</div><div class="ex-meta">${l.date}${l.dist?' · '+l.dist+'km':''}${l.pace?' · 配速 '+l.pace:''}</div></div>
+    <div class="ex-stats"><div class="val">${l.cal||'—'}</div><div class="unit">🔥 卡路里</div><div style="font-size:10px;color:var(--text3);">${l.dur||0}分钟</div></div>
+    <button class="ex-del" onclick="delEx(${l.id})">✕</button>
+  </div>`).join('');
+}
+
+// ===== 3. HIIT TIMER =====
+let hiitState={running:false,phase:'rest',work:20,rest:10,rounds:8,currentRound:0,timeLeft:0,totalRounds:0,preset:'tabata',intervalId:null};
+function selectPreset(p){
+  hiitState.preset=p;
+  document.querySelectorAll('.hiit-preset').forEach(x=>x.classList.remove('active'));
+  document.querySelector('.hiit-preset[data-preset="'+p+'"]').classList.add('active');
+  if(p==='custom'){ document.getElementById('hiitCustom').classList.add('show'); }
+  else { document.getElementById('hiitCustom').classList.remove('show'); }
+  if(!hiitState.running){
+    let ps={tabata:{w:20,r:10,n:8},standard:{w:30,r:15,n:10},emom:{w:40,r:20,n:5}};
+    if(p!=='custom'){ let v=ps[p]; hiitState.work=v.w;hiitState.rest=v.r;hiitState.rounds=v.n; }
+    else {
+      hiitState.work=parseInt(document.getElementById('hiitWork').value)||40;
+      hiitState.rest=parseInt(document.getElementById('hiitRest').value)||20;
+      hiitState.rounds=parseInt(document.getElementById('hiitRounds').value)||8;
+    }
+    hiitState.timeLeft=hiitState.work; hiitState.phase='work'; hiitState.currentRound=1;
+    updateHiitDisplay();
+  }
+}
+function updateHiitDisplay(){
+  let m=Math.floor(hiitState.timeLeft/60),s=hiitState.timeLeft%60;
+  document.getElementById('hiitTimer').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  let timerEl=document.getElementById('hiitTimer');
+  timerEl.classList.remove('rest','warn');
+  if(hiitState.phase==='rest') timerEl.classList.add('rest');
+  if(hiitState.timeLeft<=3) timerEl.classList.add('warn');
+  document.getElementById('hiitLabel').textContent=hiitState.phase==='work'?'💪 练习':'🧘 休息';
+  document.getElementById('hiitRound').textContent=`第 ${hiitState.currentRound} / ${hiitState.rounds} 轮`;
+}
+function playBeep(freq,dur){ try{let ctx=new(window.AudioContext||window.webkitAudioContext)();let o=ctx.createOscillator();let g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=freq;o.type='sine';g.gain.value=0.1;o.start();o.stop(ctx.currentTime+dur/1000);setTimeout(()=>ctx.close(),dur+100);}catch(e){} }
+function hiitToggle(){
+  if(hiitState.running){ hiitStop(); return; }
+  hiitState.running=true;
+  document.getElementById('hiitStartBtn').textContent='⏸ 停止';
+  // disable preset changes
+  if(hiitState.preset==='custom'){
+    hiitState.work=parseInt(document.getElementById('hiitWork').value)||40;
+    hiitState.rest=parseInt(document.getElementById('hiitRest').value)||20;
+    hiitState.rounds=parseInt(document.getElementById('hiitRounds').value)||8;
+  }
+  hiitState.timeLeft=hiitState.work; hiitState.phase='work'; hiitState.currentRound=1;
+  updateHiitDisplay();
+  hiitState.intervalId=setInterval(hiitTick,1000);
+}
+function hiitStop(){
+  hiitState.running=false;
+  clearInterval(hiitState.intervalId);
+  document.getElementById('hiitStartBtn').textContent='▶ 开始训练';
+  document.getElementById('hiitTimer').textContent='00:00';
+  document.getElementById('hiitLabel').textContent='准备开始';
+  document.getElementById('hiitRound').textContent='';
+  document.getElementById('hiitTimer').classList.remove('rest','warn');
+  hiitState.timeLeft=hiitState.work; hiitState.phase='work'; hiitState.currentRound=1;
+}
+function hiitTick(){
+  if(hiitState.timeLeft<=3&&hiitState.timeLeft>0) playBeep(800,150);
+  hiitState.timeLeft--;
+  if(hiitState.timeLeft<0){
+    if(hiitState.phase==='work'){
+      hiitState.phase='rest'; hiitState.timeLeft=hiitState.rest;
+    } else {
+      hiitState.currentRound++;
+      if(hiitState.currentRound>hiitState.rounds){ hiitDone(); return; }
+      hiitState.phase='work'; hiitState.timeLeft=hiitState.work;
+    }
+    playBeep(1200,200);
+  }
+  updateHiitDisplay();
+}
+function hiitDone(){
+  hiitStop();
+  playBeep(600,150); setTimeout(()=>playBeep(800,150),200); setTimeout(()=>playBeep(1000,300),400);
+  document.getElementById('hiitLabel').textContent='🎉 训练完成！';
+  document.getElementById('hiitRound').textContent='干得漂亮！';
+  toast('🎉 HIIT 训练完成！');
+}
+
+// ===== 4. TRAINING PLAN =====
+function getTp(){ return ls('tp')||{}; }
+function tpWeekKey(){ return 'w_'+fmtDate(weekStart(new Date())); }
+function refreshTp(){
+  let wk=tpWeekKey(), ws=weekStart(new Date());
+  document.getElementById('tpWeekLabel').textContent=fmtDate(ws)+' ~ '+fmtDate(new Date(ws.getTime()+6*86400000));
+  let tp=getTp();
+  if(!tp[wk]) tp[wk]={};
+  let dayNames=['周一','周二','周三','周四','周五','周六','周日'];
+  let today=todayStr();
+  let html='';
+  for(let i=0;i<7;i++){
+    let d=new Date(ws.getTime()+i*86400000), ds=fmtDate(d);
+    let tasks=tp[wk][ds]||[];
+    let isToday=ds===today;
+    html+=`<div class="tp-day${isToday?' today':''}">
+      <div class="day-name">${dayNames[i]}</div>
+      <div class="day-date">${ds.slice(5)}</div>
+      ${tasks.map((t,ti)=>`<div class="tp-task${t.done?' done':''}" onclick="tpToggle('${ds}',${ti})">${t.done?'✅':'⬜'}${t.name}</div>`).join('')}
+      <span class="tp-add" onclick="tpAdd('${ds}')">+</span>
+    </div>`;
+  }
+  document.getElementById('tpWeek').innerHTML=html;
+}
+function tpAdd(ds){ document.getElementById('tpDayIdx').value=ds; document.getElementById('tpTask').value=''; document.getElementById('tpModalTitle').textContent='添加训练 - '+ds; document.getElementById('tpModal').classList.add('show'); }
+function saveTpTask(){
+  let ds=document.getElementById('tpDayIdx').value, name=document.getElementById('tpTask').value.trim();
+  if(!name) return;
+  let tp=getTp(), wk=tpWeekKey();
+  if(!tp[wk]) tp[wk]={};
+  if(!tp[wk][ds]) tp[wk][ds]=[];
+  tp[wk][ds].push({name,done:false});
+  ls('tp',tp);
+  document.getElementById('tpModal').classList.remove('show');
+  refreshTp();
+}
+function tpToggle(ds,ti){
+  let tp=getTp(), wk=tpWeekKey();
+  tp[wk][ds][ti].done=!tp[wk][ds][ti].done;
+  ls('tp',tp);
+  refreshTp();
+}
+
+// ===== 5. REPORTS =====
+let reportMode='week'; // week or month
+function refreshReport(){
+  renderReportTabs();
+  renderReportData();
+}
+function renderReportTabs(){
+  document.getElementById('reportPeriodBtns').innerHTML=`
+    <button class="${reportMode==='week'?'active':''}" onclick="reportMode='week';refreshReport();">本周</button>
+    <button class="${reportMode==='month'?'active':''}" onclick="reportMode='month';refreshReport();">本月</button>
+  `;
+}
+function renderReportData(){
+  let logs=getExLogs();
+  let now=new Date();
+  let start=new Date();
+  if(reportMode==='week'){ start=weekStart(now); }
+  else { start=new Date(now.getFullYear(),now.getMonth(),1); }
+  let startStr=fmtDate(start);
+  let filtered=logs.filter(l=>l.date>=startStr&&l.date<=todayStr());
+  let totalDist=filtered.reduce((s,l)=>s+(l.dist||0),0).toFixed(1);
+  let totalCal=filtered.reduce((s,l)=>s+(l.cal||0),0);
+  let totalDur=filtered.reduce((s,l)=>s+(l.dur||0),0);
+  let sessions=filtered.length;
+  // Per type breakdown
+  let typeMap={};
+  filtered.forEach(l=>{ let t=l.type; if(!typeMap[t]) typeMap[t]={dist:0,dur:0,cal:0,count:0}; typeMap[t].dist+=l.dist||0; typeMap[t].dur+=l.dur||0; typeMap[t].cal+=l.cal||0; typeMap[t].count++; });
+  document.getElementById('reportStats').innerHTML=`
+    <div class="report-stat"><div class="rs-icon">🏃</div><div class="rs-val">${sessions}</div><div class="rs-label">运动次数</div></div>
+    <div class="report-stat"><div class="rs-icon">📏</div><div class="rs-val">${totalDist}</div><div class="rs-label">总距离 km</div></div>
+    <div class="report-stat"><div class="rs-icon">🔥</div><div class="rs-val">${totalCal.toLocaleString()}</div><div class="rs-label">消耗卡路里</div></div>
+    <div class="report-stat"><div class="rs-icon">⏱️</div><div class="rs-val">${Math.floor(totalDur/60)}h${totalDur%60}m</div><div class="rs-label">运动时长</div></div>
+    <div class="report-stat"><div class="rs-icon">📊</div><div class="rs-val">${Object.keys(typeMap).length}</div><div class="rs-label">运动种类</div></div>
+    <div class="report-stat"><div class="rs-icon">🎯</div><div class="rs-val">${sessions>0?Math.round(totalDur/sessions):0}</div><div class="rs-label">平均分钟/次</div></div>
+  `;
+  // Bar chart: daily calories
+  let labels=[], vals=[];
+  if(reportMode==='week'){
+    for(let i=0;i<7;i++){ let d=new Date(start.getTime()+i*86400000),ds=fmtDate(d); labels.push(ds.slice(5)); vals.push(filtered.filter(l=>l.date===ds).reduce((s,l)=>s+(l.cal||0),0)); }
+  } else {
+    let daysInMonth=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+    for(let i=0;i<daysInMonth;i++){ let ds=fmtDate(new Date(now.getFullYear(),now.getMonth(),i+1)); labels.push(ds.slice(5)); vals.push(filtered.filter(l=>l.date===ds).reduce((s,l)=>s+(l.cal||0),0)); }
+  }
+  if(window._reportChart) window._reportChart.destroy();
+  let ctx=document.getElementById('reportChart').getContext('2d');
+  window._reportChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'消耗卡路里 (kcal)',data:vals,backgroundColor:'rgba(0,178,89,0.25)',borderColor:'#00B259',borderWidth:2,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#E5E5EA'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});
+}
+
+// ===== MODAL CLOSE =====
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',function(e){ if(e.target===this) this.classList.remove('show'); }));
+
+// ===== INIT =====
+selectPreset('tabata');
+refreshDashboard();
+</script>
+</body>
+</html>
