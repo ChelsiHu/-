@@ -1,9 +1,37 @@
 {
-  "synced_at": "2026-08-07T18:24:01.559040",
+  "synced_at": "2026-08-09T22:14:40.316471",
   "account": "8613720012911",
   "daily": {
+    "2026-08-09": {
+      "steps": 943,
+      "step_goal": 4300,
+      "resting_hr": 55,
+      "max_hr": 105,
+      "min_hr": 54,
+      "avg_resting_hr_7d": 56,
+      "sleep": 6.5,
+      "deep_sleep_seconds": 3360,
+      "light_sleep_seconds": 13080,
+      "rem_sleep_seconds": 6780,
+      "awake_sleep_seconds": 420,
+      "sleep_score": 80
+    },
+    "2026-08-08": {
+      "steps": 1274,
+      "step_goal": 4300,
+      "resting_hr": 57,
+      "max_hr": 108,
+      "min_hr": 41,
+      "avg_resting_hr_7d": 56,
+      "sleep": 6.3,
+      "deep_sleep_seconds": 7680,
+      "light_sleep_seconds": 11280,
+      "rem_sleep_seconds": 3840,
+      "awake_sleep_seconds": 0,
+      "sleep_score": 78
+    },
     "2026-08-07": {
-      "steps": 4487,
+      "steps": 5641,
       "step_goal": 4300,
       "resting_hr": 54,
       "max_hr": 109,
@@ -71,34 +99,6 @@
       "rem_sleep_seconds": 5520,
       "awake_sleep_seconds": 780,
       "sleep_score": 82
-    },
-    "2026-08-02": {
-      "steps": 3113,
-      "step_goal": 4300,
-      "resting_hr": 56,
-      "max_hr": 117,
-      "min_hr": 56,
-      "avg_resting_hr_7d": 56,
-      "sleep": 8.7,
-      "deep_sleep_seconds": 3600,
-      "light_sleep_seconds": 20820,
-      "rem_sleep_seconds": 6900,
-      "awake_sleep_seconds": 540,
-      "sleep_score": 91
-    },
-    "2026-08-01": {
-      "steps": 281,
-      "step_goal": 4300,
-      "resting_hr": 56,
-      "max_hr": 93,
-      "min_hr": 55,
-      "avg_resting_hr_7d": 57,
-      "sleep": 7.6,
-      "deep_sleep_seconds": 4020,
-      "light_sleep_seconds": 16620,
-      "rem_sleep_seconds": 6720,
-      "awake_sleep_seconds": 360,
-      "sleep_score": 93
     }
   },
   "profile": {
