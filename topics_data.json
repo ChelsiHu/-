@@ -1,16 +1,16 @@
 {
-  "updated_at": "2026-08-07",
-  "source": "小红书热门笔记",
+  "updated_at": "2026-08-10",
+  "source": "小红书热门笔记 + 天猫服饰潮流速报",
   "items": [
-    {"title":"千禧校园电影里那些引领时尚潮流的女孩","hot":"🔥 19w+ 互动","platform":"xhs","label":"小红书","url":"https://www.xiaohongshu.com/explore/6a6f348d0000000005029b59"},
-    {"title":"这妆怎么定不住了？拖拉机开进美妆圈","hot":"🔥 2w+ 互动","platform":"xhs","label":"小红书","url":"https://www.xiaohongshu.com/explore/6a6c5a410000000028003dca"},
-    {"title":"当网友说60岁老头不懂时尚穿搭时...","hot":"🔥 2w+ 互动","platform":"xhs","label":"小红书","url":"https://www.xiaohongshu.com/explore/6a6c857b000000002701d09a"},
-    {"title":"最时尚单品半框眼镜和最萌除颤仪喵喵拳来啦","hot":"🔥 4w+ 互动","platform":"xhs","label":"小红书","url":"https://www.xiaohongshu.com/explore/6a7072b5000000003302ca9b"},
-    {"title":"去澳门一小时就成美妆蛋了","hot":"🔥 1w+ 互动","platform":"xhs","label":"小红书","url":"https://www.xiaohongshu.com/explore/6a6d6f38000000002501037b"},
-    {"title":"此女的时尚感知能力到底有多强","hot":"🔥 1w+ 互动","platform":"xhs","label":"小红书","url":"https://www.xiaohongshu.com/explore/6a6c847b000000000502adfc"},
-    {"title":"VOGUE编辑买过哪些时尚但不实穿的单品？","hot":"🔥 5000+ 互动","platform":"xhs","label":"小红书","url":"https://www.xiaohongshu.com/explore/6a71a717000000002202fe8c"},
-    {"title":"时尚圈大火的迷你毛绒包盲盒！隐藏竟然是？","hot":"🔥 5000+ 互动","platform":"xhs","label":"小红书","url":"https://www.xiaohongshu.com/explore/6a6ece250000000005023c83"},
-    {"title":"这真不是拍美剧吗⁉️昭仪米卡时尚感好超前","hot":"🔥 5000+ 互动","platform":"xhs","label":"小红书","url":"https://www.xiaohongshu.com/explore/6a6d9e240000000033018625"},
-    {"title":"时尚博主住上海3层别墅！一天只花50块钱？","hot":"🔥 5000+ 互动","platform":"xhs","label":"小红书","url":"https://www.xiaohongshu.com/explore/6a6c522d0000000028007265"}
+    {"title":"\u201c\u6c27\u6c14\u611f\u7a7f\u642d\u201d\u706b\u4e86\uff01\u590f\u5929\u8fd9\u6837\u7a7f\u6e05\u723d\u53c8\u65f6\u9ae6", "hot":"\ud83d\udd25 10w+ \u4e92\u52a8", "platform":"xhs", "label":"\u5c0f\u7ea2\u4e66", "url":"https://www.xiaohongshu.com/search_result?keyword=%E6%B0%A7%E6%B0%94%E6%84%9F%E7%A9%BF%E6%90%AD"},
+    {"title":"\u65e9\u79cb\u201c\u751c\u9177\u677e\u5f1b\u611f\u201d32\u5957\u642d\u914d\uff0c\u51fa\u8857\u5230\u7ea6\u4f1a\u4f18\u96c5\u4f4e\u5962", "hot":"\ud83d\udd25 10w+ \u70b9\u8d5e", "platform":"xhs", "label":"\u5c0f\u7ea2\u4e66", "url":"https://www.xiaohongshu.com/search_result?keyword=%E6%97%A9%E7%A7%8B%E7%94%9C%E9%85%B7%E6%9d%BE%E5%BC%9B%E6%84%9F"},
+    {"title":"\u5fae\u80d6\u5973\u751f\u4eca\u590f\u8d62\u9ebb\u4e86\uff01\u8fd9\u4e9b\u7a7f\u642d\u516c\u5f0f\u8ba9\u4f60\u7f8e\u5230\u51fa\u5708", "hot":"\ud83d\udd25 500w+ \u7b14\u8bb0", "platform":"xhs", "label":"\u5c0f\u7ea2\u4e66", "url":"https://www.xiaohongshu.com/search_result?keyword=%E5%BE%AE%E8%83%96%E7%A9%BF%E6%90%AD"},
+    {"title":"\u590f\u5929\u201c\u957f+\u957f\u201d\u706b\u51fa\u5708\uff0c\u6d0b\u6c14\u65f6\u9ae6\u8fd8\u663e\u9ad8", "hot":"\ud83d\udd25 5w+ \u4e92\u52a8", "platform":"xhs", "label":"\u5c0f\u7ea2\u4e66", "url":"https://www.xiaohongshu.com/search_result?keyword=%E9%95%BF%E5%8A%A0%E9%95%BF%E7%A9%BF%E6%90%AD"},
+    {"title":"cleanfit\u7a7f\u642d\u98ce\u6f6e\uff1a\u5408\u8eab\u8d28\u611f\u5355\u54c1\u914d\u5962\u724c\u5305\uff0c\u521a\u521a\u597d\u7684\u9ad8\u7ea7", "hot":"\ud83d\udd25 8w+ \u4e92\u52a8", "platform":"xhs", "label":"\u5c0f\u7ea2\u4e66", "url":"https://www.xiaohongshu.com/search_result?keyword=cleanfit%E7%A9%BF%E6%90%AD"},
+    {"title":"\u65e9\u79cb\u9885\u578b\u98ce\u8863+\u76ae\u8863\u53e0\u7a7f\uff0c\u7f8e\u62c9\u5fb7\u8272\u7cfb\u649e\u84dd\u767d\u8d85\u65f6\u9ae6", "hot":"\ud83d\udd25 3w+ \u4e92\u52a8", "platform":"xhs", "label":"\u5c0f\u7ea2\u4e66", "url":"https://www.xiaohongshu.com/search_result?keyword=%E6%97%A9%E7%A7%8B%E9%A3%8E%E8%A1%A3%E7%9A%AE%E8%A1%A3%E5%8F%A0%E7%A9%BF"},
+    {"title":"\u52c3\u80af\u978b\u7a7f\u642d\u70ed\u6f6e\uff1a\u8212\u9002\u8fd8\u6709\u523a\u7ee3\u8bbe\u8ba1\uff0c\u9650\u5b9a\u6b3e\u62a2\u624b", "hot":"\ud83d\udd25 2w+ \u4e92\u52a8", "platform":"xhs", "label":"\u5c0f\u7ea2\u4e66", "url":"https://www.xiaohongshu.com/search_result?keyword=%E5%8B%83%E8%82%AF%E9%9E%8B%E7%A9%BF%E6%90%AD"},
+    {"title":"\u6cd5\u5f0f\u590d\u53e4\u7a7f\u642d\uff1a\u6ce2\u70b9\u4e1d\u5dfe+\u516b\u89d2\u5e3d\uff0c\u590d\u53e4\u6781\u7b80\u98ce", "hot":"\ud83d\udd25 2w+ \u4e92\u52a8", "platform":"xhs", "label":"\u5c0f\u7ea2\u4e66", "url":"https://www.xiaohongshu.com/search_result?keyword=%E6%B3%95%E5%BC%8F%E5%A4%8D%E5%8F%A4%E7%A9%BF%E6%90%AD"},
+    {"title":"\u8857\u5934vibe\u98ce\uff1a\u649e\u8272\u6d82\u9e26\u5370\u82b1\uff0c\u52a8\u611f\u6d3b\u529b\u62c9\u6ee1", "hot":"\ud83d\udd25 1.5w+ \u4e92\u52a8", "platform":"xhs", "label":"\u5c0f\u7ea2\u4e66", "url":"https://www.xiaohongshu.com/search_result?keyword=%E8%A1%97%E5%A4%B4vibe%E7%A9%BF%E6%90%AD"},
+    {"title":"\u8f7b\u6237\u5916\u7a7f\u642d\uff1a\u673a\u80fd\u5355\u54c1+\u7eff\u610f\u914d\u8272\uff0c\u9003\u79bb\u90fd\u5e02\u7684\u677e\u5f1b\u611f", "hot":"\ud83d\udd25 1w+ \u4e92\u52a8", "platform":"xhs", "label":"\u5c0f\u7ea2\u4e66", "url":"https://www.xiaohongshu.com/search_result?keyword=%E8%BD%BB%E6%88%B7%E5%A4%96%E7%A9%BF%E6%90%AD"}
   ]
 }

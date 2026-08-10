@@ -1,16 +1,16 @@
 {
-  "updated_at": "2026-08-07",
-  "source": "AI行业新闻",
+  "updated_at": "2026-08-10",
+  "source": "新华社/科创板日报/第一财经",
   "items": [
-    {"title":"Kimi K3正式开源：全球首个3万亿级参数开源模型","hot":"📅 7月27日","platform":"bili","label":"新浪财经","url":"https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/839305186041/index.phtml"},
-    {"title":"OpenAI GPT-5.6降价80%，Luna输入价降至$0.2/百万token","hot":"📅 7月30日","platform":"dy","label":"今日头条","url":"https://www.toutiao.com/article/7669037487494349362/"},
-    {"title":"DeepSeek V4-Flash正式版上线，价格仅为Claude的1/90","hot":"📅 7月31日","platform":"dy","label":"今日头条","url":"https://www.toutiao.com/article/7669395032444797476/"},
-    {"title":"MiniMax H3发布：首款开源多模态生成模型，视频编辑全球第一","hot":"📅 7月31日","platform":"bili","label":"今日头条","url":"https://www.toutiao.com/article/7669395032444797476/"},
-    {"title":"字节跳动发布Seedance 2.5：新一代视频生成模型","hot":"📅 7月31日","platform":"bili","label":"今日头条","url":"https://www.toutiao.com/article/7669395032444797476/"},
-    {"title":"Claude Opus 5发布：性能接近Fable 5，价格减半","hot":"📅 7月底","platform":"bili","label":"新浪财经","url":"https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/839305186041/index.phtml"},
-    {"title":"Qwen3.8-Max首发上线：阿里重回开源路线，2.4T参数将开源","hot":"📅 7月底","platform":"bili","label":"新浪财经","url":"https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/839305186041/index.phtml"},
-    {"title":"2025中国AI产业规模超1.2万亿元，同比增长40%","hot":"📅 8月3日","platform":"xhs","label":"中新经纬","url":"https://www.jwview.com/jingwei/html/08-03/682035.shtml"},
-    {"title":"智能体互联国标出台：GB/Z185-2026为AI Agent分配唯一身份码","hot":"📅 7月底","platform":"web","label":"网易","url":"https://www.163.com/dy/article/L3E1K1C9053812HP.html"},
-    {"title":"Gemini Robotics 2发布：谷歌具身智能\"安卓化\"路线","hot":"📅 7月底","platform":"bili","label":"新浪财经","url":"https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/search/rptid/839305186041/index.phtml"}
+    {"title":"DeepSeek-V3.1\u6b63\u5f0f\u53d1\u5e03\uff1a\u6df7\u5408\u63a8\u7406\u67b6\u6784\uff0c\u4e00\u4e2a\u6a21\u578b\u652f\u6301\u601d\u8003/\u975e\u601d\u8003\u53cc\u6a21\u5f0f", "hot":"\ud83d\udcc5 8\u670821\u65e5", "platform":"web", "label":"\u79d1\u521b\u677f\u65e5\u62a5", "url":"https://so.html5.qq.com/page/real/search_news?docid=70000021_41668a726bd92652"},
+    {"title":"OpenAI GPT-5\u53d1\u5e03\uff1a\u57fa\u51c6\u6d4b\u8bd5\u8d85\u8d8a\u5148\u524d\u6a21\u578b\uff0c\u51cf\u5c11\u5e7b\u89c9\u91cd\u5927\u7a81\u7834", "hot":"\ud83d\udcc5 8\u6708\u521d", "platform":"web", "label":"\u65b0\u534e\u793e", "url":"https://www.news.cn/tech/20250901/866a83def5db4255b0426d94eeaf1429/c.html"},
+    {"title":"\u56fd\u52a1\u9662\u5370\u53d1\u300a\u201c\u4eba\u5de5\u667a\u80fd+\u201d\u884c\u52a8\u610f\u89c1\u300b\uff1a6\u5927\u91cd\u70b9\u884c\u52a8+8\u9879\u57fa\u7840\u652f\u6491", "hot":"\ud83d\udcc5 8\u670826\u65e5", "platform":"web", "label":"\u65b0\u534e\u793e", "url":"https://www.news.cn/tech/20250901/866a83def5db4255b0426d94eeaf1429/c.html"},
+    {"title":"\u5168\u7403\u9996\u4e2a\u4e07\u4eba\u7ea7\u4eba\u5f62\u673a\u5668\u4eba\u8ba2\u5355\uff1a\u5929\u592a\u673a\u5668\u4eba1\u4e07\u53f0\u7387\u5148\u89c4\u6a21\u5546\u7528", "hot":"\ud83d\udcc5 8\u670820\u65e5", "platform":"web", "label":"\u65b0\u534e\u793e", "url":"https://www.news.cn/tech/20250901/866a83def5db4255b0426d94eeaf1429/c.html"},
+    {"title":"2025\u4e16\u754c\u4eba\u5f62\u673a\u5668\u4eba\u8fd0\u52a8\u4f1a\u5317\u4eac\u5f00\u5e55\uff0c\u8df3\u8dc3\u8db3\u7403\u4f53\u64cd\u6b66\u672f\u5168\u4e0a\u573a", "hot":"\ud83d\udcc5 8\u670814\u65e5", "platform":"web", "label":"\u65b0\u534e\u793e", "url":"https://www.news.cn/tech/20250901/866a83def5db4255b0426d94eeaf1429/c.html"},
+    {"title":"\u8054\u5408\u56fd\u5927\u4f1a\u901a\u8fc7\u5168\u7403AI\u6cbb\u7406\u51b3\u8bae\uff0c\u8bbe\u7acb40\u540d\u4e13\u5bb6\u79d1\u5b66\u5c0f\u7ec4", "hot":"\ud83d\udcc5 8\u670826\u65e5", "platform":"web", "label":"\u65b0\u534e\u793e", "url":"https://www.news.cn/tech/20250901/866a83def5db4255b0426d94eeaf1429/c.html"},
+    {"title":"\u9489\u9489\u53d1\u5e03AI\u9489\u9489\u0031\u002e\u0030\uff1a\u65b0\u589e\u5bf9\u8bdd\u5f0f\u4ea4\u4e92+5\u6b3eAI\u65b0\u4ea7\u54c1", "hot":"\ud83d\udcc5 8\u670825\u65e5", "platform":"web", "label":"\u7b2c\u4e00\u8d22\u7ecf", "url":"https://so.html5.qq.com/page/real/search_news?docid=70000021_11868b45e7251852"},
+    {"title":"\u963f\u91cc\u901a\u4e49\u5343\u95eeQwen-Image-Edit\u56fe\u50cf\u7f16\u8f91\u6a21\u578b\u53d1\u5e03", "hot":"\ud83d\udcc5 8\u6708\u4e0b\u65ec", "platform":"web", "label":"\u521b\u4e1a\u5bb6", "url":"https://www.iceo.com.cn/article/c26f5428-bd52-448f-9ce4-34aa4c01f4f2"},
+    {"title":"\u82f1\u4f1f\u8fbeJetson Thor\u673a\u5668\u4eba\u82af\u7247\u4e0b\u6708\u51fa\u8d27\uff0c\u552e\u4ef73499\u7f8e\u5143", "hot":"\ud83d\udcc5 8\u6708\u4e0b\u65ec", "platform":"web", "label":"\u521b\u4e1a\u5bb6", "url":"https://www.iceo.com.cn/article/c26f5428-bd52-448f-9ce4-34aa4c01f4f2"},
+    {"title":"\u4e2d\u79d1\u9662\u53d1\u5e03\u201c\u6708\u7403\u79d1\u5b66\u591a\u6a21\u6001\u4e13\u4e1a\u5927\u6a21\u578bV2.0\u201d\uff0c\u8d4b\u80fd\u6570\u5b57\u6708\u7403", "hot":"\ud83d\udcc5 8\u6708\u5e95", "platform":"web", "label":"\u65b0\u534e\u793e", "url":"https://www.news.cn/tech/20250901/866a83def5db4255b0426d94eeaf1429/c.html"}
   ]
 }
