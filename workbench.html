@@ -106,6 +106,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .task-list .task-del{color:#ccc;cursor:pointer;font-size:16px;flex-shrink:0;opacity:0;transition:opacity 0.2s;}
 .task-list li:hover .task-del{opacity:1;}
 .task-list .task-del:hover{color:var(--red);}
+.task-list .overdue-tag{display:inline-block;background:#FFE8E8;color:var(--red);padding:1px 7px;border-radius:10px;margin-left:4px;font-size:11px;}
+.task-list .overdue-serious{display:inline-block;background:var(--red);color:#fff;padding:1px 7px;border-radius:10px;margin-left:4px;font-size:11px;font-weight:600;}
+.task-list .overdue-group-title{font-size:12px;color:var(--text2);font-weight:600;padding:8px 0 4px;border-bottom:1px dashed #eee;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.task-list .overdue-group-title .gr-count{background:var(--red);color:#fff;font-size:10px;padding:1px 6px;border-radius:8px;font-weight:600;}
 /* Learn */
 .learn-category{margin-bottom:16px;}
 .learn-category .cat-name{font-size:13px;font-weight:600;color:var(--green);margin-bottom:8px;background:var(--green-light);display:inline-block;padding:4px 14px;border-radius:10px;}
@@ -324,6 +328,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
       <div class="card">
         <div class="card-header"><h3>🏃 今日运动</h3></div>
         <div id="dashExercise"></div>
+      </div>
+      <div class="card full-width">
+        <div class="card-header">
+          <h3>📌 积压任务 <span id="overdueCount" style="font-weight:400;font-size:12px;color:var(--text3);margin-left:6px;"></span></h3>
+          <span style="font-size:11px;color:var(--text3);">过去日期未完成</span>
+        </div>
+        <div id="dashOverdueTasks" class="task-list"></div>
       </div>
     </div>
   </div>
@@ -776,12 +787,78 @@ function renderTaskList(type) {
 
 function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+// ===== OVERDUE (积压任务) =====
+function refreshOverdueTasks() {
+  let today = formatDate(new Date());
+  let groups = {};
+  ['work','shop'].forEach(type=>{
+    load(type).forEach((t, idx)=>{
+      if(t.done) return;
+      if(!t.date) return;
+      if(t.date >= today) return;
+      if(!groups[t.date]) groups[t.date] = [];
+      groups[t.date].push(Object.assign({_type:type, _idx:idx}, t));
+    });
+  });
+
+  let dates = Object.keys(groups).sort();
+  let totalCount = dates.reduce((s,d)=>s+groups[d].length, 0);
+
+  let countEl = document.getElementById('overdueCount');
+  if(countEl) countEl.textContent = totalCount ? '· '+totalCount+' 项' : '';
+
+  let el = document.getElementById('dashOverdueTasks');
+  if(!el) return;
+
+  if(!totalCount) {
+    el.innerHTML = '<div class="empty-state"><span class="empty-icon">🎉</span><div class="empty-text">没有积压任务，干得漂亮</div></div>';
+    return;
+  }
+
+  let todayMs = Date.parse(today);
+  let html = '';
+  dates.forEach(date=>{
+    let overdueDays = Math.round((todayMs - Date.parse(date)) / 86400000);
+    html += '<li class="overdue-group-item" style="display:block;border:none;padding:0;">'
+      +'<div class="overdue-group-title">📅 '+date+'（'+overdueDays+' 天前）<span class="gr-count">'+groups[date].length+'</span></div>'
+      + '<ul style="list-style:none;padding:0;margin:0;">'
+      + groups[date].map(t=>{
+          let pCls = t.priority||'med';
+          let pLabel = {high:'🔴 高',med:'🟡 中',low:'🟢 低'}[pCls]||'中';
+          let typeLabel = t._type==='work'?'💼':'🏪';
+          let catName = t._type==='work'?'工作任务':'秀场任务';
+          let tagCls = overdueDays>=3 ? 'overdue-serious' : 'overdue-tag';
+          let tagText = overdueDays>=7 ? '⚠️ 延迟 '+overdueDays+' 天' : '⏰ 延迟 '+overdueDays+' 天';
+          return '<li>'
+            +'<div class="task-check" onclick="toggleOverdueTask(\''+t._type+'\','+t._idx+')"></div>'
+            +'<div class="task-info">'
+            +'<div class="task-title">'+escHtml(t.title)+'</div>'
+            +'<div class="task-date">'+typeLabel+' '+catName+' · <span class="'+tagCls+'">'+tagText+'</span></div>'
+            +'</div>'
+            +'<span class="task-priority '+pCls+'">'+pLabel+'</span>'
+            +'</li>';
+        }).join('')
+      + '</ul></li>';
+  });
+  el.innerHTML = html;
+}
+
+function toggleOverdueTask(type, idx) {
+  let tasks = load(type);
+  if(!tasks[idx]) return;
+  tasks[idx].done = !tasks[idx].done;
+  save(type, tasks);
+  renderTaskList(type);
+  refreshOverdueTasks();
+}
+
 function toggleTask(type, idx) {
   let tasks = load(type);
   if(!tasks[idx]) return;
   tasks[idx].done = !tasks[idx].done;
   save(type, tasks);
   renderTaskList(type);
+  refreshOverdueTasks();
 }
 
 function delTask(type, idx) {
@@ -791,6 +868,7 @@ function delTask(type, idx) {
   if(type==='work'){renderCalFor('work');renderTaskList('work');}
   else if(type==='shop'){renderCalFor('shop');renderTaskList('shop');}
   else if(type==='notes'){renderCalFor('notes');renderTaskList('notes');}
+  refreshOverdueTasks();
 }
 
 function openTaskModal(type) {
@@ -1406,6 +1484,7 @@ function refreshAll() {
   renderCalFor('work'); renderCalFor('shop'); renderCalFor('notes');
   if(calendars.ex) renderCalFor('ex');
   renderTaskList('work'); renderTaskList('shop'); renderTaskList('notes');
+  refreshOverdueTasks();
   refreshExercise();
   refreshLearn();
   refreshTrending();
