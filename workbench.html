@@ -237,6 +237,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .health-stat-card .hs-badge{font-size:9px;background:#C8E6C9;color:#2E7D32;padding:1px 5px;border-radius:8px;position:absolute;top:6px;right:6px;}
 .sync-badge{display:inline-block;font-size:10px;font-weight:500;background:#E8F5E9;color:var(--green);padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle;}
 .sync-badge.manual{background:#FFF3E0;color:var(--orange);}
+.sync-now-btn{display:inline-block;font-size:11px;font-weight:600;background:var(--green);color:#fff;padding:3px 10px;border-radius:12px;border:none;cursor:pointer;margin-left:8px;vertical-align:middle;transition:all 0.2s;}
+.sync-now-btn:hover{opacity:0.85;}
+.sync-now-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.sync-now-btn.syncing{background:var(--orange);animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.6;}}
 .chart-toggle{display:flex;gap:6px;margin-bottom:10px;}
 .chart-toggle button{padding:5px 12px;border-radius:14px;border:1px solid #ddd;background:#fff;font-size:11px;cursor:pointer;color:var(--text2);transition:all 0.2s;}
 .chart-toggle button.active{background:var(--green);color:#fff;border-color:var(--green);}
@@ -355,7 +360,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   <div class="page" id="page-exercise">
     <!-- Health Data Dashboard (Garmin synced) - placed ABOVE calendar -->
     <div class="card fitness-section">
-      <div class="card-header"><h3>📊 今日健康 <span class="sync-badge" id="syncBadge" style="display:none;">🔄 同步中...</span></h3></div>
+      <div class="card-header"><h3>📊 今日健康 <span class="sync-badge" id="syncBadge" style="display:none;">🔄 同步中...</span><button class="sync-now-btn" id="syncNowBtn" onclick="syncGarminNow()">🔄 立即同步</button></h3></div>
       <div class="health-stats" id="healthStats"></div>
       <div class="card" style="margin-top:10px;padding:14px;">
         <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">📈 7日趋势</div>
@@ -977,13 +982,95 @@ function loadGarminData(){
     .then(function(d){
       garminData=d; garminLoaded=true;
       var ago=timeAgo(d.synced_at);
-      badge.innerHTML='⌚ Garmin · '+ago; badge.className='sync-badge';
+      var stale=isStale(d.synced_at);
+      badge.innerHTML=(stale?'⚠️ ':'⌚ ')+'Garmin · '+ago;
+      badge.className='sync-badge'+(stale?' manual':'');
+      if(stale){ badge.title='数据超过12小时未更新，点击"立即同步"'; }
+      // Auto-sync if data is stale and local server is available
+      if(stale){
+        var syncBtn=document.getElementById('syncNowBtn');
+        if(syncBtn && !syncBtn.classList.contains('syncing')){
+          // Try auto-sync silently
+          fetch('/api/sync-garmin').then(function(r){return r.json();}).then(function(d){
+            if(d.status==='started'){
+              if(syncBtn){ syncBtn.classList.add('syncing'); syncBtn.disabled=true; syncBtn.textContent='⏳ 自动同步中...'; }
+              var attempts=0;
+              var timer=setInterval(function(){
+                attempts++;
+                if(attempts>20){ clearInterval(timer); return; }
+                fetch('/api/sync-status?'+Date.now())
+                  .then(function(r){return r.json();})
+                  .then(function(s){
+                    if(!s.running){ clearInterval(timer); loadGarminData(); }
+                  })
+                  .catch(function(){});
+              },3000);
+            }
+          }).catch(function(){ /* server not running, silent fail */ });
+        }
+      }
       refreshHealthDashboard();
     })
     .catch(function(e){
       badge.innerHTML='⌚ Garmin 离线'; badge.className='sync-badge manual';
       refreshHealthDashboard();
     });
+}
+// Trigger Garmin sync via local server API
+function syncGarminNow(){
+  var btn=document.getElementById('syncNowBtn');
+  var badge=document.getElementById('syncBadge');
+  if(!btn) return;
+  if(btn.classList.contains('syncing')) return; // already running
+
+  btn.classList.add('syncing');
+  btn.disabled=true;
+  btn.textContent='⏳ 同步中...';
+  if(badge){ badge.style.display='inline'; badge.textContent='🔄 正在从手环拉取...'; badge.className='sync-badge'; }
+
+  fetch('/api/sync-garmin')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.status==='started' || d.status==='already_running'){
+        // Poll for completion
+        var attempts=0;
+        var timer=setInterval(function(){
+          attempts++;
+          if(attempts>20){ clearInterval(timer); finishSync(false,'同步超时'); return; }
+          fetch('/api/sync-status?'+Date.now())
+            .then(function(r){ return r.json(); })
+            .then(function(s){
+              if(!s.running){
+                clearInterval(timer);
+                if(s.lastResult && s.lastResult.success){
+                  finishSync(true);
+                } else {
+                  finishSync(false, s.lastResult? s.lastResult.message : '同步失败');
+                }
+              }
+            })
+            .catch(function(){ /* keep polling */ });
+        }, 3000);
+      } else {
+        finishSync(false, d.message||'同步启动失败');
+      }
+    })
+    .catch(function(e){
+      finishSync(false, '无法连接本地服务器，请确保 server.js 正在运行 (port 8899)');
+    });
+
+  function finishSync(ok, errMsg){
+    btn.classList.remove('syncing');
+    btn.disabled=false;
+    btn.textContent='🔄 立即同步';
+    if(ok){
+      // Reload the data file
+      loadGarminData();
+    } else {
+      if(badge){ badge.innerHTML='❌ '+(errMsg||'同步失败'); badge.className='sync-badge manual'; }
+      setTimeout(function(){ loadGarminData(); }, 3000); // restore badge after 3s
+    }
+  }
 }
 function timeAgo(isoStr){
   if(!isoStr) return '未知';
@@ -992,6 +1079,11 @@ function timeAgo(isoStr){
   if(diff<3600) return Math.floor(diff/60)+'分钟前';
   if(diff<86400) return Math.floor(diff/3600)+'小时前';
   return Math.floor(diff/86400)+'天前';
+}
+function isStale(isoStr){
+  if(!isoStr) return true;
+  var diff=(Date.now()-new Date(isoStr).getTime())/1000;
+  return diff > 43200; // 12 hours
 }
 function getGarminDay(ds){
   if(!garminData||!garminData.daily) return null;
