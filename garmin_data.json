@@ -1,12 +1,26 @@
 {
-  "synced_at": "2026-08-10T10:13:44.464011",
+  "synced_at": "2026-08-11T10:00:02.467360",
   "account": "8613720012911",
   "daily": {
+    "2026-08-11": {
+      "steps": 147,
+      "step_goal": 4300,
+      "resting_hr": 60,
+      "max_hr": 102,
+      "min_hr": 58,
+      "avg_resting_hr_7d": 56,
+      "sleep": 8.1,
+      "deep_sleep_seconds": 2940,
+      "light_sleep_seconds": 18300,
+      "rem_sleep_seconds": 7740,
+      "awake_sleep_seconds": 120,
+      "sleep_score": 82
+    },
     "2026-08-10": {
-      "steps": 139,
+      "steps": 1995,
       "step_goal": 4300,
       "resting_hr": 57,
-      "max_hr": 90,
+      "max_hr": 112,
       "min_hr": 56,
       "avg_resting_hr_7d": 56,
       "sleep": 8.1,
@@ -84,20 +98,6 @@
       "light_sleep_seconds": 19200,
       "rem_sleep_seconds": 3120,
       "awake_sleep_seconds": 780,
-      "sleep_score": 80
-    },
-    "2026-08-04": {
-      "steps": 7458,
-      "step_goal": 4300,
-      "resting_hr": 58,
-      "max_hr": 142,
-      "min_hr": 54,
-      "avg_resting_hr_7d": 56,
-      "sleep": 6.2,
-      "deep_sleep_seconds": 5880,
-      "light_sleep_seconds": 11160,
-      "rem_sleep_seconds": 5280,
-      "awake_sleep_seconds": 0,
       "sleep_score": 80
     }
   },
