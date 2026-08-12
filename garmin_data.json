@@ -1,5 +1,5 @@
 {
-  "synced_at": "2026-08-11T10:01:59.482714",
+  "synced_at": "2026-08-12T09:36:10.212137",
   "account": "8613720012911",
   "daily": {
     "2026-08-11": {
@@ -86,20 +86,7 @@
       "awake_sleep_seconds": 180,
       "sleep_score": 92
     },
-    "2026-08-05": {
-      "steps": 505,
-      "step_goal": 4300,
-      "resting_hr": 57,
-      "max_hr": 108,
-      "min_hr": 56,
-      "avg_resting_hr_7d": 57,
-      "sleep": 7.2,
-      "deep_sleep_seconds": 3480,
-      "light_sleep_seconds": 19200,
-      "rem_sleep_seconds": 3120,
-      "awake_sleep_seconds": 780,
-      "sleep_score": 80
-    }
+    "2026-08-12": {}
   },
   "profile": {
     "name": "Chelsi",
