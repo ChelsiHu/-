@@ -1196,24 +1196,38 @@ function formatDate2(d){
 function todayStr2(){ return formatDate2(new Date()); }
 
 function refreshHealthDashboard(){
-  var g=getGarminDay(todayStr2());
+  var todayStr=todayStr2();
+  var g=getGarminDay(todayStr);
   var prevStr=formatDate2(new Date(Date.now()-86400000));
   var gPrev=getGarminDay(prevStr);
+  // Check if today's data is empty (Garmin often returns nothing for "today" early in the day)
+  var gIsEmpty = !g || (g && !g.steps && !g.resting_hr && !g.sleep && !g.calories);
+  var displayDate = todayStr;
+  var dateLabel = '今日';
+  if(gIsEmpty){
+    g = gPrev || {steps:null,resting_hr:null,sleep:null};
+    displayDate = prevStr;
+    dateLabel = '昨日';
+    // For comparison, use the day before yesterday
+    var prev2Str=formatDate2(new Date(Date.now()-2*86400000));
+    gPrev=getGarminDay(prev2Str);
+  }
   if(!g) g={steps:null,resting_hr:null,sleep:null};
   var steps=g.steps||'—', hr=g.resting_hr||'—', sleep=g.sleep||'—';
   var stepsCh='', hrCh='', sleepCh='';
   if(gPrev){
-    if(gPrev.steps) stepsCh='vs 昨日: '+(((steps-gPrev.steps)/gPrev.steps*100).toFixed(0))+'%';
-    if(gPrev.resting_hr) hrCh='vs 昨日: '+(gPrev.resting_hr-hr)+'bpm';
-    if(gPrev.sleep) sleepCh='vs 昨日: '+(sleep-gPrev.sleep).toFixed(1)+'h';
+    if(gPrev.steps && typeof steps==='number') stepsCh='vs 前日: '+(((steps-gPrev.steps)/gPrev.steps*100).toFixed(0))+'%';
+    if(gPrev.resting_hr && typeof hr==='number') hrCh='vs 前日: '+(gPrev.resting_hr-hr)+'bpm';
+    if(gPrev.sleep && typeof sleep==='number') sleepCh='vs 前日: '+(sleep-gPrev.sleep).toFixed(1)+'h';
   }
   var gTag=garminData?' <span class="hs-badge">⌚ Garmin</span>':'';
+  var dateBadge = gIsEmpty ? ' <span class="hs-badge" style="background:#FFF3CD;color:#856404;">📅 '+dateLabel+'数据</span>' : '';
   var el=document.getElementById('healthStats');
   if(!el) return;
   el.innerHTML=
     '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'"><div class="hs-icon">🚶</div><div class="hs-val">'+(typeof steps==='number'?steps.toLocaleString():steps)+'</div><div class="hs-label">步数'+gTag+'</div><div class="hs-change">'+stepsCh+'</div></div>'+
     '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'"><div class="hs-icon">💓</div><div class="hs-val">'+hr+'</div><div class="hs-label">静息心率 bpm'+gTag+'</div><div class="hs-change">'+hrCh+'</div></div>'+
-    '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'"><div class="hs-icon">😴</div><div class="hs-val">'+sleep+'</div><div class="hs-label">睡眠 小时'+gTag+'</div><div class="hs-change">'+sleepCh+(g.sleep_score?' · 评分 '+g.sleep_score:'')+'</div></div>'+
+    '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'"><div class="hs-icon">😴</div><div class="hs-val">'+sleep+'</div><div class="hs-label">睡眠 小时'+gTag+dateBadge+'</div><div class="hs-change">'+sleepCh+(g.sleep_score?' · 评分 '+g.sleep_score:'')+'</div></div>'+
     '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'" style="opacity:'+(garminData?'1':'0.5')+'"><div class="hs-icon">🔥</div><div class="hs-val">'+(g.calories||'—')+'</div><div class="hs-label">消耗卡路里'+gTag+'</div><div class="hs-change">'+(g.step_goal?'🎯 目标 '+g.step_goal:'—')+'</div></div>';
   var metric=document.getElementById('healthChartToggle');
   var m=metric?metric.querySelector('.active')?metric.querySelector('.active').dataset.metric:'steps':'steps';
