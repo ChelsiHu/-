@@ -1,5 +1,6 @@
 {
-  "version": "2026-08-13-v1",
-  "updated_at": "2026-08-13T11:35:00",
-  "changelog": "Garmin数据同步+卡路里字段修复"
+  "version": "2026-08-13-v2",
+  "app": "workbench",
+  "updated": "2026-08-13T14:35:00+08:00",
+  "notes": "Sleep fallback: 8/13 shows 8/12's sleep (last night), keep today's steps/HR. Card badge: '· 夜上睡眠'"
 }

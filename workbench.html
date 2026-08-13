@@ -1195,42 +1195,72 @@ function formatDate2(d){
 }
 function todayStr2(){ return formatDate2(new Date()); }
 
+// Sleep-fallback helper constants
+var EM="—";
+var HG="⌚";
+var BULLET="·";
+var IC_STEPS="🚶";
+var IC_HEART="💓";
+var IC_SLEEP="😴";
+var IC_FIRE="🔥";
+var IC_TARGET="🎯";
+var CN_YEST="昨日";
+var CN_PREV="前晚";
+var CN_NIGHT="夜上睡眠";
+var CN_STEPS="步数";
+var CN_HR="静息心率";
+var CN_SLEEP="睡眠 小时";
+var CN_KCAL="消耗卡路里";
+var CN_GOAL="目标";
+var CN_BU="步";
+var CN_SCORE="评分";
+var CN_NOREC="未记录";
+var CN_EST="基于步数估算";
+
 function refreshHealthDashboard(){
   var todayStr=todayStr2();
   var g=getGarminDay(todayStr);
   var prevStr=formatDate2(new Date(Date.now()-86400000));
   var gPrev=getGarminDay(prevStr);
-  // Check if today's data is empty (Garmin often returns nothing for "today" early in the day)
-  var gIsEmpty = !g || (g && !g.steps && !g.resting_hr && !g.sleep && !g.calories);
-  var displayDate = todayStr;
-  var dateLabel = '今日';
-  if(gIsEmpty){
-    g = gPrev || {steps:null,resting_hr:null,sleep:null};
-    displayDate = prevStr;
-    dateLabel = '昨日';
-    // For comparison, use the day before yesterday
-    var prev2Str=formatDate2(new Date(Date.now()-2*86400000));
-    gPrev=getGarminDay(prev2Str);
-  }
+  // Sleep fallback: Garmin stores "last night sleep" under YESTERDAY’s date slot.
+  // On this "today" dashboard users expect to see last night’s sleep, so if today
+  // has no sleep entry we read yesterday’s slot. Steps/HR always come from today.
   if(!g) g={steps:null,resting_hr:null,sleep:null};
-  var steps=g.steps||'—', hr=g.resting_hr||'—', sleep=g.sleep||'—';
-  var stepsCh='', hrCh='', sleepCh='';
-  if(gPrev){
-    if(gPrev.steps && typeof steps==='number') stepsCh='vs 前日: '+(((steps-gPrev.steps)/gPrev.steps*100).toFixed(0))+'%';
-    if(gPrev.resting_hr && typeof hr==='number') hrCh='vs 前日: '+(gPrev.resting_hr-hr)+'bpm';
-    if(gPrev.sleep && typeof sleep==='number') sleepCh='vs 前日: '+(sleep-gPrev.sleep).toFixed(1)+'h';
+  var steps=g.steps, hr=g.resting_hr;
+  var sleep, sleepScore, sleepBadge;
+  if(g.sleep){
+    sleep = g.sleep;
+    sleepScore = g.sleep_score;
+    sleepBadge = "";
+  } else if(gPrev && gPrev.sleep){
+    sleep = gPrev.sleep;
+    sleepScore = gPrev.sleep_score;
+    sleepBadge = ' <span class="hs-badge" style="background:#FFF3CD;color:#856404;">'+BULLET+' '+CN_NIGHT+'</span>';
+  } else {
+    sleep = null;
+    sleepScore = null;
+    sleepBadge = "";
   }
-  var gTag=garminData?' <span class="hs-badge">⌚ Garmin</span>':'';
-  var dateBadge = gIsEmpty ? ' <span class="hs-badge" style="background:#FFF3CD;color:#856404;">📅 '+dateLabel+'数据</span>' : '';
-  var el=document.getElementById('healthStats');
+  var stepsDisp = steps||EM, hrDisp = hr||EM, sleepDisp = sleep||EM;
+  var stepsCh="", hrCh="", sleepCh="";
+  if(gPrev){
+    if(typeof stepsDisp==="number" && gPrev.steps) stepsCh="vs "+CN_YEST+": "+(((stepsDisp-gPrev.steps)/gPrev.steps*100).toFixed(0))+"%";
+    if(typeof hrDisp==="number" && gPrev.resting_hr) hrCh="vs "+CN_YEST+": "+(gPrev.resting_hr-hrDisp)+"bpm";
+  }
+  // Sleep comparison: tonight (yesterday slot) vs the night before (2 days ago)
+  var prev2Str=formatDate2(new Date(Date.now()-2*86400000));
+  var gPrev2=getGarminDay(prev2Str);
+  if(typeof sleepDisp==="number" && gPrev2 && gPrev2.sleep) sleepCh="vs "+CN_PREV+": "+(sleepDisp-gPrev2.sleep).toFixed(1)+"h";
+  var gTag=garminData?" <span class=\"hs-badge\">"+HG+" Garmin</span>":"";
+  var el=document.getElementById("healthStats");
   if(!el) return;
   el.innerHTML=
-    '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'"><div class="hs-icon">🚶</div><div class="hs-val">'+(typeof steps==='number'?steps.toLocaleString():steps)+'</div><div class="hs-label">步数'+gTag+'</div><div class="hs-change">'+stepsCh+'</div></div>'+
-    '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'"><div class="hs-icon">💓</div><div class="hs-val">'+hr+'</div><div class="hs-label">静息心率 bpm'+gTag+'</div><div class="hs-change">'+hrCh+'</div></div>'+
-    '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'"><div class="hs-icon">😴</div><div class="hs-val">'+sleep+'</div><div class="hs-label">睡眠 小时'+gTag+dateBadge+'</div><div class="hs-change">'+sleepCh+(g.sleep_score?' · 评分 '+g.sleep_score:'')+'</div></div>'+
-    '<div class="health-stat-card'+(garminData?' hs-garmin':'')+'" style="opacity:'+(garminData?'1':'0.5')+'"><div class="hs-icon">🔥</div><div class="hs-val">'+(function(){if(g.calories) return g.calories.toLocaleString();if(typeof steps==='number') return Math.round(steps*0.04).toLocaleString()+'<span style="font-size:11px;opacity:0.6;"> ~</span>';return '<span style="font-size:13px;opacity:0.6;">未记录</span>';})()+'</div><div class="hs-label">消耗卡路里'+gTag+'</div><div class="hs-change">'+(g.step_goal?'🎯 目标 '+g.step_goal+'步':'—')+(g.calories?'':' <span style="color:var(--text3);font-size:10px;">基于步数估算</span>')+'</div></div>';
-  var metric=document.getElementById('healthChartToggle');
-  var m=metric?metric.querySelector('.active')?metric.querySelector('.active').dataset.metric:'steps':'steps';
+    '<div class="health-stat-card'+(garminData?" hs-garmin":"")+'"><div class="hs-icon">'+IC_STEPS+'</div><div class="hs-val">'+(typeof stepsDisp==="number"?stepsDisp.toLocaleString():stepsDisp)+'</div><div class="hs-label">'+CN_STEPS+gTag+'</div><div class="hs-change">'+stepsCh+'</div></div>'+
+    '<div class="health-stat-card'+(garminData?" hs-garmin":"")+'"><div class="hs-icon">'+IC_HEART+'</div><div class="hs-val">'+hrDisp+'</div><div class="hs-label">'+CN_HR+' bpm'+gTag+'</div><div class="hs-change">'+hrCh+'</div></div>'+
+    '<div class="health-stat-card'+(garminData?" hs-garmin":"")+'"><div class="hs-icon">'+IC_SLEEP+'</div><div class="hs-val">'+sleepDisp+'</div><div class="hs-label">'+CN_SLEEP+gTag+sleepBadge+'</div><div class="hs-change">'+sleepCh+(sleepScore?" "+BULLET+" "+CN_SCORE+" "+sleepScore:"")+'</div></div>'+
+    '<div class="health-stat-card'+(garminData?" hs-garmin":"")+'" style="opacity:'+(garminData?"1":"0.5")+'"><div class="hs-icon">'+IC_FIRE+'</div><div class="hs-val">'+(function(){if(g.calories) return g.calories.toLocaleString();if(typeof stepsDisp==="number") return Math.round(stepsDisp*0.04).toLocaleString()+'<span style="font-size:11px;opacity:0.6;"> ~</span>';return '<span style="font-size:13px;opacity:0.6;">'+CN_NOREC+'</span>';})()+'</div><div class="hs-label">'+CN_KCAL+gTag+'</div><div class="hs-change">'+(g.step_goal?IC_TARGET+" "+CN_GOAL+" "+g.step_goal+CN_BU:EM)+(g.calories?"":" <span style=\"color:var(--text3);font-size:10px;\">"+CN_EST+"</span>")+'</div></div>';
+  var metric=document.getElementById("healthChartToggle");
+  var m=metric?metric.querySelector(".active")?metric.querySelector(".active").dataset.metric:"steps":"steps";
   renderHealthChart(m);
 }
 
