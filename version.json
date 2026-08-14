@@ -1,6 +1,8 @@
 {
-  "version": "2026-08-13-v3",
+  "version": "2026-08-14-garmin",
   "app": "workbench",
   "updated": "2026-08-13T14:44:00+08:00",
-  "notes": "FORCED PWA RELOAD - sleep fallback (8/13→8/12) already deployed in v2 but phone cache wasn't picking it up. Bump to v3 triggers version.json comparison in localStorage to force location.reload()."
+  "notes": "FORCED PWA RELOAD - sleep fallback (8/13→8/12) already deployed in v2 but phone cache wasn't picking it up. Bump to v3 triggers version.json comparison in localStorage to force location.reload().",
+  "updated_at": "2026-08-14T09:28:23",
+  "changelog": "Garmin数据自动同步 2026-08-14"
 }
