@@ -1,13 +1,13 @@
 {
-  "synced_at": "2026-08-25T15:30:14.758851",
+  "synced_at": "2026-08-25T23:56:10.256569",
   "account": "8613720012911",
   "daily": {
     "2026-08-25": {
-      "steps": 65,
+      "steps": 866,
       "step_goal": 4300,
       "resting_hr": 59,
-      "max_hr": 84,
-      "min_hr": 59,
+      "max_hr": 106,
+      "min_hr": 54,
       "avg_resting_hr_7d": 60,
       "sleep": 8.3,
       "deep_sleep_seconds": 3480,
