@@ -300,6 +300,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   <div class="greeting" id="greeting">👋 下午好，<em>漂亮宝贝</em></div>
   <div class="header-right">
     <span style="font-size:12px;color:var(--text3);white-space:nowrap;" id="headerDate"></span>
+    <button class="reset-btn" id="backupBtn" onclick="openBackup()">📦 备份</button>
     <button class="reset-btn" id="resetBtn">🔄 重置今日</button>
   </div>
 </div>
@@ -568,6 +569,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   </div>
 </div>
 
+<!-- Backup Dialog -->
+<div class="confirm-dialog" id="backupDialog" style="display:none;">
+  <div class="confirm-box" style="max-width:360px;width:92%;">
+    <h3 style="margin:0 0 6px;font-size:16px;">📦 数据备份 / 恢复</h3>
+    <p style="font-size:12px;color:var(--text3);margin:0 0 14px;" id="backupInfo">上次备份：从未</p>
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <button class="btn-confirm" style="background:var(--green);" onclick="exportBackup()">⬇️ 导出备份</button>
+      <label class="btn-confirm" style="background:var(--green);display:flex;align-items:center;justify-content:center;cursor:pointer;">⬆️ 恢复文件<input type="file" id="backupFile" accept=".json,application/json" style="display:none;" onchange="importBackupFile(this)"></label>
+    </div>
+    <textarea id="backupPaste" rows="3" placeholder="备用：也可以把备份内容粘贴到这里" style="width:100%;box-sizing:border-box;font-size:11px;border:1px solid #ddd;border-radius:8px;padding:8px;margin-bottom:10px;font-family:monospace;"></textarea>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <button class="btn-cancel" onclick="copyBackupText()">📋 复制全部数据</button>
+      <button class="btn-confirm" style="background:var(--green);" onclick="restoreFromText()">♻️ 恢复粘贴内容</button>
+    </div>
+    <p style="font-size:11px;color:var(--text3);margin:0 0 12px;text-align:left;">💡 建议每周导出一份，存到微信/备忘录。手机换号、误删都不怕。</p>
+    <div class="confirm-btns">
+      <button class="btn-cancel" onclick="closeBackup()">关闭</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ===== DATA STORE =====
 const KEYS = {
@@ -583,6 +605,73 @@ const KEYS = {
 
 function load(k) { try { return JSON.parse(localStorage.getItem(KEYS[k]) || '[]'); } catch(e) { return []; } }
 function save(k, v) { localStorage.setItem(KEYS[k], JSON.stringify(v)); }
+
+// ===== BACKUP / RESTORE =====
+function openBackup(){
+  var last = localStorage.getItem('wb_backup_at');
+  document.getElementById('backupInfo').textContent = last ? ('上次备份：'+last) : '上次备份：从未';
+  document.getElementById('backupDialog').style.display = 'flex';
+}
+function closeBackup(){ document.getElementById('backupDialog').style.display = 'none'; }
+function backupData(){
+  var all = {}, k;
+  for (k in KEYS) {
+    var v = localStorage.getItem(KEYS[k]);
+    if (v !== null) all[KEYS[k]] = v;
+  }
+  return all;
+}
+function exportBackup(){
+  var all = backupData();
+  if (!Object.keys(all).length) { alert('当前没有任何数据可备份'); return; }
+  var blob = new Blob([JSON.stringify(all, null, 2)], {type:'application/json'});
+  var ts = new Date(), p = function(n){ return (n<10?'0':'')+n; };
+  var name = 'workbench-backup-'+ts.getFullYear()+p(ts.getMonth()+1)+p(ts.getDate())+'-'+p(ts.getHours())+p(ts.getMinutes())+'.json';
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  localStorage.setItem('wb_backup_at', new Date().toLocaleString('zh-CN'));
+  document.getElementById('backupInfo').textContent = '上次备份：'+localStorage.getItem('wb_backup_at');
+  alert('✅ 备份已生成：'+name+'\n\n如果手机没有自动下载，点「📋 复制全部数据」，把内容粘贴到备忘录或微信文件传输助手保存即可。');
+}
+function importBackupFile(input){
+  var f = input.files[0]; if (!f) return;
+  var r = new FileReader();
+  r.onload = function(){ applyBackup(String(r.result)); };
+  r.readAsText(f);
+  input.value = '';
+}
+function restoreFromText(){
+  var t = document.getElementById('backupPaste').value.trim();
+  if (!t) { alert('请先粘贴备份内容'); return; }
+  applyBackup(t);
+}
+function copyBackupText(){
+  var all = backupData();
+  var ta = document.getElementById('backupPaste');
+  ta.value = JSON.stringify(all, null, 2);
+  ta.style.display = 'block';
+  ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  if (navigator.clipboard) { navigator.clipboard.writeText(ta.value).catch(function(){}); }
+  alert('📋 数据已复制！请粘贴到备忘录 / 微信文件传输助手保存。');
+}
+function applyBackup(text){
+  try {
+    var data = JSON.parse(text), n = 0, k;
+    for (k in data) {
+      if (/^wb_v3_/.test(k) || k === 'wb_pwa_version') {
+        localStorage.setItem(k, data[k]); n++;
+      }
+    }
+    if (n === 0) { alert('⚠️ 这个文件里没有工作台的数据'); return; }
+    localStorage.setItem('wb_backup_at', new Date().toLocaleString('zh-CN'));
+    alert('✅ 恢复成功！共恢复 '+n+' 项数据，马上刷新生效。');
+    closeBackup();
+    location.reload();
+  } catch(e) { alert('❌ 备份内容格式不对，请确认是工作台导出的备份'); }
+}
 
 // ===== STATE =====
 let currentPage = 'home';
