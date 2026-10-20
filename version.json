@@ -1,8 +1,8 @@
 {
-  "version": "2026-09-18-garmin",
+  "version": "2026-10-20-garmin",
   "app": "workbench",
   "updated": "2026-08-27T16:25:00+08:00",
   "notes": "新增📦一键备份/恢复功能（导出JSON/文件恢复/粘贴恢复），防止iOS清数据导致丢失。版本号bump触发PWA强制刷新。",
-  "updated_at": "2026-09-18T16:40:36",
-  "changelog": "Garmin数据自动同步 2026-09-18"
+  "updated_at": "2026-10-20T17:06:51",
+  "changelog": "Garmin数据自动同步 2026-10-20"
 }
