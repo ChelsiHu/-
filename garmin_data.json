@@ -1,13 +1,29 @@
 {
-  "synced_at": "2026-10-20T17:07:53.196523",
+  "synced_at": "2026-10-21T10:30:28.751015",
   "account": "8613720012911",
   "daily": {
-    "2026-10-20": {
-      "steps": 3123,
+    "2026-10-21": {
+      "steps": 54,
       "step_goal": 4300,
       "resting_hr": 55,
-      "max_hr": 93,
-      "min_hr": 52,
+      "max_hr": 73,
+      "min_hr": 54,
+      "avg_resting_hr_7d": 54,
+      "sleep": 9.1,
+      "deep_sleep_seconds": 3780,
+      "light_sleep_seconds": 21360,
+      "rem_sleep_seconds": 7560,
+      "awake_sleep_seconds": 480,
+      "sleep_score": 92,
+      "calories": 0,
+      "active_calories": 0
+    },
+    "2026-10-20": {
+      "steps": 5123,
+      "step_goal": 4300,
+      "resting_hr": 55,
+      "max_hr": 96,
+      "min_hr": 51,
       "avg_resting_hr_7d": 53,
       "sleep": 6.8,
       "deep_sleep_seconds": 4800,
@@ -95,22 +111,6 @@
       "rem_sleep_seconds": 5700,
       "awake_sleep_seconds": 600,
       "sleep_score": 86,
-      "calories": 0,
-      "active_calories": 0
-    },
-    "2026-10-14": {
-      "steps": 2947,
-      "step_goal": 4300,
-      "resting_hr": 52,
-      "max_hr": 154,
-      "min_hr": 51,
-      "avg_resting_hr_7d": 53,
-      "sleep": 8.5,
-      "deep_sleep_seconds": 6600,
-      "light_sleep_seconds": 16080,
-      "rem_sleep_seconds": 7800,
-      "awake_sleep_seconds": 0,
-      "sleep_score": 100,
       "calories": 0,
       "active_calories": 0
     }
