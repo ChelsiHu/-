@@ -1,8 +1,8 @@
 {
-  "version": "2026-10-22-garmin",
+  "version": "2026-10-27-garmin",
   "app": "workbench",
   "updated": "2026-10-22T07:58:00+08:00",
   "notes": "Garmin 数据每日同步：2026-10-22 更新",
-  "updated_at": "2026-10-22T07:58:00",
-  "changelog": "每日Garmin数据自动同步"
+  "updated_at": "2026-10-27T23:56:15",
+  "changelog": "Garmin数据自动同步 2026-10-27"
 }
